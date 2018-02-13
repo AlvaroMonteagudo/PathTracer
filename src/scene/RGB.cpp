@@ -14,21 +14,12 @@
 #include "../../include/scene/RGB.h"
 
 /**
- * Default constructor
- */
-RGB::RGB() : red(0.0f), green(0.0f), blue(0.0f)  {}
-
-/**
  * Color constructor
  * @param red value
  * @param green value
  * @param blue value
  */
-RGB::RGB(float red, float green, float blue) {
-
-    /*if(red<0 || red > 255 || blue < 0 ||blue > 255 || green < 0 || green > 255 ){
-        cerr << "One of the colors are not in range (" << red << "," << green << "," << blue << ")" << endl;
-    }*/
+RGB::RGB(float red = 0, float green = 0, float blue = 0) {
 
     RGB::red = red;
     RGB::green = green;

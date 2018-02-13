@@ -36,6 +36,10 @@ class Shape {
 
 public:
 
+    enum Type { DIFF, SPEC, REFR };
+
+    Type type = DIFF;
+
     /**
      * Intersection method
      * @return distance of intersection
@@ -130,24 +134,6 @@ public:
 
     float getShininess() const {
         return shininess;
-    }
-
-    /// SETTERS
-
-    void setKd(const RGB &kd) {
-        Shape::kd = kd;
-    }
-
-    void setKs(const RGB &ks) {
-        Shape::ks = ks;
-    }
-
-    void setKr(const RGB &kr) {
-        Shape::kr = kr;
-    }
-
-    void setKt(const RGB &kt) {
-        Shape::kt = kt;
     }
 
     void setShininess(float shininess) {

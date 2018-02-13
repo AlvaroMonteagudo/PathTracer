@@ -28,7 +28,7 @@ public:
      * @param normal of the plane
      * @param point: a point of the plane
      */
-    Plane(const Dir &normal, const Point &point);
+    Plane(const Dir &normal, const Point &point, Type type = DIFF);
 
     /**
      * Intersection method

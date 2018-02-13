@@ -29,7 +29,7 @@ public:
      * @param radius of the sphere
      * @param center of the sphere
      */
-    Sphere(float radius, const Point &center);
+    Sphere(float radius, const Point &center, Type type = DIFF);
 
     /**
      * Intersection method

@@ -24,9 +24,9 @@ Sphere::Sphere() = default;
  * @param radius of the sphere
  * @param center of the sphere
  */
-Sphere::Sphere(float radius, const Point &center) :
+Sphere::Sphere(float radius, const Point &center, Type type = DIFF) :
         Shape(), radius(radius), center(center), sqrd_radius(radius*radius) {
-
+    Shape::type = type;
 }
 
 /**

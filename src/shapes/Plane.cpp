@@ -18,8 +18,10 @@
  * @param normal of the plane
  * @param point: a point of the plane
  */
-Plane::Plane(const Dir &normal, const Point &point) :
-            Shape(), normal((normal).normalize()) , point(point) {}
+Plane::Plane(const Dir &normal, const Point &point, Type type = DIFF) :
+            Shape(), normal((normal).normalize()) , point(point) {
+    Shape::type = type;
+}
 
 /**
  * Intersection method

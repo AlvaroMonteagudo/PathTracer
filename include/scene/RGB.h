@@ -25,17 +25,12 @@ class RGB{
 public:
 
     /**
-     * Default constructor
-     */
-    RGB();
-
-    /**
      * Color constructor
      * @param red value
      * @param green value
      * @param blue value
      */
-    RGB(float red, float green, float blue);
+    RGB(float red = 0, float green = 0, float blue = 0);
 
     /// GETTERS
     float getRed() const;

@@ -72,7 +72,7 @@ void Tracer::renderImage() const {
             printProgress(camera.getWidth() * i + j, totalPixels);
 
             Ray ray(camera.getFocal(), pixel);
-            image(i,j) = rayTrace(ray, 0);
+            image(i,j) = radiance(ray, 0);
 
             pixel = pixel + colAdd;
         }
@@ -161,7 +161,7 @@ void Tracer::renderImageLines(int start, int end) {
                         Point(pixel.x + randomWidthOffset,
                               pixel.y + randomHeightOffset,
                               pixel.z));
-                image(i,j) += rayTrace(ray, 0);
+                image(i,j) += radiance(ray, 0);
             }
             image(i, j) /= SAMPLES;
 
@@ -176,46 +176,52 @@ void Tracer::renderImageLines(int start, int end) {
     }
 }
 
-RGB Tracer::rayTrace(const Ray ray, int depth) const {
+inline bool Tracer::intersect(const Ray &ray, float &distance, int &id) const {
+    float d;
+    for (int i = 0; i < shapes.size(); ++i) {
+        if ((d = shapes.at(i)->intersect(ray)) < distance) {
+            distance = d;
+            id = i;
+        }
+    }
+    return distance < MAX_FLOAT;
+}
+
+RGB Tracer::radiance(const Ray ray, int depth) const {
 
     RGB result = BLACK;
 
+    float dist  = MAX_FLOAT;
+    int id = -1;
+
+    if (!intersect(ray, dist, id)) return BLACK;
+
+    const shared_ptr<Shape> shape = shapes.at(id);
+    Point itsctPoint = ray.getSource() + (ray.getDirection() * dist);
+    Dir normal = shape->getNormal(itsctPoint);
+    Dir nl = (normal.dot(ray.getDirection()) < 0) ? normal : normal * -1;
+    RGB color = shape->getKd(); //TODO: Rename featuress add type of material and remove coefficients
+
+    float maxVal = color.getMax();
+
     if (depth == MAX_DEPTH) return BLACK;
 
-    float intersection  = MAX_FLOAT;
-    int first = -1;
+    // Mirar tipos
+    if (shape->type == Shape::Type::DIFF) {
 
-    for(unsigned int i = 0; i < shapes.size(); i++){
-        if(shapes.at(i)->intersect(ray) < intersection){
-            intersection = shapes.at(i)->intersect(ray);
-            first = i;
-        }
-    }
+    } else if (shape->type == Shape::Type::SPEC) {
 
-    for (unsigned int i = 0; i < areaLights.size(); i++) {
-        if(areaLights.at(i).intersect(ray) < intersection) {
-            result += WHITE / (intersection * intersection);
-            return result;
-        }
-    }
-
-    if (intersection != MAX_FLOAT) {
-        if (first != -1) {
-            shared_ptr<Shape> firstShape = shapes.at(first);
-            Point intersectedPoint = ray.getSource() + (ray.getDirection() * intersection);
-            Dir normalShape = firstShape->getNormal(intersectedPoint);
-            result = directLight(intersectedPoint, normalShape, firstShape, ray)
-                    + (RussianRoulette(intersectedPoint, firstShape, depth) / (MAX_DEPTH + 1));
-                     //+ deltaInteraction(intersectedPoint, normalShape, firstShape, ray, depth, indirectSteps)
-                     //+ indirectLight(intersectedPoint, normalShape, firstShape, ray, depth, indirectSteps);
-
-            return result;
-        } else {
-            return result;
-        }
     } else {
-        return BLACK;
+
     }
+
+    result = directLight(itsctPoint, normal, shape, ray)
+            + (RussianRoulette(itsctPoint, shape, depth) / (MAX_DEPTH + 1));
+             //+ deltaInteraction(itsctPoint, normal, shape, ray, depth, indirectSteps)
+             //+ indirectLight(itsctPoint, normal, shape, ray, depth, indirectSteps);
+
+    return result;
+
 }
 
 RGB Tracer::directLight(const Point &intersectedPoint, const Dir &normal,
@@ -280,7 +286,7 @@ RGB Tracer::indirectLight(const Point &intersectedPoint, const Dir &normalShape,
 
         Ray sample(intersectedPoint, rayDir);
 
-        /*result += rayTrace(sample, depth + 1, indirectSteps + 1) *
+        /*result += radiance(sample, depth + 1, indirectSteps + 1) *
                   Phong(Ray(ray.getSource(), ray.getDirection() * -1), sample,
                         normalShape, shape, intersectedPoint) * PI;*/
     }
@@ -297,12 +303,12 @@ RGB Tracer::deltaInteraction(const Point &intersectedPoint, const Dir &normal,
 
     if (shape->getKr() != BLACK) {
         Ray reflectedRay(intersectedPoint, shape->getDirRayReflected(ray.getDirection(), normal));
-        //color += rayTrace(reflectedRay, depth + 1, indirectSteps) * shape->getKr();
+        //color += radiance(reflectedRay, depth + 1, indirectSteps) * shape->getKr();
     }
 
     if (shape->getKt() != BLACK) {
         Ray refractedRay(intersectedPoint, shape->getDirRayRefracted(ray.getDirection(), normal * -1));
-        //color += rayTrace(refractedRay, depth + 1, indirectSteps) * shape->getKt();
+        //color += radiance(refractedRay, depth + 1, indirectSteps) * shape->getKt();
     }
 
     return color;
@@ -351,7 +357,7 @@ RGB Tracer::RussianRoulette(const Point &intersectedPoint, const shared_ptr<Shap
 
         Ray sample(intersectedPoint, rayDir);
 
-        return rayTrace(sample, depth + 1) * shape->getKd(); // PI sin and cos cancelled with pdf product
+        return radiance(sample, depth + 1) * shape->getKd(); // PI sin and cos cancelled with pdf product
 
     } else if (random < shape->getKd().getMax() + shape->getKs().getMean()) {
         // lobe specular
@@ -366,7 +372,7 @@ RGB Tracer::RussianRoulette(const Point &intersectedPoint, const shared_ptr<Shap
 
         Ray sample(intersectedPoint, rayDir);
 
-        return rayTrace(sample, depth + 1) * shape->getKs() *
+        return radiance(sample, depth + 1) * shape->getKs() *
                 (shape->getShininess() + 2.0f) /
                 (shape->getShininess() + 1.0f);
     } else {
