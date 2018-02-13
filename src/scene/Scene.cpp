@@ -25,7 +25,7 @@ Scene::Scene() {
     rightWall.setFeatures(RED, BLACK, BLACK, BLACK);
 
     Plane leftWall(Plane(Dir(1, 0, 0), Point(-1, 0, 0)));
-    leftWall.setFeatures(PURPLE, BLACK, BLACK, BLACK);
+    leftWall.setFeatures(GREEN, BLACK, BLACK, BLACK);
 
     Plane floor(Plane(Dir(0, 1, 0), Point(0, -1, 0)));
     floor.setFeatures(GRAY, BLACK, BLACK, BLACK);
@@ -37,7 +37,7 @@ Scene::Scene() {
     bottom.setFeatures(GRAY, BLACK, BLACK, BLACK);
 
     Plane backWall(Plane(Dir(0, 0, 1), Point(0, 0, -2)));
-    backWall.setFeatures(GREEN, BLACK, BLACK, BLACK);
+    backWall.setFeatures(GRAY, BLACK, BLACK, BLACK);
 
     Sphere leftSphere(Sphere(0.25f, Point(-0.5f, 0, 0.4f)));
     leftSphere.setFeatures(RED, BLACK, BLACK, BLACK);

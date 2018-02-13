@@ -151,8 +151,8 @@ void Tracer::renderImageLines(int start, int end) {
     pixel = pixel - rowAdd * start;
     Point pixelRow = pixel;
 
-    for (int i = start; i < end; ++i){
-        for (int j = 0; j < camera.getWidth(); ++j) {
+    for (int i = 0; i < 1; ++i){
+        for (int j = 0; j < 1; ++j) {
 
             for (int k = 0; k < SAMPLES; ++k) {
                 float randomWidthOffset, randomHeightOffset;
@@ -194,11 +194,15 @@ RGB Tracer::radiance(const Ray ray, int depth) const {
 
     if (!intersect(ray, dist, id)) return BLACK;
 
+    cout << id << endl;
+
     const shared_ptr<Shape> shape = shapes.at(id);
     Point itsctPoint = ray.getSource() + (ray.getDirection() * dist);
     Dir normal = shape->getNormal(itsctPoint);
     Dir nl = (normal.dot(ray.getDirection()) < 0) ? normal : normal * -1;
     RGB color = shape->getKd(); //TODO: Rename featuress add type of material and remove coefficients
+
+    cout << color << endl;
 
     float maxVal = color.getMax();
 
