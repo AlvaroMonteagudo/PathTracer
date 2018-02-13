@@ -189,8 +189,6 @@ inline bool Tracer::intersect(const Ray &ray, float &distance, int &id) const {
 
 RGB Tracer::radiance(const Ray ray, int depth) const {
 
-    RGB result = BLACK;
-
     float dist  = MAX_FLOAT;
     int id = -1;
 
@@ -206,21 +204,8 @@ RGB Tracer::radiance(const Ray ray, int depth) const {
 
     if (depth == MAX_DEPTH) return BLACK;
 
-    // Mirar tipos
-    if (shape->type == Shape::Type::DIFF) {
+    return color*(RussianRoulette(itsctPoint, shape, depth));
 
-    } else if (shape->type == Shape::Type::SPEC) {
-
-    } else {
-
-    }
-
-    result = directLight(itsctPoint, normal, shape, ray)
-            + (RussianRoulette(itsctPoint, shape, depth) / (MAX_DEPTH + 1));
-             //+ deltaInteraction(itsctPoint, normal, shape, ray, depth, indirectSteps)
-             //+ indirectLight(itsctPoint, normal, shape, ray, depth, indirectSteps);
-
-    return result;
 
 }
 
