@@ -46,7 +46,7 @@ Scene::Scene() {
     rightSphere.setFeatures(GREEN, BLACK, BLACK, BLACK);
 
     setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
-                    Point(0.f, -0.f, -1.8f), 1.0, 1080, 1080, PI/3.0f));
+                    Point(0.f, -0.f, -2.8f), 1.0, 720, 720, PI/3.0f));
 
     LightSource light = LightSource(Point(0.0f, 0.8f, -0.3f), 1.5f);
 
@@ -56,8 +56,8 @@ Scene::Scene() {
     shapes.push_back(make_shared<Plane>(leftWall));
     shapes.push_back(make_shared<Plane>(floor));
     shapes.push_back(make_shared<Plane>(ceiling));
-    shapes.push_back(make_shared<Sphere>(leftSphere));
-    shapes.push_back(make_shared<Sphere>(rightSphere));
+    //shapes.push_back(make_shared<Sphere>(leftSphere));
+    //shapes.push_back(make_shared<Sphere>(rightSphere));
     shapes.push_back(make_shared<Plane>(bottom));
     //shapes.push_back(make_shared<Plane>(backWall));
     //shapes.push_back(make_shared<Sphere>(airSphere));

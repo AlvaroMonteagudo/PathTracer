@@ -151,8 +151,8 @@ void Tracer::renderImageLines(int start, int end) {
     pixel = pixel - rowAdd * start;
     Point pixelRow = pixel;
 
-    for (int i = 0; i < 1; ++i){
-        for (int j = 0; j < 1; ++j) {
+    for (int i = start; i < end; ++i){
+        for (int j = 0; j < image.getWidth(); ++j) {
 
             for (int k = 0; k < SAMPLES; ++k) {
                 float randomWidthOffset, randomHeightOffset;
@@ -187,29 +187,92 @@ inline bool Tracer::intersect(const Ray &ray, float &distance, int &id) const {
     return distance < MAX_FLOAT;
 }
 
-RGB Tracer::radiance(const Ray ray, int depth) const {
+RGB Tracer::radiance(const Ray &_ray, int _depth) const {
 
     float dist  = MAX_FLOAT;
     int id = -1;
+    Ray ray = _ray;
+    int depth = _depth;
 
-    if (!intersect(ray, dist, id)) return BLACK;
+    RGB acumColor = BLACK, acumRefl = WHITE;
 
-    cout << id << endl;
 
-    const shared_ptr<Shape> shape = shapes.at(id);
-    Point itsctPoint = ray.getSource() + (ray.getDirection() * dist);
-    Dir normal = shape->getNormal(itsctPoint);
-    Dir nl = (normal.dot(ray.getDirection()) < 0) ? normal : normal * -1;
-    RGB color = shape->getKd(); //TODO: Rename featuress add type of material and remove coefficients
+    while(1) {
 
-    cout << color << endl;
+        if (!intersect(ray, dist, id)) return acumColor;
 
-    float maxVal = color.getMax();
+        //cout << id << " " << depth << endl;
 
-    if (depth == MAX_DEPTH) return BLACK;
+        const shared_ptr<Shape> shape = shapes.at(id);
+        Point intersectedPoint = ray.getSource() + (ray.getDirection() * dist);
+        Dir normal = shape->getNormal(intersectedPoint);
+        Dir nl = (normal.dot(ray.getDirection()) < 0) ? normal : normal * -1;
+        RGB shapeColor = shape->getKd(); // Esto sera color y nos valdremos por el tipo
 
-    return color*(RussianRoulette(itsctPoint, shape, depth));
+        //return shapeColor; // esto es solo directa
+        float maxVal = shapeColor.getMax();
+        acumColor += acumRefl * shapeColor;
 
+        if (++depth > MAX_DEPTH) {
+            if (randomValue() < maxVal) shapeColor /= maxVal;
+            return acumColor;
+        }
+
+        acumRefl *= shapeColor;
+
+        if (shape->type == Shape::Type::DIFF) {
+
+            Dir zAxis = shape->getNormal(intersectedPoint);
+            Dir xAxis = ((zAxis.x != 0) ? Dir(0, 1, 0) : Dir(1, 0, 0)).cross(zAxis).normalize();
+            Dir yAxis = zAxis.cross(xAxis);
+
+            Mat transformToGlobalCoordinates = Mat(xAxis, yAxis, zAxis, intersectedPoint);
+
+            // Uniform cosine
+            float inclination, azimuth;
+            uniformCosineSampling(inclination, azimuth);
+
+            Dir rayDirLocal = Dir(sin(inclination) * cos(azimuth),
+                                  sin(inclination) * sin(azimuth),
+                                  cos(inclination));
+
+            Dir rayDir = transformToGlobalCoordinates * rayDirLocal; // Get global coordinates ray direction
+
+            ray = Ray(intersectedPoint, rayDir);
+            continue;
+        }
+    }
+    //cout << color << endl;
+
+    /*float maxVal = color.getMax();
+
+    if (++depth > MAX_DEPTH) {
+        if (randomValue() < maxVal) color /= maxVal;
+        else return shape->getEmit();
+    }
+
+    if (shape->type == Shape::Type::DIFF) {
+
+        float r1 = 2 * PI * randomValue(), r2 = randomValue();
+        float r2s = sqrt(r2);
+
+        Dir z = nl;
+        Dir x = ((fabs(z.x) > .1) ? Dir(0, 1, 0) : Dir(1, 0, 0)).cross(z).normalize();
+        Dir y = z.cross(x);
+
+        Dir d = (x * cos(r1) * r2s + y * sin(r1) * r2s + z * sqrt(1 - r2)).normalize();
+
+        return shape->getEmit() + color * radiance(Ray(intersectedPoint, d), depth);
+
+    } else if (shape->type == Shape::Type::SPEC) {
+        Ray reflectedRay(intersectedPoint, shape->getDirRayReflected(ray.getDirection(), normal));
+        return shape->getEmit() + color * radiance(reflectedRay, depth);
+    }*/
+
+    //Ray refractedRay(intersectedPoint, shape->getDirRayRefracted(ray.getDirection(), normal));
+    //return shape->getEmit() + color * radiance(refractedRay, depth);
+
+    //return color*(RussianRoulette(intersectedPoint, shape, depth));
 
 }
 
@@ -296,7 +359,7 @@ RGB Tracer::deltaInteraction(const Point &intersectedPoint, const Dir &normal,
     }
 
     if (shape->getKt() != BLACK) {
-        Ray refractedRay(intersectedPoint, shape->getDirRayRefracted(ray.getDirection(), normal * -1));
+        //Ray refractedRay(intersectedPoint, shape->getDirRayRefracted(ray.getDirection(), normal * -1));
         //color += radiance(refractedRay, depth + 1, indirectSteps) * shape->getKt();
     }
 
