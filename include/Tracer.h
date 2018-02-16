@@ -62,7 +62,7 @@ public:
      * @param indirectSteps: number of bounces for indirect light
      * @return color obtained of the path this ray follows
      */
-    RGB radiance(const Ray ray, int depth) const;
+    RGB radiance(const Ray &_ray, int depth) const;
 
     /**
      * Direct light method

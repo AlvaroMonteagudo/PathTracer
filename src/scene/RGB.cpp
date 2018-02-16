@@ -11,6 +11,7 @@
  */
 
 #include <iostream>
+#include <cmath>
 #include "../../include/scene/RGB.h"
 
 /**
@@ -56,11 +57,20 @@ std::ostream& operator << (std::ostream &os, const RGB &rgb){
 }
 
 std::ofstream& operator << (std::ofstream &file, const RGB &rgb){
-    file << " " << (int) (rgb.getRed() * 255)
-         << " " << (int) (rgb.getGreen() * 255)
-         << " " << (int) (rgb.getBlue() * 255) << '\t';
+    file << " " << rgb.getRed()
+         << " " << rgb.getGreen()
+         << " " << rgb.getBlue() << '\t';
     return file;
 }
+
+inline float clamp(float x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
+RGB RGB::toInt() {
+    red = int(pow(clamp(red), 1/2.2) * 255 + .5f);
+    green = int(pow(clamp(green), 1/2.2) * 255 + .5f);
+    blue = int(pow(clamp(blue), 1/2.2) * 255 + .5f);
+    return *this;
+}
+
 
 RGB RGB::operator + (const RGB &color) const {
     return { red + color.getRed(), green + color.getGreen(), blue + color.getBlue()  };

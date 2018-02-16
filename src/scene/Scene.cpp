@@ -56,8 +56,8 @@ Scene::Scene() {
     shapes.push_back(make_shared<Plane>(leftWall));
     shapes.push_back(make_shared<Plane>(floor));
     shapes.push_back(make_shared<Plane>(ceiling));
-    //shapes.push_back(make_shared<Sphere>(leftSphere));
-    //shapes.push_back(make_shared<Sphere>(rightSphere));
+    shapes.push_back(make_shared<Sphere>(leftSphere));
+    shapes.push_back(make_shared<Sphere>(rightSphere));
     shapes.push_back(make_shared<Plane>(bottom));
     //shapes.push_back(make_shared<Plane>(backWall));
     //shapes.push_back(make_shared<Sphere>(airSphere));

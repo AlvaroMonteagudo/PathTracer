@@ -1,9 +1,10 @@
 #pragma once
 
-float randomValue() {
-    std::default_random_engine generator;
-    std::uniform_real_distribution<float> distribution(0, 1);
-    return distribution(generator);
+inline static float randomValue() {
+    static random_device device;
+    static mt19937 mt(device());
+    static uniform_real_distribution<float> distribution(0, 1);
+    return distribution(mt);
 }
 
 

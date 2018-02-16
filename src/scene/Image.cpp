@@ -61,7 +61,7 @@ void Image::saveImage(string filename)const {
 
     for (int i = 0; i < height; ++i) {
         for (int j = 0; j < width; ++j) {
-            file << (*this)(i,j) << '\t';
+            file << (*this)(i,j).toInt() << '\t';
         }
         file << '\n';
     }

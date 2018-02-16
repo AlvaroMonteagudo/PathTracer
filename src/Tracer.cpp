@@ -196,8 +196,7 @@ RGB Tracer::radiance(const Ray &_ray, int _depth) const {
 
     RGB acumColor = BLACK, acumRefl = WHITE;
 
-
-    while(1) {
+    while(true) {
 
         if (!intersect(ray, dist, id)) return acumColor;
 
@@ -205,20 +204,20 @@ RGB Tracer::radiance(const Ray &_ray, int _depth) const {
 
         const shared_ptr<Shape> shape = shapes.at(id);
         Point intersectedPoint = ray.getSource() + (ray.getDirection() * dist);
-        Dir normal = shape->getNormal(intersectedPoint);
+        Dir normal = shape->getNormal(intersectedPoint).normalize();
         Dir nl = (normal.dot(ray.getDirection()) < 0) ? normal : normal * -1;
         RGB shapeColor = shape->getKd(); // Esto sera color y nos valdremos por el tipo
 
         //return shapeColor; // esto es solo directa
-        float maxVal = shapeColor.getMax();
+        //float maxVal = shapeColor.getMax();
         acumColor += acumRefl * shapeColor;
 
         if (++depth > MAX_DEPTH) {
-            if (randomValue() < maxVal) shapeColor /= maxVal;
             return acumColor;
         }
-
+        //cout << acumRefl << endl;
         acumRefl *= shapeColor;
+        //cout << acumRefl << endl;
 
         if (shape->type == Shape::Type::DIFF) {
 

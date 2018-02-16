@@ -74,6 +74,9 @@ public:
      */
     friend std::ofstream& operator << (std::ofstream &file, const RGB &rgb);
 
+    RGB toInt();
+
+
 private:
 
     float red, blue, green;
@@ -83,12 +86,12 @@ private:
 /// RGB common used values
 #define WHITE   RGB(1.0f, 1.0f, 1.0f)
 #define BLACK   RGB(0, 0, 0)
-#define RED     RGB(1.0f, 0, 0)
-#define GREEN   RGB(0, 1.0f, 0)
-#define BLUE    RGB(0, 0, 1.0f)
+#define RED     RGB(0.85f, 0, 0)
+#define GREEN   RGB(0, 0.85f, 0)
+#define BLUE    RGB(0, 0, 0.85f)
 #define GRAY    RGB(0.5, 0.5, 0.5)
-#define PURPLE  RGB(1.0f, 0.2f, 1.0f)
-#define ORANGE  RGB(1.0f, 0.55f, 0.2f)
-#define YELLOW  RGB(1.0f, 1.0f, 0.3f)
+#define PURPLE  RGB(0.85f, 0.2f, 1.0f)
+#define ORANGE  RGB(0.85f, 0.55f, 0.2f)
+#define YELLOW  RGB(0.85f, 0.85f, 0.3f)
 #define L_GRAY  GRAY * 1.25f
 #define D_GRAY  GRAY * 0.75f
