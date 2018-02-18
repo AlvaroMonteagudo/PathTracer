@@ -43,5 +43,9 @@ Dir Ray::getDirection() const  {
     return direction;
 }
 
+Point Ray::getPoint(float distance) const {
+    return source + direction * distance;
+}
+
 
 

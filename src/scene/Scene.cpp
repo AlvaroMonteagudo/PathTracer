@@ -14,6 +14,8 @@
 #include <sstream>
 #include <cstring>
 #include "../../include/scene/Scene.h"
+#include "../../include/shapes/Circle.h"
+#include "../../include/shapes/Quad.h"
 
 
 /**
@@ -45,6 +47,12 @@ Scene::Scene() {
     Triangle triangle(Point(0.2, 0, 0.4), Point(0.6, 0, 0.4), Point(0.4, 0.4, 0.4));
     triangle.setFeatures(GREEN, BLACK, BLACK, BLACK);
 
+    Circle circle(Point(0, 0, 0.2), Dir(0, 0, -1), 0.25f);
+    circle.setFeatures(BLUE, BLACK, BLACK, BLACK);
+
+    Quad quad(Point(0, 0, 0), Point(0.2, 0 , 0), Point(0.1 ,0.2 , 0), Point(0.3 ,0.2 ,0));
+    quad.setFeatures(BLUE, BLACK, BLACK, BLACK);
+
     setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
                     Point(0.f, -0.f, -2.8f), 1.0, 720, 720, PI/3.0f));
 
@@ -59,6 +67,8 @@ Scene::Scene() {
     addShape(leftSphere);
     addShape(triangle);
     addShape(bottom);
+    addShape(quad);
+    //addShape(circle);
     //addShape(backWall));
     //addShape(airSphere));
     //addShape(waterSphere));

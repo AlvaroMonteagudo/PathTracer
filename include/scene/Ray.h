@@ -43,8 +43,10 @@ public:
 
     Dir getDirection() const;
 
+    Point getPoint(float distance) const;
 
-private:
+
+protected:
 
     /// RAY PARAMETERS
     Point source;

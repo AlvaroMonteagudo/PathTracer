@@ -1,7 +1,3 @@
-//
-// Created by alvaro on 28/12/17.
-//
-
 #include "../../include/algebraUtils/Point.h"
 #include "../../include/shapes/Triangle.h"
 
@@ -31,6 +27,7 @@ const Point &Triangle::getC() const {
 float Triangle::intersect(const Ray &ray) const {
     // Intersection of the ray of light with the plane.
     float t = Plane::intersect(ray);
+    if (t == MAX_FLOAT) return MAX_FLOAT;
     Point intersection = ray.getSource() + ray.getDirection() * t;
     // Based in Christer Ericson's Real-Time Collision Detection.
     /* Get the barycentric coordinates for the intersection
