@@ -108,7 +108,6 @@ int main(int argc, char * argv[]){
     }
 
     Scene scene = Scene();
-    if (!fileScene.empty()) scene = Scene(fileScene);
 
     Tracer tracer = Tracer(outfileName, scene);
     tracer.MAX_INDIRECT_STEPS = indirectSteps;

@@ -20,7 +20,7 @@
 #include <memory>
 #include <vector>
 #include "LightSource.h"
-#include "../shapes/Plane.h"
+#include "../shapes/Triangle.h"
 #include "../shapes/Sphere.h"
 #include "Camera.h"
 #include "AreaLight.h"
@@ -35,12 +35,6 @@ public:
     Scene();
 
     /**
-     * Scene constructor
-     * @param filename where scene specifications are
-     */
-    explicit Scene(string filename);
-
-    /**
      * Get camera used in this scene
      * @return camera used in this scene
      */
@@ -51,6 +45,13 @@ public:
      * @param camera
      */
     void setCamera(const Camera &camera);
+
+    template <class S>
+    void addShape(const S &shape)
+    {
+        shapes.push_back(make_shared<S>(shape));
+    }
+
 
     /**
      * Get shapes usd in this scene
@@ -80,13 +81,6 @@ private:
     std::vector<AreaLight> areaLights;
 
     Camera camera;
-
-    /// Methods to set scene features stored in a file
-    void addPlane(ifstream &ifstream);
-
-    void addSphere(ifstream &ifstream);
-
-    void parseMaterial(const string &line, RGB &kd, RGB &ks, RGB &kr, RGB &kt);
 };
 
 
