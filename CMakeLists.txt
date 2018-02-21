@@ -14,6 +14,6 @@ set (SOURCE_FILES main.cc
         include/scene/Image.h src/scene/Image.cpp
         include/scene/Scene.h src/scene/Scene.cpp
         include/scene/LightSource.h src/scene/LightSource.cpp
-        include/Tracer.h src/Tracer.cpp include/shapes/Triangle.h src/shapes/Triangle.cpp include/scene/AreaLight.h src/scene/AreaLight.cpp include/samplingUtils.h include/shapes/Circle.h src/shapes/Circle.cpp include/shapes/Quad.h src/shapes/Quad.cpp)                        # Add main.cc file of project root directory as source file
+        include/Tracer.h src/Tracer.cpp include/shapes/Triangle.h src/shapes/Triangle.cpp include/scene/AreaLight.h src/scene/AreaLight.cpp include/samplingUtils.h include/shapes/Circle.h src/shapes/Circle.cpp include/shapes/Quad.h src/shapes/Quad.cpp include/shapes/Box.h src/shapes/Box.cpp include/shapes/Pyramid.h src/shapes/Pyramid.cpp)                        # Add main.cc file of project root directory as source file
 
 add_executable(render ${SOURCE_FILES})

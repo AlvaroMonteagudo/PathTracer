@@ -3,17 +3,14 @@
 #include "Plane.h"
 
 class Triangle : public Plane {
+
 public:
 
     Triangle(const Point &a, const Point &b, const Point &c);
 
     float intersect(const Ray &ray) const;
 
-    const Point &getA() const;
-
-    const Point &getB() const;
-
-    const Point &getC() const;
+    tuple<Point, Point, Point> getCorners() const;
 
 protected:
 

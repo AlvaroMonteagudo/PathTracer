@@ -20,6 +20,7 @@
 #include "../scene/RGB.h"
 #include <iostream>
 #include <limits>
+#include <memory>
 
 #define THRESHOLD 0.0001
 #define MIN_FLOAT std::numeric_limits<float>::min()
@@ -132,6 +133,10 @@ public:
         return kt;
     }
 
+    const RGB &getEmit() const {
+        return emit;
+    }
+
     float getShininess() const {
         return shininess;
     }
@@ -142,6 +147,10 @@ public:
 
     void setRefractiveIndex(float refractiveIndex) {
         Shape::refractiveIndex = refractiveIndex;
+    }
+
+    void setEmit(RGB &_emit) {
+        emit = _emit;
     }
 
     void setFeatures(const RGB &kd, const RGB &ks, const RGB &kr, const RGB & kt){
@@ -155,6 +164,7 @@ private:
 
     /// Shape features coefficients
     RGB kd, ks, kr , kt;
+    RGB emit = BLACK;
 
     /// Other shape values
     float shininess = 0.0f, refractiveIndex = AIR_RI;

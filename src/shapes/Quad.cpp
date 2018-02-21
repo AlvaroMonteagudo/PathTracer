@@ -1,10 +1,11 @@
+#include <tuple>
 #include "../../include/shapes/Quad.h"
 
 Quad::Quad(const Point &a, const Point &b, const Point &c, const Point &d)
     : Plane((b - a).cross(c - a).normalize(), a),
       v00(a), v10(b), v11(c), v01(d),
       t1(Triangle(a, b, c)),
-      t2(Triangle(b, c, d)) { }
+      t2(Triangle(a, c, d)) { }
 
 float Quad::intersect(const Ray &ray) const {
     float dist = Plane::intersect(ray);
@@ -54,4 +55,16 @@ float Quad::intersect(const Ray &ray) const {
     Dir N = E01.cross(E03);*/
 
     return (t1.intersect(ray) < MAX_FLOAT) ? dist : (t2.intersect(ray) < MAX_FLOAT) ? dist : MAX_FLOAT;
+}
+
+tuple<Point, Point, Point, Point> Quad::getCorners() const {
+    return make_tuple(v00, v10, v11, v01);
+}
+
+Dir Quad::getNormal(const Point &intersectedPoint) const {
+    return Plane::getNormal(intersectedPoint);
+}
+
+Dir Quad::getNormal() const {
+    return Plane::getNormal();
 }

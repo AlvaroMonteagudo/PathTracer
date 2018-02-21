@@ -1,7 +1,6 @@
 #include "../../include/algebraUtils/Point.h"
 #include "../../include/shapes/Triangle.h"
 
-
 Triangle::Triangle(const Point &a, const Point &b, const Point &c) :
         Plane((b - a).cross(c - a).normalize(), a),
         a(a), b(b), c(c),
@@ -10,18 +9,11 @@ Triangle::Triangle(const Point &a, const Point &b, const Point &c) :
         d00(v0.dot(v0)),
         d01(v0.dot(v1)),
         d11(v1.dot(v1)),
-        denominator(d00 * d11 - d01 * d01){}
+        denominator(d00 * d11 - d01 * d01)
+{}
 
-const Point &Triangle::getA() const {
-    return a;
-}
-
-const Point &Triangle::getB() const {
-    return b;
-}
-
-const Point &Triangle::getC() const {
-    return c;
+tuple<Point, Point, Point> Triangle::getCorners() const {
+    return make_tuple(a, b, c);
 }
 
 float Triangle::intersect(const Ray &ray) const {

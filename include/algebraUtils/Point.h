@@ -59,12 +59,30 @@ public:
     }
 
     /**
+     * Plus operator
+     * @param point: input point
+     * @return point result from adding dir to this
+     */
+    Point operator + (const Point &point) const {
+        return { x + point.x, y + point.y, z + point.z };
+    }
+
+    /**
      * Minus operator
      * @param dir: input direction
      * @return point result from substraction dir to this
      */
     Point operator - (const Dir &dir) const {
         return { x - dir.x, y - dir.y, z - dir.z };
+    }
+
+    /**
+     * Div operator
+     * @param num: divisor
+     * @return point result from dividing this point by float num
+     */
+    Point operator / (const float num) const {
+        return { x / num, y / num, z / num };
     }
 
     bool operator <= (const Point &point) const {
