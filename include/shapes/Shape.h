@@ -18,6 +18,7 @@
 #include "../scene/Ray.h"
 #include "../algebraUtils/Point.h"
 #include "../scene/RGB.h"
+#include "../scene/Camera.h"
 #include <iostream>
 #include <limits>
 #include <memory>
@@ -158,6 +159,18 @@ public:
         this->ks = ks;
         this->kr = kr;
         this->kt = kt;
+    }
+
+    RGB phong(const Ray &ray, const Ray &light,  const Point &point) const {
+
+        Dir normal = this->getNormal(point);
+        Dir reflectedLight = getDirRayReflected(light.getDirection() * -1, normal);
+
+        float cos = ray.getDirection().dot(reflectedLight);
+
+        if (cos < 0) cos = -cos;
+
+        return ((kd / PI) + (ks * ((shininess + 2.0f) / (2.0f * PI)) * pow(cos, shininess)));
     }
 
 private:

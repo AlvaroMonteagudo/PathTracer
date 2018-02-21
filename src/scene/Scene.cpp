@@ -18,6 +18,7 @@
 #include "../../include/shapes/Quad.h"
 #include "../../include/shapes/Box.h"
 #include "../../include/shapes/Pyramid.h"
+#include "../../include/shapes/Cone.h"
 
 
 /**
@@ -49,7 +50,7 @@ Scene::Scene() {
     Triangle triangle(Point(-0.5f, -0.5f, 0), Point(-0.8f, -0.5f , -0.2f), Point(-0.6f ,-0.5f , 0));
     triangle.setFeatures(GREEN, BLACK, BLACK, BLACK);
 
-    Circle circle(Point(0, 0, 0.2), Dir(0, 0, -1), 0.25f);
+    Circle circle(Point(0, -0.5f, 0.2), Dir(0, 1, 0), 0.25f);
     circle.setFeatures(BLUE, BLACK, BLACK, BLACK);
 
     Quad quad(Point(0, -0.5f, 0), Point(0.4, -0.5f , -0.2f), Point(0.8 ,-0.5f , 0), Point(0.4 ,-0.5f ,0.2));
@@ -64,6 +65,9 @@ Scene::Scene() {
     Pyramid pyramid3(triangle, 0.5);
     pyramid4.setMaterial(BLUE, BLACK, BLACK, BLACK);
 
+    Cone cone(circle, 0.5f);
+    cone.setMaterial(BLUE, BLACK, BLACK, BLACK);
+
     setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
                     Point(0.f, -0.f, -2.8f), 1.0, 720, 720, PI/3.0f));
 
@@ -76,6 +80,7 @@ Scene::Scene() {
     addShape(floor);
     addShape(ceiling);
     addShape(bottom);
+    addShape(cone);
     //addShape(pyramid4);
     //addShape(pyramid3);
     //addShape(box);

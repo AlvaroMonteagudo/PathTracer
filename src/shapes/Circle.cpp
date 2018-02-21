@@ -11,3 +11,11 @@ float Circle::intersect(const Ray &ray) const {
     return ((point - p).module() <= radius) ? t : MAX_FLOAT;
 }
 
+const Point &Circle::getPoint() const {
+    return point;
+}
+
+float Circle::getRadius() const {
+    return radius;
+}
+

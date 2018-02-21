@@ -102,17 +102,6 @@ public:
     RGB deltaInteraction(const Point &intersectedPoint, const Dir &normalShape,
                          const shared_ptr<Shape> &shape, const Ray &ray, int depth, int indrectSteps) const;
 
-    /**
-     * Phong's BRDF method
-     * @param ray
-     * @param light
-     * @param normal of the shape
-     * @param shape intersected
-     * @param point where shape was intersected
-     * @return color from Phong's BRDF formula
-     */
-    RGB Phong(const Ray &ray, const Ray &light, const Dir &normal, shared_ptr<Shape> shape,
-              const Point &point) const;
 
     RGB RussianRoulette(const Point &intersectedPoint, const shared_ptr<Shape> shape, int depth) const;
 

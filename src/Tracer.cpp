@@ -200,7 +200,7 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
     Dir nl = (normal.dot(ray.getDirection()) < 0) ? normal : normal * -1;
     RGB shapeColor = shape->getKd(); // Esto sera color y nos valdremos por el tipo
 
-    //return shapeColor; // esto es solo directa
+    return shapeColor; // esto es solo directa
     float maxVal = shapeColor.getMax();
 
     if (++depth > MAX_DEPTH) {
@@ -228,7 +228,7 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
 
         Ray sample(intersectedPoint, transformToGlobalCoordinates * rayDirLocal);
 
-        return Phong(ray, sample, nl, shape, intersectedPoint) * radiance(sample, depth);
+        return shape->phong(ray, sample, intersectedPoint) * radiance(sample, depth);
 
     }
 }
@@ -256,8 +256,8 @@ RGB Tracer::directLight(const Point &intersectedPoint, const Dir &normal,
 
         if(!inShadow) {
             float cos = shadow.getDirection().dot(normal);
-            color += (Phong(Ray(ray.getSource(), ray.getDirection() * -1), shadow, normal, shape, intersectedPoint)
-                      * (light.getIntensity() / (lightDist * lightDist)) * std::abs(cos));
+            //color += (Phong(Ray(ray.getSource(), ray.getDirection() * -1), shadow, normal, shape, intersectedPoint)
+             //         * (light.getIntensity() / (lightDist * lightDist)) * std::abs(cos));
 
         }
     }
@@ -323,19 +323,6 @@ RGB Tracer::deltaInteraction(const Point &intersectedPoint, const Dir &normal,
     return color;
 }
 
-RGB Tracer::Phong(const Ray &ray, const Ray &light, const Dir &normal,
-                  shared_ptr<Shape> shape, const Point &point) const {
-
-    Dir reflectedLight = shape->getDirRayReflected(light.getDirection() * -1, normal);
-
-    float cos = ray.getDirection().dot(reflectedLight);
-
-    if (cos < 0) cos = -cos;
-
-    return ((shape->getKd() / PI) +
-            (shape->getKs() * ((shape->getShininess() + 2.0f) / (2.0f * PI))
-                            * pow(cos, shape->getShininess())));
-}
 
 RGB Tracer::RussianRoulette(const Point &intersectedPoint, const shared_ptr<Shape> shape, int depth) const {
 

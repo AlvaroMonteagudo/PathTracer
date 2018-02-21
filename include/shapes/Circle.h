@@ -10,6 +10,10 @@ public:
 
     float intersect(const Ray &ray) const;
 
+    const Point &getPoint() const;
+
+    float getRadius() const;
+
 protected:
 
     Point point;
