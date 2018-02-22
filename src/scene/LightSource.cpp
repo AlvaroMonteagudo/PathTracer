@@ -10,7 +10,7 @@
  *  Implementation for light source class
  */
 
-#include "../../include/scene/LightSource.h"
+#include "LightSource.h"
 
 /**
  * Default constructor

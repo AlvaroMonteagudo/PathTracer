@@ -1,5 +1,5 @@
 #include <tuple>
-#include "../../include/shapes/Quad.h"
+#include "Quad.h"
 
 Quad::Quad(const Point &a, const Point &b, const Point &c, const Point &d)
     : Plane((b - a).cross(c - a).normalize(), a),

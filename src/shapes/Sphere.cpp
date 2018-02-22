@@ -11,7 +11,7 @@
  */
 
 #include <iostream>
-#include "../../include/shapes/Sphere.h"
+#include "Sphere.h"
 
 /**
  * Default constructor

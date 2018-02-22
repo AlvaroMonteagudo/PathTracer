@@ -12,7 +12,7 @@
 
 #include <iostream>
 #include <cmath>
-#include "../../include/scene/RGB.h"
+#include "RGB.h"
 
 /**
  * Color constructor

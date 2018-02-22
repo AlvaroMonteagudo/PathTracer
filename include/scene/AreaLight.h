@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../algebraUtils/Point.h"
-#include "../shapes/Plane.h"
+#include "Point.h"
+#include "Plane.h"
 
 class AreaLight  : public Plane{
 

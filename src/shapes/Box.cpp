@@ -1,4 +1,4 @@
-#include "../../include/shapes/Box.h"
+#include "Box.h"
 
 Box::Box(const Quad &quad, const float depth) : Shape() {
 

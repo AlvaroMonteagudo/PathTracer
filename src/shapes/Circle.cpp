@@ -1,4 +1,4 @@
-#include "../../include/shapes/Circle.h"
+#include "Circle.h"
 
 Circle::Circle(const Point &p, const Dir &normal, float radius) :
     Plane(normal, p), point(p), radius(radius)  { }

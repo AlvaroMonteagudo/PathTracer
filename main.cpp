@@ -14,11 +14,8 @@
 #include <iostream>
 #include <queue>
 #include <list>
-#include "include/algebraUtils/Point.h"
-#include "include/algebraUtils/Mat.h"
-#include "include/scene/Image.h"
-#include "include/scene/Scene.h"
-#include "include/Tracer.h"
+#include "Scene.h"
+#include "Tracer.h"
 
 void printUsage();
 

@@ -1,5 +1,5 @@
 
-#include "../../include/shapes/Cone.h"
+#include "Cone.h"
 #include <cmath>
 
 Cone::Cone(const Circle &base, float height) :

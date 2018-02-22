@@ -12,8 +12,8 @@
 
 #include <ctime>
 
-#include "../include/Tracer.h"
-#include "../include/samplingUtils.h"
+#include "Tracer.h"
+#include "samplingUtils.h"
 
 using namespace std;
 

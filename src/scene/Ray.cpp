@@ -10,7 +10,7 @@
  *  Implementation for light source class
  */
 
-#include "../../include/scene/Ray.h"
+#include "Ray.h"
 
 /**
  * Default constructor

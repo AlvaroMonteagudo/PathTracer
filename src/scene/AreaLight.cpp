@@ -3,7 +3,7 @@
 //
 
 
-#include "../../include/scene/AreaLight.h"
+#include "AreaLight.h"
 
 
 AreaLight::AreaLight(const Point &upCorner, const Point &downCorner, const Dir &normal, const Dir &xDir, const Dir &yDir,

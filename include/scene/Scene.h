@@ -20,8 +20,8 @@
 #include <memory>
 #include <vector>
 #include "LightSource.h"
-#include "../shapes/Triangle.h"
-#include "../shapes/Sphere.h"
+#include "Triangle.h"
+#include "Sphere.h"
 #include "Camera.h"
 #include "AreaLight.h"
 

@@ -1,5 +1,5 @@
 
-#include "../../include/shapes/Pyramid.h"
+#include "Pyramid.h"
 
 Pyramid::Pyramid(const Quad &quad, float height) {
     tie(a, b, c, d) = quad.getCorners();

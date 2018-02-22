@@ -14,8 +14,8 @@
 #include "scene/Scene.h"
 #include <vector>
 #include <fstream>
-#include "algebraUtils/Mat.h"
-#include "scene/Image.h"
+#include "Mat.h"
+#include "Image.h"
 #include <cstring>
 #include <iostream>
 #include <random>

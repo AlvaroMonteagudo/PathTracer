@@ -15,10 +15,10 @@
 
 #pragma once
 
-#include "../scene/Ray.h"
-#include "../algebraUtils/Point.h"
-#include "../scene/RGB.h"
-#include "../scene/Camera.h"
+#include "Ray.h"
+#include "Point.h"
+#include "RGB.h"
+#include "Camera.h"
 #include <iostream>
 #include <limits>
 #include <memory>

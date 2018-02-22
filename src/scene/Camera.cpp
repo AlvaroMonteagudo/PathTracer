@@ -9,7 +9,7 @@
  *
  *  Implementation for camera class
  */
-#include "../../include/scene/Camera.h"
+#include "Camera.h"
 
 /**
  * Empty constructor

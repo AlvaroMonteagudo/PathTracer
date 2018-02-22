@@ -15,7 +15,7 @@
 #define PI 3.14159265358979323846f
 
 #include <ostream>
-#include "../algebraUtils/Point.h"
+#include "Point.h"
 
 class Camera {
 

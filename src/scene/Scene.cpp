@@ -13,12 +13,12 @@
 
 #include <sstream>
 #include <cstring>
-#include "../../include/scene/Scene.h"
-#include "../../include/shapes/Circle.h"
-#include "../../include/shapes/Quad.h"
-#include "../../include/shapes/Box.h"
-#include "../../include/shapes/Pyramid.h"
-#include "../../include/shapes/Cone.h"
+#include "Scene.h"
+#include "Circle.h"
+#include "Quad.h"
+#include "Box.h"
+#include "Pyramid.h"
+#include "Cone.h"
 
 
 /**

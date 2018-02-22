@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "../algebraUtils/Point.h"
+#include "Point.h"
 
 class LightSource {
 

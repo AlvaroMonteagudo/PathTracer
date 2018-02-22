@@ -11,7 +11,7 @@
  */
 
 #include <limits>
-#include "../../include/shapes/Plane.h"
+#include "Plane.h"
 
 /**
  * Constructor for plane

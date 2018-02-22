@@ -14,10 +14,10 @@
 
 #pragma once
 
-#include "../algebraUtils/Dir.h"
+#include "Dir.h"
 #include "Shape.h"
-#include "../algebraUtils/Point.h"
-#include "../scene/Ray.h"
+#include "Point.h"
+#include "Ray.h"
 
 class Plane : public Shape {
 

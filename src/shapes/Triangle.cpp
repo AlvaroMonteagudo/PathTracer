@@ -1,5 +1,5 @@
-#include "../../include/algebraUtils/Point.h"
-#include "../../include/shapes/Triangle.h"
+#include "Point.h"
+#include "Triangle.h"
 
 Triangle::Triangle(const Point &a, const Point &b, const Point &c) :
         Plane((b - a).cross(c - a).normalize(), a),

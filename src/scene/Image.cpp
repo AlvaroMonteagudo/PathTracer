@@ -10,7 +10,7 @@
  *  Implementation for image class
  */
 
-#include "../../include/scene/Image.h"
+#include "Image.h"
 #include <fstream>
 
 /**
