@@ -12,7 +12,7 @@
 
 #include <iostream>
 #include <cmath>
-#include "RGB.h"
+#include "../../include/scene/RGB.h"
 
 /**
  * Color constructor
@@ -65,6 +65,7 @@ std::ofstream& operator << (std::ofstream &file, const RGB &rgb){
 
 inline float clamp(float x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
 RGB RGB::toInt() {
+    //  TODO: Gamma correction check efectiveness
     red = int(pow(clamp(red), 1/2.2) * 255 + .5f);
     green = int(pow(clamp(green), 1/2.2) * 255 + .5f);
     blue = int(pow(clamp(blue), 1/2.2) * 255 + .5f);

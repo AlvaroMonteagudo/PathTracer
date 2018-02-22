@@ -42,7 +42,7 @@ Scene::Scene() {
     bottom.setFeatures(GRAY * 1.5, BLACK, BLACK, BLACK);
 
     Plane backWall(Plane(Dir(0, 0, 1), Point(0, 0, -2)));
-    backWall.setFeatures(GRAY * 1.5, BLACK, BLACK, BLACK);
+    backWall.setFeatures(GRAY, BLACK, BLACK, BLACK);
 
     Sphere leftSphere(Sphere(0.25f, Point(-0.5f, 0, 0.4f)));
     leftSphere.setFeatures(RED, BLACK, BLACK, BLACK);
