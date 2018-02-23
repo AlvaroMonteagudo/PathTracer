@@ -230,7 +230,7 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
 
         return shape->phong(ray, sample, intersectedPoint) + shapeColor * radiance(sample, depth);
         //return shapeColor + shape->phong(ray, sample, intersectedPoint)  * radiance(sample, depth);
-    }
+    } else return BLACK;
 }
 
 RGB Tracer::directLight(const Point &intersectedPoint, const Dir &normal,
