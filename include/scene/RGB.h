@@ -84,7 +84,7 @@ private:
 };
 
 /// RGB common used values
-#define WHITE   RGB(1.0f, 1.0f, 1.0f)
+#define WHITE   RGB(1.0f, 1.0f, 1.0f) * .999
 #define BLACK   RGB(0, 0, 0)
 #define RED     RGB(0.85f, 0, 0)
 #define GREEN   RGB(0, 0.85f, 0)

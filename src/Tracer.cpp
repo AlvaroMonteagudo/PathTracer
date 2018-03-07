@@ -200,7 +200,7 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
     Dir nl = (normal.dot(ray.getDirection()) < 0) ? normal : normal * -1;
     RGB shapeColor = shape->getKd(); // Esto sera color y nos valdremos por el tipo
 
-    return shapeColor; // esto es solo directa
+    //return shapeColor; // esto es solo directa
     float maxVal = shapeColor.getMax();
 
     if (++depth > MAX_DEPTH) {
@@ -228,9 +228,9 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
 
         Ray sample(intersectedPoint, transformToGlobalCoordinates * rayDirLocal);
 
-        return shape->phong(ray, sample, intersectedPoint) * radiance(sample, depth);
-
-    }
+        return shape->phong(ray, sample, intersectedPoint) + shapeColor * radiance(sample, depth);
+        //return shapeColor + shape->phong(ray, sample, intersectedPoint)  * radiance(sample, depth);
+    } else return BLACK;
 }
 
 RGB Tracer::directLight(const Point &intersectedPoint, const Dir &normal,

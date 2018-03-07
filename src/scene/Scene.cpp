@@ -33,13 +33,13 @@ Scene::Scene() {
     leftWall.setFeatures(GREEN, BLACK, BLACK, BLACK);
 
     Plane floor(Plane(Dir(0, 1, 0), Point(0, -1, 0)));
-    floor.setFeatures(GRAY, BLACK, BLACK, BLACK);
+    floor.setFeatures(WHITE, BLACK, BLACK, BLACK);
 
     Plane ceiling(Plane(Dir(0, -1, 0), Point(0, 1, 0)));
-    ceiling.setFeatures(GRAY, BLACK, BLACK, BLACK);
+    ceiling.setFeatures(WHITE, BLACK, BLACK, BLACK);
 
     Plane bottom(Plane(Dir(0, 0, -1), Point(0, 0, 1)));
-    bottom.setFeatures(GRAY * 1.5, BLACK, BLACK, BLACK);
+    bottom.setFeatures(WHITE, BLACK, BLACK, BLACK);
 
     Plane backWall(Plane(Dir(0, 0, 1), Point(0, 0, -2)));
     backWall.setFeatures(GRAY, BLACK, BLACK, BLACK);
@@ -80,11 +80,11 @@ Scene::Scene() {
     addShape(floor);
     addShape(ceiling);
     addShape(bottom);
-    addShape(cone);
+    //addShape(cone);
     //addShape(pyramid4);
     //addShape(pyramid3);
     //addShape(box);
-    //addShape(leftSphere);
+    addShape(leftSphere);
     //addShape(triangle);
     //addShape(quad);
     //addShape(circle);
