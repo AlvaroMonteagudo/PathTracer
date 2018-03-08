@@ -28,7 +28,7 @@ using namespace std;
 int main(int argc, char * argv[]){
 
     string fileScene, outfileName = "../images/image" + currentDate() + ".ppm";
-    int indirectSamples = 8;
+    int indirectSamples = 128;
     int indirectSteps = 1;
     int rayTraceDepth = 5;
 

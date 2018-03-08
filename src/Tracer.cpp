@@ -195,12 +195,15 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
     if (!intersect(ray, dist, id)) return BLACK;
 
     const shared_ptr<Shape> shape = shapes.at(id);
+
+    if (shape->getEmit() != BLACK) return shape->getEmit();
+
     Point intersectedPoint = ray.getSource() + (ray.getDirection() * dist);
     Dir normal = shape->getNormal(intersectedPoint).normalize();
     Dir nl = (normal.dot(ray.getDirection()) < 0) ? normal : normal * -1;
     RGB shapeColor = shape->getKd(); // Esto sera color y nos valdremos por el tipo
 
-    return shapeColor; // esto es solo directa
+    //return shapeColor; // esto es solo directa
     float maxVal = shapeColor.getMax();
 
     if (++depth > MAX_DEPTH) {
@@ -228,8 +231,41 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
 
         Ray sample(intersectedPoint, transformToGlobalCoordinates * rayDirLocal);
 
-        return shape->phong(ray, sample, intersectedPoint) * radiance(sample, depth);
+        return radiance(sample, depth) * shape->getKd();
+        //return shape->getEmit() + shape->phong(ray, sample, intersectedPoint) * radiance(sample, depth);
+    } else if (random < shape->getKd().getMean() + shape->getKs().getMean()) {
 
+        Dir zAxis = shape->getNormal(intersectedPoint);
+        Dir xAxis = ((zAxis.x != 0) ? Dir(0, 1, 0) : Dir(1, 0, 0)).cross(zAxis).normalize();
+        Dir yAxis = zAxis.cross(xAxis);
+        Mat transformToGlobalCoordinates = Mat(xAxis, yAxis, zAxis, intersectedPoint);
+
+        // lobe specular
+        float inclination, azimuth;
+        specularLobeSampling(inclination, azimuth, shape->getShininess());
+
+        Dir rayDirLocal = Dir(sin(inclination) * cos(azimuth),
+                              sin(inclination) * sin(azimuth),
+                              cos(inclination));
+
+        Dir rayDir = transformToGlobalCoordinates * rayDirLocal; // Get global coordinates ray direction
+
+        Ray sample(intersectedPoint, rayDir);
+
+        return radiance(sample, depth) * shape->getKs() *
+               (shape->getShininess() + 2.0f) /
+               (shape->getShininess() + 1.0f);
+    } else {
+        /*if (shape->getKr() != BLACK) {
+            Ray reflectedRay(intersectedPoint, shape->getDirRayReflected(ray.getDirection(), nl));
+            return radiance(reflectedRay, depth) * shape->getKr();
+        }
+
+        if (shape->getKt() != BLACK) {
+            Ray refractedRay(intersectedPoint, shape->getDirRayRefracted(ray.getDirection(), nl));
+            return radiance(refractedRay, depth) * shape->getKt();
+        };*/
+        return BLACK;
     }
 }
 

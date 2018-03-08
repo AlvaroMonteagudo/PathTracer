@@ -36,6 +36,7 @@ Scene::Scene() {
     floor.setFeatures(GRAY, BLACK, BLACK, BLACK);
 
     Plane ceiling(Plane(Dir(0, -1, 0), Point(0, 1, 0)));
+    ceiling.setEmit(WHITE);
     ceiling.setFeatures(GRAY, BLACK, BLACK, BLACK);
 
     Plane bottom(Plane(Dir(0, 0, -1), Point(0, 0, 1)));
@@ -44,8 +45,12 @@ Scene::Scene() {
     Plane backWall(Plane(Dir(0, 0, 1), Point(0, 0, -2)));
     backWall.setFeatures(GRAY, BLACK, BLACK, BLACK);
 
-    Sphere leftSphere(Sphere(0.25f, Point(-0.5f, 0, 0.4f)));
+    Sphere leftSphere(Sphere(0.35f, Point(-0.5f, -0.6f, 0.4f)));
     leftSphere.setFeatures(RED, BLACK, BLACK, BLACK);
+
+    Sphere rightSphere(Sphere(0.35f, Point(0.6f, -0.6f, 0.4f)));
+    rightSphere.setFeatures(RED, BLACK, BLACK, BLACK);
+    //rightSphere.setRefractiveIndex(GLASS);
 
     Triangle triangle(Point(-0.5f, -0.5f, 0), Point(-0.8f, -0.5f , -0.2f), Point(-0.6f ,-0.5f , 0));
     triangle.setFeatures(GREEN, BLACK, BLACK, BLACK);
@@ -71,20 +76,17 @@ Scene::Scene() {
     setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
                     Point(0.f, -0.f, -2.8f), 1.0, 720, 720, PI/3.0f));
 
-    LightSource light = LightSource(Point(0.0f, 0.8f, -0.3f), 1.5f);
-
-    lights.push_back(light);
-
     addShape(rightWall);
     addShape(leftWall);
     addShape(floor);
     addShape(ceiling);
     addShape(bottom);
-    addShape(cone);
+    //addShape(cone);
     //addShape(pyramid4);
     //addShape(pyramid3);
     //addShape(box);
-    //addShape(leftSphere);
+    addShape(leftSphere);
+    //addShape(rightSphere);
     //addShape(triangle);
     //addShape(quad);
     //addShape(circle);

@@ -150,7 +150,7 @@ public:
         Shape::refractiveIndex = refractiveIndex;
     }
 
-    void setEmit(RGB &_emit) {
+    void setEmit(const RGB &_emit) {
         emit = _emit;
     }
 
