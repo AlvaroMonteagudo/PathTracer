@@ -45,8 +45,9 @@ Scene::Scene() {
     Plane backWall(Plane(Dir(0, 0, 1), Point(0, 0, -2)));
     backWall.setFeatures(GRAY, BLACK, BLACK, BLACK);
 
-    Sphere leftSphere(Sphere(0.35f, Point(-0.5f, -0.6f, 0.4f)));
-    leftSphere.setFeatures(RED, BLACK, BLACK, BLACK);
+    Sphere leftSphere(Sphere(0.35f, Point(-0.6f, -0.6f, 0.2f)));
+    leftSphere.setFeatures(BLACK, BLACK, WHITE, BLACK);
+    //leftSphere.setRefractiveIndex(GLASS);
 
     Sphere rightSphere(Sphere(0.35f, Point(0.6f, -0.6f, 0.4f)));
     rightSphere.setFeatures(RED, BLACK, BLACK, BLACK);
@@ -59,13 +60,13 @@ Scene::Scene() {
     circle.setFeatures(BLUE, BLACK, BLACK, BLACK);
 
     Quad quad(Point(0, -0.5f, 0), Point(0.4, -0.5f , -0.2f), Point(0.8 ,-0.5f , 0), Point(0.4 ,-0.5f ,0.2));
-    quad.setFeatures(BLUE, BLACK, BLACK, BLACK);
+    quad.setFeatures(BLACK, BLACK, WHITE, BLACK);
 
     Box box(quad, 0.6);
-    box.setMaterial(BLUE, BLACK, BLACK, BLACK);
+    box.setMaterial(BLACK, BLACK, WHITE, BLACK);
 
     Pyramid pyramid4(quad, 1);
-    pyramid4.setMaterial(BLUE, BLACK, BLACK, BLACK);
+    pyramid4.setMaterial(BLACK, BLACK, WHITE, BLACK);
 
     Pyramid pyramid3(triangle, 0.5);
     pyramid4.setMaterial(BLUE, BLACK, BLACK, BLACK);

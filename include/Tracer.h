@@ -108,7 +108,7 @@ public:
     inline bool intersect(const Ray &ray, float &distance, int &id) const;
 
     /// PUBLIC PARAMETERS
-    int MAX_DEPTH = 5, MAX_INDIRECT_STEPS = 1, SAMPLES = 8;
+    int MAX_DEPTH = 15, MAX_INDIRECT_STEPS = 1, SAMPLES = 8;
 
 private:
 

@@ -187,6 +187,93 @@ inline bool Tracer::intersect(const Ray &ray, float &distance, int &id) const {
     return distance < MAX_FLOAT;
 }
 
+/*RGB Tracer::radiance(const Ray &ray, int depth) const {
+
+    RGB acumColor = BLACK, acumRefl = WHITE;
+
+    float dist  = MAX_FLOAT;
+    int id = -1;
+
+    Ray _ray = ray;
+
+    while (1){
+        if (++depth == MAX_DEPTH) return acumColor;
+
+        if (!intersect(_ray, dist, id)) return acumColor;
+
+        const shared_ptr<Shape> shape = shapes.at(id);
+
+        if (shape->getEmit() != BLACK) return acumColor * shape->getEmit();
+
+        Point intersectedPoint = ray.getSource() + (ray.getDirection() * dist);
+        Dir normal = shape->getNormal(intersectedPoint).normalize();
+
+        float random = randomValue();
+
+        if (random < shape->getKd().getMean()) {
+
+            Dir zAxis = shape->getNormal(intersectedPoint);
+            Dir xAxis = ((zAxis.x != 0) ? Dir(0, 1, 0) : Dir(1, 0, 0)).cross(zAxis).normalize();
+            Dir yAxis = zAxis.cross(xAxis);
+            Mat transformToGlobalCoordinates = Mat(xAxis, yAxis, zAxis, intersectedPoint);
+
+            // Uniform cosine
+            float inclination, azimuth;
+            uniformCosineSampling(inclination, azimuth);
+
+            Dir rayDirLocal = Dir(sin(inclination) * cos(azimuth),
+                                  sin(inclination) * sin(azimuth),
+                                  cos(inclination));
+
+            Ray sample(intersectedPoint, transformToGlobalCoordinates * rayDirLocal);
+            RGB phong = shape->phong(ray, Ray(sample.getSource(), sample.getDirection() * -1), intersectedPoint);
+
+            acumColor += acumRefl * phong;
+            acumRefl *= phong;
+
+            _ray = sample;
+            continue;
+        }
+
+    }
+
+
+    /*else if (random < shape->getKd().getMean() + shape->getKs().getMean()) {
+
+        Dir zAxis = shape->getNormal(intersectedPoint);
+        Dir xAxis = ((zAxis.x != 0) ? Dir(0, 1, 0) : Dir(1, 0, 0)).cross(zAxis).normalize();
+        Dir yAxis = zAxis.cross(xAxis);
+        Mat transformToGlobalCoordinates = Mat(xAxis, yAxis, zAxis, intersectedPoint);
+
+        // lobe specular
+        float inclination, azimuth;
+        specularLobeSampling(inclination, azimuth, shape->getShininess());
+
+        Dir rayDirLocal = Dir(sin(inclination) * cos(azimuth),
+                              sin(inclination) * sin(azimuth),
+                              cos(inclination));
+
+        Dir rayDir = transformToGlobalCoordinates * rayDirLocal; // Get global coordinates ray direction
+
+        Ray sample(intersectedPoint, rayDir);
+
+        return radiance(sample, depth) * shape->getKs() *
+               (shape->getShininess() + 2.0f) /
+               (shape->getShininess() + 1.0f);
+    } else {
+        /*if (shape->getKr() != BLACK) {
+            Ray reflectedRay(intersectedPoint, shape->getDirRayReflected(ray.getDirection(), nl));
+            return radiance(reflectedRay, depth) * shape->getKr();
+        }
+
+        if (shape->getKt() != BLACK) {
+            Ray refractedRay(intersectedPoint, shape->getDirRayRefracted(ray.getDirection(), nl));
+            return radiance(refractedRay, depth) * shape->getKt();
+        };*/
+        //return BLACK;
+    //}*/
+//}*/
+
 RGB Tracer::radiance(const Ray &ray, int depth) const {
 
     float dist  = MAX_FLOAT;
@@ -204,13 +291,6 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
     RGB shapeColor = shape->getKd(); // Esto sera color y nos valdremos por el tipo
 
     //return shapeColor; // esto es solo directa
-    float maxVal = shapeColor.getMax();
-
-    if (++depth > MAX_DEPTH) {
-        if (randomValue() < maxVal) shapeColor = shapeColor * (1 / maxVal);
-        else return shape->getEmit();
-    }
-
 
     float random = randomValue();
 
@@ -255,16 +335,22 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
         return radiance(sample, depth) * shape->getKs() *
                (shape->getShininess() + 2.0f) /
                (shape->getShininess() + 1.0f);
-    } else {
-        /*if (shape->getKr() != BLACK) {
+    } else if (random < (shape->getKd().getMean() +
+                         shape->getKs().getMean() +
+                         shape->getKr().getMean())) {
+        if (shape->getKr() != BLACK) {
             Ray reflectedRay(intersectedPoint, shape->getDirRayReflected(ray.getDirection(), nl));
             return radiance(reflectedRay, depth) * shape->getKr();
         }
-
+    } else if (random < (shape->getKd().getMean() +
+                         shape->getKs().getMean() +
+                         shape->getKr().getMean() +
+                         shape->getKt().getMean())) {
         if (shape->getKt() != BLACK) {
             Ray refractedRay(intersectedPoint, shape->getDirRayRefracted(ray.getDirection(), nl));
             return radiance(refractedRay, depth) * shape->getKt();
-        };*/
+        }
+    } else {
         return BLACK;
     }
 }
