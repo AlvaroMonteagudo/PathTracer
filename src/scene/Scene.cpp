@@ -36,7 +36,6 @@ Scene::Scene() {
     floor.setFeatures(GRAY, BLACK, BLACK, BLACK);
 
     Plane ceiling(Plane(Dir(0, -1, 0), Point(0, 1, 0)));
-    ceiling.setEmit(WHITE);
     ceiling.setFeatures(GRAY, BLACK, BLACK, BLACK);
 
     Plane bottom(Plane(Dir(0, 0, -1), Point(0, 0, 1)));
@@ -47,20 +46,21 @@ Scene::Scene() {
 
     Sphere leftSphere(Sphere(0.35f, Point(-0.6f, -0.6f, 0.2f)));
     leftSphere.setFeatures(BLACK, BLACK, WHITE, BLACK);
-    //leftSphere.setRefractiveIndex(GLASS);
+    leftSphere.setRefractiveIndex(GLASS);
 
     Sphere rightSphere(Sphere(0.35f, Point(0.6f, -0.6f, 0.4f)));
     rightSphere.setFeatures(RED, BLACK, BLACK, BLACK);
     //rightSphere.setRefractiveIndex(GLASS);
 
-    Triangle triangle(Point(-0.5f, -0.5f, 0), Point(-0.8f, -0.5f , -0.2f), Point(-0.6f ,-0.5f , 0));
-    triangle.setFeatures(GREEN, BLACK, BLACK, BLACK);
+    Triangle triangle(Point(-0.5f, -0.5f, 0), Point(0, 0 , -0.2f), Point(0.5f ,-0.5f , 0));
+    triangle.setFeatures(BLACK, BLACK, WHITE, BLACK);
+    //triangle.setRefractiveIndex(GLASS);
 
     Circle circle(Point(0, -0.5f, 0.2), Dir(0, 1, 0), 0.25f);
     circle.setFeatures(BLUE, BLACK, BLACK, BLACK);
 
-    Quad quad(Point(0, -0.5f, 0), Point(0.4, -0.5f , -0.2f), Point(0.8 ,-0.5f , 0), Point(0.4 ,-0.5f ,0.2));
-    quad.setFeatures(BLACK, BLACK, WHITE, BLACK);
+    Quad quad(Point(-0.4f, 0.99f, -0.4f), Point(0.4f, 0.99f, -0.4f), Point(0.4f , 0.99f, 0.4f), Point(-0.4f , 0.99f , 0.4f));
+    quad.setEmit(WHITE);
 
     Box box(quad, 0.6);
     box.setMaterial(BLACK, BLACK, WHITE, BLACK);
@@ -87,9 +87,9 @@ Scene::Scene() {
     //addShape(pyramid3);
     //addShape(box);
     addShape(leftSphere);
-    //addShape(rightSphere);
+    addShape(rightSphere);
     //addShape(triangle);
-    //addShape(quad);
+    addShape(quad);
     //addShape(circle);
     //addShape(backWall));
     //addShape(airSphere));

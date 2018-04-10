@@ -288,9 +288,6 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
     Point intersectedPoint = ray.getSource() + (ray.getDirection() * dist);
     Dir normal = shape->getNormal(intersectedPoint).normalize();
     Dir nl = (normal.dot(ray.getDirection()) < 0) ? normal : normal * -1;
-    RGB shapeColor = shape->getKd(); // Esto sera color y nos valdremos por el tipo
-
-    //return shapeColor; // esto es solo directa
 
     float random = randomValue();
 
