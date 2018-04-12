@@ -68,7 +68,7 @@ float Sphere::intersect(const Ray &ray) const {
  * @return normal between itnersected point and sphere center
  */
 Dir Sphere::getNormal(const Point &intersectedPoint) const {
-    return (center - intersectedPoint).normalize(); // radius;
+    return (intersectedPoint - center).normalize(); // radius;
 }
 
 

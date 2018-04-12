@@ -41,31 +41,35 @@ Scene::Scene() {
     Plane bottom(Plane(Dir(0, 0, -1), Point(0, 0, 1)));
     bottom.setFeatures(GRAY * 1.5, BLACK, BLACK, BLACK);
 
-    Plane backWall(Plane(Dir(0, 0, 1), Point(0, 0, -2)));
+    Plane backWall(Plane(Dir(0, 0, 1), Point(0, 0, -3)));
     backWall.setFeatures(GRAY, BLACK, BLACK, BLACK);
 
     Sphere leftSphere(Sphere(0.35f, Point(-0.6f, -0.6f, 0.2f)));
-    leftSphere.setFeatures(BLACK, BLACK, WHITE, BLACK);
-    leftSphere.setRefractiveIndex(GLASS);
+    leftSphere.setFeatures(RED, BLACK, BLACK, BLACK);
+    //leftSphere.setRefractiveIndex(GLASS);
 
     Sphere rightSphere(Sphere(0.35f, Point(0.6f, -0.6f, 0.4f)));
-    rightSphere.setFeatures(RED, BLACK, BLACK, BLACK);
+    rightSphere.setFeatures(BLACK, GREEN, BLACK, BLACK);
+    rightSphere.setShininess(5);
     //rightSphere.setRefractiveIndex(GLASS);
 
-    Triangle triangle(Point(-0.5f, -0.5f, 0), Point(0, 0 , -0.2f), Point(0.5f ,-0.5f , 0));
-    triangle.setFeatures(BLACK, BLACK, WHITE, BLACK);
+    Triangle triangle(Point(-0.8f, -0.5f, -0.3f), Point(-0.8f, -0.5f , 0.5f), Point(-0.8f ,0 , 0.1f));
+    triangle.setFeatures(RED, BLACK, BLACK, BLACK);
     //triangle.setRefractiveIndex(GLASS);
+
+    Triangle triangle2(Point(0.8f, 0.4f, -0.3f), Point(0.8f, 0.4f , 0.5f), Point(0.8f , 0.8f , 0.1f));
+    triangle.setFeatures(BLUE, BLACK, BLACK, BLACK);
 
     Circle circle(Point(0, -0.5f, 0.2), Dir(0, 1, 0), 0.25f);
     circle.setFeatures(BLUE, BLACK, BLACK, BLACK);
 
-    Quad quad(Point(-0.4f, 0.99f, -0.4f), Point(0.4f, 0.99f, -0.4f), Point(0.4f , 0.99f, 0.4f), Point(-0.4f , 0.99f , 0.4f));
-    quad.setEmit(WHITE);
+    Quad light(Point(-0.4f, 0.99f, -0.4f), Point(0.4f, 0.99f, -0.4f), Point(0.4f , 0.99f, 0.4f), Point(-0.4f , 0.99f , 0.4f));
+    light.setEmit(WHITE);
 
-    Box box(quad, 0.6);
+    Box box(light, 0.6);
     box.setMaterial(BLACK, BLACK, WHITE, BLACK);
 
-    Pyramid pyramid4(quad, 1);
+    Pyramid pyramid4(light, 1);
     pyramid4.setMaterial(BLACK, BLACK, WHITE, BLACK);
 
     Pyramid pyramid3(triangle, 0.5);
@@ -89,9 +93,10 @@ Scene::Scene() {
     addShape(leftSphere);
     addShape(rightSphere);
     //addShape(triangle);
-    addShape(quad);
+    //addShape(triangle2);
+    addShape(light);
     //addShape(circle);
-    //addShape(backWall));
+    addShape(backWall);
     //addShape(airSphere));
     //addShape(waterSphere));
     //addShape(glassSphere));

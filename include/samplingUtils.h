@@ -8,14 +8,16 @@ inline static float randomValue() {
 }
 
 
-void uniformCosineSampling(float &inclination, float &azimuth){
-    inclination = acos(sqrt(1 - randomValue()));
-    azimuth = 2.0f * PI * randomValue();
+std::tuple<float, float> uniformCosineSampling(){
+    float inclination = acos(sqrt(1 - randomValue()));
+    float azimuth = 2.0f * PI * randomValue();
+    return std::make_tuple(inclination, azimuth);
 }
 
-void specularLobeSampling(float &inclination, float &azimuth, float alpha){
-    inclination = acos(pow(randomValue(), (1 /(alpha + 1))));
-    azimuth = 2.0f * PI * randomValue();
+std::tuple<float, float> specularLobeSampling(float alpha){
+    float inclination = acos(pow(randomValue(), (1 /(alpha + 1))));
+    float azimuth = 2.0f * PI * randomValue();
+    return std::make_tuple(inclination, azimuth);
 }
 
 void randomRaySampling(float &widthOffset, float &heightOffset, float pixelSize){

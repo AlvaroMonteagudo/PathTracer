@@ -1,5 +1,5 @@
 /**
- *  @file    Sphere.h
+ *  @file    main.cpp
  *  @authors Alfonso Delgado: 679745 at unizar dot es
  *           Álvaro Monteagudo: 681060 at unizar dot es
  *  @date    30/09/2017
