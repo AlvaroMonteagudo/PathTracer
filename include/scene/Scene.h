@@ -23,7 +23,6 @@
 #include "Triangle.h"
 #include "Sphere.h"
 #include "Camera.h"
-#include "AreaLight.h"
 
 class Scene {
 
@@ -65,20 +64,12 @@ public:
      */
     const std::vector<LightSource> &getLights() const;
 
-    /**
-     * Get area lights usd in this scene
-     * @return vector with area lights of this scene
-     */
-    const std::vector<AreaLight> &getAreaLights() const;
+
 
 private:
 
     /// SCENE ATTRIBUTES
     std::vector<std::shared_ptr<Shape>> shapes;
-
-    std::vector<LightSource> lights;
-
-    std::vector<AreaLight> areaLights;
 
     Camera camera;
 };

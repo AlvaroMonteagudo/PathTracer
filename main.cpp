@@ -19,8 +19,6 @@
 
 void printUsage();
 
-void printFormat();
-
 string currentDate();
 
 using namespace std;
@@ -28,7 +26,7 @@ using namespace std;
 int main(int argc, char * argv[]){
 
     string fileScene, outfileName = "../images/image" + currentDate() + ".ppm";
-    int indirectSamples = 2048;
+    int indirectSamples = 1024;//*10;
 
     vector<string> arguments;
 

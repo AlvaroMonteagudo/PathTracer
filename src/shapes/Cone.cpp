@@ -60,7 +60,7 @@ float Cone::intersect(const Ray &ray) const {
 }
 
 void Cone::setMaterial(const RGB &kd, const RGB &ks, const RGB &kr, const RGB &kt) {
-    base->setFeatures(kd, ks, kr, kt);
+    base->setMaterial(kd, ks, kr, kt);
 }
 
 Dir Cone::getNormal(const Point &intersectedPoint) const {

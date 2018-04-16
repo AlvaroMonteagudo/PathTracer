@@ -18,4 +18,8 @@ protected:
 
     shared_ptr<Quad> faces[6];
 
+private:
+
+    shared_ptr<Quad> faceHitted = nullptr;
+
 };

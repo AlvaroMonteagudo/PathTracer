@@ -11,9 +11,9 @@ public:
 
     float intersect(const Ray &ray) const;
 
-    Dir getNormal(const Point &intersectedPoint) const;
+    /*Dir getNormal(const Point &intersectedPoint) const;
 
-    Dir getNormal() const;
+    Dir getNormal() const;*/
 
     tuple<Point, Point, Point, Point> getCorners() const;
 

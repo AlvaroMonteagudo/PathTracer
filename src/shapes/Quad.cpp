@@ -61,10 +61,10 @@ tuple<Point, Point, Point, Point> Quad::getCorners() const {
     return make_tuple(v00, v10, v11, v01);
 }
 
-Dir Quad::getNormal(const Point &intersectedPoint) const {
+/*Dir Quad::getNormal(const Point &intersectedPoint) const {
     return Plane::getNormal(intersectedPoint);
 }
 
 Dir Quad::getNormal() const {
     return Plane::getNormal();
-}
+}*/

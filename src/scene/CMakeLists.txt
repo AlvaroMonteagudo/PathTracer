@@ -1,5 +1,4 @@
 set(SOURCE_FILES
-        AreaLight.cpp
         Camera.cpp
         Image.cpp
         LightSource.cpp
@@ -9,7 +8,6 @@ set(SOURCE_FILES
         )
 
 set(HEADER_FILES
-        ${PROJECT_SOURCE_DIR}/include/scene/AreaLight.h
         ${PROJECT_SOURCE_DIR}/include/scene/Camera.h
         ${PROJECT_SOURCE_DIR}/include/scene/Image.h
         ${PROJECT_SOURCE_DIR}/include/scene/LightSource.h

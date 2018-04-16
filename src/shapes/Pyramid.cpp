@@ -65,7 +65,7 @@ Dir Pyramid::getNormal(const Point &intersectedPoint) const {
 
 void Pyramid::setMaterial(const RGB &kd, const RGB &ks, const RGB &kr, const RGB &kt) {
     for (const shared_ptr<Shape> &face: faces) {
-        face->setFeatures(kd, ks, kr, kt);
+        face->setMaterial(kd, ks, kr, kt);
     }
 }
 

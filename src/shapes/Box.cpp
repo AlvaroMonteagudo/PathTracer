@@ -31,6 +31,7 @@ float Box::intersect(const Ray &ray) const {
         float dist_face = face->intersect(ray);
         if (dist_face < min) {
             min = dist_face;
+            //faceHitted = face;
         }
     }
 
@@ -38,11 +39,11 @@ float Box::intersect(const Ray &ray) const {
 }
 
 Dir Box::getNormal(const Point &intersectedPoint) const {
-   return {1, 0, 0}; // Temporal
+   return faceHitted->getNormal(intersectedPoint);
 }
 
 void Box::setMaterial(const RGB &kd, const RGB &ks, const RGB &kr, const RGB &kt) {
     for (const shared_ptr<Quad> &face: faces) {
-        face->setFeatures(kd, ks, kr, kt);
+        face->setMaterial(kd, ks, kr, kt);
     }
 }

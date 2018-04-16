@@ -150,7 +150,7 @@ public:
         emit = _emit;
     }
 
-    void setFeatures(const RGB &kd, const RGB &ks, const RGB &kr, const RGB & kt){
+    virtual void setMaterial(const RGB &kd, const RGB &ks, const RGB &kr, const RGB &kt){
         this->kd = kd;
         this->ks = ks;
         this->kr = kr;
