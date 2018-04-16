@@ -38,10 +38,6 @@ class Shape {
 
 public:
 
-    enum Type { DIFF, SPEC, REFR };
-
-    Type type = DIFF;
-
     /**
      * Intersection method
      * @return distance of intersection

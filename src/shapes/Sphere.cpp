@@ -24,10 +24,8 @@ Sphere::Sphere() = default;
  * @param radius of the sphere
  * @param center of the sphere
  */
-Sphere::Sphere(float radius, const Point &center, Type type = DIFF) :
-        Shape(), radius(radius), center(center), sqrd_radius(radius*radius) {
-    Shape::type = type;
-}
+Sphere::Sphere(float radius, const Point &center) :
+        Shape(), radius(radius), center(center), sqrd_radius(radius*radius) { }
 
 /**
  * Intersection method
@@ -37,7 +35,7 @@ Sphere::Sphere(float radius, const Point &center, Type type = DIFF) :
 float Sphere::intersect(const Ray &ray) const {
     Dir d = ray.getSource() - center;
 
-    float a = ray.getDirection().dot(ray.getDirection());
+    float a = 1.0f;
     float b = 2.0f * ray.getDirection().dot(d);
     float c = d.dot(d) - sqrd_radius;
     float discriminant = b*b - 4*a*c;
@@ -68,7 +66,7 @@ float Sphere::intersect(const Ray &ray) const {
  * @return normal between itnersected point and sphere center
  */
 Dir Sphere::getNormal(const Point &intersectedPoint) const {
-    return (intersectedPoint - center).normalize(); // radius;
+    return (intersectedPoint - center).normalize(); //  DIV radius;
 }
 
 

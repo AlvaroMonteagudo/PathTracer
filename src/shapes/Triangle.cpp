@@ -32,6 +32,6 @@ float Triangle::intersect(const Ray &ray) const {
     float beta = (d00 * d21 - d01 * d20) / denominator;
     // Gamma is not necessary: float gamma = 1.0f - alpha - beta;
     // Check if the intersection point is inside the triangle bounds.
-    return (alpha >= 0) & (beta >= 0) & (alpha + beta < 1) ? t : MAX_FLOAT;
+    return ((alpha >= 0) & (beta >= 0) & (alpha + beta < 1)) ? t : MAX_FLOAT;
 }
 

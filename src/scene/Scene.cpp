@@ -25,6 +25,10 @@
  * Default constructor
  */
 Scene::Scene() {
+
+    Quad light(Point(-0.4f, 0.99f, -0.4f), Point(0.4f, 0.99f, -0.4f), Point(0.4f , 0.99f, 0.4f), Point(-0.4f , 0.99f , 0.4f));
+    light.setEmit(WHITE);
+
     // Dir es normal,
     Plane rightWall(Plane(Dir(-1, 0, 0), Point(1, 0, 0)));
     rightWall.setFeatures(RED, BLACK, BLACK, BLACK);
@@ -44,27 +48,24 @@ Scene::Scene() {
     Plane backWall(Plane(Dir(0, 0, 1), Point(0, 0, -3)));
     backWall.setFeatures(GRAY, BLACK, BLACK, BLACK);
 
-    Sphere leftSphere(Sphere(0.35f, Point(-0.6f, -0.6f, 0.2f)));
-    leftSphere.setFeatures(RED, BLACK, BLACK, BLACK);
-    //leftSphere.setRefractiveIndex(GLASS);
+    Sphere leftSphere(Sphere(0.35f, Point(0, -0.6f, 0.2f)));
+    leftSphere.setFeatures(BLACK, BLACK, BLACK, WHITE);
+    leftSphere.setRefractiveIndex(GLASS*25);
 
-    Sphere rightSphere(Sphere(0.35f, Point(0.6f, -0.6f, 0.4f)));
+    Sphere rightSphere(Sphere(0.35f, Point(0.f, -0.6f, 0.4f)));
     rightSphere.setFeatures(BLACK, GREEN, BLACK, BLACK);
     rightSphere.setShininess(5);
     //rightSphere.setRefractiveIndex(GLASS);
 
-    Triangle triangle(Point(-0.8f, -0.5f, -0.3f), Point(-0.8f, -0.5f , 0.5f), Point(-0.8f ,0 , 0.1f));
+    Triangle triangle(Point(-0.8f, -0.5f, -0.5f), Point(-0.3f, -0.5f , 0.5f), Point(-0.8f , 0.5f, 0));
     triangle.setFeatures(RED, BLACK, BLACK, BLACK);
     //triangle.setRefractiveIndex(GLASS);
 
-    Triangle triangle2(Point(0.8f, 0.4f, -0.3f), Point(0.8f, 0.4f , 0.5f), Point(0.8f , 0.8f , 0.1f));
+    /*Triangle triangle2(Point(0.8f, 0.4f, -0.3f), Point(0.8f, 0.4f , 0.5f), Point(0.8f , 0.8f , 0.1f));
     triangle.setFeatures(BLUE, BLACK, BLACK, BLACK);
 
     Circle circle(Point(0, -0.5f, 0.2), Dir(0, 1, 0), 0.25f);
     circle.setFeatures(BLUE, BLACK, BLACK, BLACK);
-
-    Quad light(Point(-0.4f, 0.99f, -0.4f), Point(0.4f, 0.99f, -0.4f), Point(0.4f , 0.99f, 0.4f), Point(-0.4f , 0.99f , 0.4f));
-    light.setEmit(WHITE);
 
     Box box(light, 0.6);
     box.setMaterial(BLACK, BLACK, WHITE, BLACK);
@@ -76,7 +77,7 @@ Scene::Scene() {
     pyramid4.setMaterial(BLUE, BLACK, BLACK, BLACK);
 
     Cone cone(circle, 0.5f);
-    cone.setMaterial(BLUE, BLACK, BLACK, BLACK);
+    cone.setMaterial(BLUE, BLACK, BLACK, BLACK);*/
 
     setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
                     Point(0.f, -0.f, -2.8f), 1.0, 720, 720, PI/3.0f));
@@ -90,13 +91,13 @@ Scene::Scene() {
     //addShape(pyramid4);
     //addShape(pyramid3);
     //addShape(box);
-    addShape(leftSphere);
-    addShape(rightSphere);
-    //addShape(triangle);
+    //addShape(leftSphere);
+    //addShape(rightSphere);
+    addShape(triangle);
     //addShape(triangle2);
     addShape(light);
     //addShape(circle);
-    addShape(backWall);
+    //addShape(backWall);
     //addShape(airSphere));
     //addShape(waterSphere));
     //addShape(glassSphere));

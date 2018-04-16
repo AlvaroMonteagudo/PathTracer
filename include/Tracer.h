@@ -27,16 +27,10 @@ public:
 
     /**
      * Constructor for path tracer
-     * @param filename where mage will be saved
-     */
-    explicit Tracer(string filename);
-
-    /**
-     * Constructor for path tracer
-     * @param filename where mage will be saved
+     * @param filename where image will be saved
      * @param scene to be renderized and stored in file
      */
-    explicit Tracer(string filename, const Scene &scene);
+    Tracer(string filename, const Scene &scene);
 
     /**
      * Render image method
@@ -64,51 +58,10 @@ public:
      */
     RGB radiance(const Ray &_ray, int depth) const;
 
-    /**
-     * Direct light method
-     * @param intersectedPoint: point of the shape
-     * @param normalShape: shape normal
-     * @param lights: lights of the scene
-     * @param shape: shape intersected
-     * @param ray: ray intersecting the shape
-     * @return direct light color
-     */
-    RGB directLight(const Point &intersectedPoint, const Dir &normalShape,
-                    const shared_ptr<Shape> &shape, const Ray &ray) const;
-
-    /**
-     * Indirect light method
-     * @param intersectedPoint: point of the shape
-     * @param normalShape: shape normal
-     * @param shape: shape intersected
-     * @param ray: ray intersecting the shape
-     * @param depth: depth of path
-     * @param indirectSteps: number of indirect steps
-     * @return indirect light color
-     */
-    RGB indirectLight(const Point &intersectedPoint, const Dir &normalShape, shared_ptr<Shape> &shape,
-                      const Ray &ray, int depth) const;
-
-    /**
-     * Specular light method
-     * @param intersectedPoint: point of the shape
-     * @param normalShape: shape normal
-     * @param shape: shape intersected
-     * @param ray: ray intersecting the shape
-     * @param depth: depth of path
-     * @param indirectSteps: number of indirect steps
-     * @return specular light color
-     */
-    RGB deltaInteraction(const Point &intersectedPoint, const Dir &normalShape,
-                         const shared_ptr<Shape> &shape, const Ray &ray, int depth, int indrectSteps) const;
-
-
-    RGB RussianRoulette(const Point &intersectedPoint, const shared_ptr<Shape> shape, int depth) const;
-
     inline bool intersect(const Ray &ray, float &distance, int &id) const;
 
     /// PUBLIC PARAMETERS
-    int MAX_DEPTH = 15, MAX_INDIRECT_STEPS = 1, SAMPLES = 8;
+    int SAMPLES = 8;
 
 private:
 
@@ -124,10 +77,6 @@ private:
     int totalPixels;
 
     vector<shared_ptr<Shape>> shapes;
-
-    vector<LightSource> lights;
-
-    vector<AreaLight> areaLights;
 };
 
 
