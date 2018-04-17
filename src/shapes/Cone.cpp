@@ -59,9 +59,9 @@ float Cone::intersect(const Ray &ray) const {
     else return MAX_FLOAT;
 }
 
-void Cone::setMaterial(const RGB &kd, const RGB &ks, const RGB &kr, const RGB &kt) {
+/*void Cone::setMaterial(const RGB &kd, const RGB &ks, const RGB &kr, const RGB &kt) {
     base->setMaterial(kd, ks, kr, kt);
-}
+}*/
 
 Dir Cone::getNormal(const Point &intersectedPoint) const {
     return {1, 0, 0};

@@ -180,9 +180,10 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
     if (!intersect(ray, dist, id)) return BLACK;
 
     const shared_ptr<Shape> shape = shapes.at(static_cast<unsigned long>(id));
-    //cout << shape->getKd() << endl;
 
     if (shape->getEmit() != BLACK) return shape->getEmit();
+    
+    shared_ptr<Material> material = shape->getMaterial();
 
     Point intersectedPoint = ray.getSource() + (ray.getDirection() * dist);
     Dir normal = shape->getNormal(intersectedPoint).normalize();
@@ -191,10 +192,10 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
 
     float random = randomValue();
 
-    float pd = shape->getKd().getMean();
-    float ps = shape->getKs().getMean();
-    float pr = shape->getKr().getMean();
-    float pt = shape->getKt().getMean();
+    float pd = material->getKd().getMean();
+    float ps = material->getKs().getMean();
+    float pr = material->getKr().getMean();
+    float pt = material->getKt().getMean();
 
     if (random < pd) {
 
@@ -214,7 +215,7 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
 
         Ray sample(intersectedPoint, transformToGlobalCoordinates * rayDirLocal);
 
-        return radiance(sample, depth) * shape->getKd() / pd;
+        return radiance(sample, depth) * material->getKd() / pd;
     } else if (random < pd + ps) {
 
         Dir zAxis = shape->getNormal(intersectedPoint);
@@ -233,18 +234,18 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
 
         Ray sample(intersectedPoint, transformToGlobalCoordinates * rayDirLocal);
 
-        return radiance(sample, depth) * shape->getKs() *
+        return radiance(sample, depth) * material->getKs() *
                 ((shape->getShininess() + 2.0f) /
                 (shape->getShininess() + 1.0f)) / (pd + ps);
     } else if (random < pd + ps + pr) {
-        if (shape->getKr() != BLACK) {
+        if (material->getKr() != BLACK) {
             Ray reflectedRay(intersectedPoint, shape->getDirRayReflected(ray.getDirection(), nl));
-            return radiance(reflectedRay, depth) * shape->getKr() / (pd + ps + pr);
+            return radiance(reflectedRay, depth) * material->getKr() / (pd + ps + pr);
         }
     } else if (random < pd + ps + pr + pt) {
-        if (shape->getKt() != BLACK) {
+        if (material->getKt() != BLACK) {
             Ray refractedRay(intersectedPoint, shape->getDirRayRefracted(ray.getDirection(), nl));
-            return radiance(refractedRay, depth) * shape->getKt() / (pd + ps + pr + pt);
+            return radiance(refractedRay, depth) * material->getKt() / (pd + ps + pr + pt);
         }
     } else {
         return BLACK;

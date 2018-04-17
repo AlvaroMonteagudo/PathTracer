@@ -22,6 +22,7 @@
 #include <iostream>
 #include <limits>
 #include <memory>
+#include <Material.h>
 
 #define THRESHOLD 0.0001
 #define MIN_FLOAT std::numeric_limits<float>::min()
@@ -114,20 +115,8 @@ public:
 
     /// GETTERS
 
-    const RGB &getKd() const {
-        return kd;
-    }
-
-    const RGB &getKs() const {
-        return ks;
-    }
-
-    const RGB &getKr() const {
-        return kr;
-    }
-
-    const RGB &getKt() const {
-        return kt;
+    shared_ptr<Material> getMaterial() const {
+        return material;
     }
 
     const RGB &getEmit() const {
@@ -150,11 +139,13 @@ public:
         emit = _emit;
     }
 
-    virtual void setMaterial(const RGB &kd, const RGB &ks, const RGB &kr, const RGB &kt){
-        this->kd = kd;
-        this->ks = ks;
-        this->kr = kr;
-        this->kt = kt;
+    virtual void setMaterial(const shared_ptr<Material> m){
+        material = m;
+    }
+
+    template <class M>
+    void setMaterial(const M m) {
+        material = make_shared<M>(m);
     }
 
     RGB phong(const Ray &ray, const Ray &light,  const Point &point) const {
@@ -166,13 +157,13 @@ public:
 
         if (cos < 0) cos = -cos;
 
-        return ((kd / PI) + (ks * ((shininess + 2.0f) / (2.0f * PI)) * pow(cos, shininess)));
+        return ((material->getKd() / PI) + (material->getKs() * ((shininess + 2.0f) / (2.0f * PI)) * pow(cos, shininess)));
     }
 
 private:
 
     /// Shape features coefficients
-    RGB kd, ks, kr , kt;
+    shared_ptr<Material> material = LAMBERTIAN;
     RGB emit = BLACK;
 
     /// Other shape values

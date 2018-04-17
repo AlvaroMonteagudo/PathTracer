@@ -29,30 +29,25 @@ Scene::Scene() {
     Quad light(Point(-0.4f, 0.99f, -0.4f), Point(0.4f, 0.99f, -0.4f), Point(0.4f , 0.99f, 0.4f), Point(-0.4f , 0.99f , 0.4f));
     light.setEmit(WHITE);
 
-    // Dir es normal,
     Plane rightWall(Plane(Dir(-1, 0, 0), Point(1, 0, 0)));
-    rightWall.setMaterial(RED, BLACK, BLACK, BLACK);
+    rightWall.setMaterial(DIFF_G);
 
     Plane leftWall(Plane(Dir(1, 0, 0), Point(-1, 0, 0)));
-    leftWall.setMaterial(GREEN, BLACK, BLACK, BLACK);
+    leftWall.setMaterial(DIFF_R);
 
     Plane floor(Plane(Dir(0, 1, 0), Point(0, -1, 0)));
-    floor.setMaterial(GRAY, BLACK, BLACK, BLACK);
 
     Plane ceiling(Plane(Dir(0, -1, 0), Point(0, 1, 0)));
-    ceiling.setMaterial(GRAY, BLACK, BLACK, BLACK);
 
     Plane bottom(Plane(Dir(0, 0, -1), Point(0, 0, 1)));
-    bottom.setMaterial(GRAY, BLACK, BLACK, BLACK);
 
     Plane backWall(Plane(Dir(0, 0, 1), Point(0, 0, -3)));
-    backWall.setMaterial(GRAY, BLACK, BLACK, BLACK);
 
     Sphere leftSphere(Sphere(0.35f, Point(-0.2f, 0, 0.2f)));
-    leftSphere.setMaterial(RED, BLACK, BLACK, BLACK);
+    leftSphere.setMaterial(DIFF_R);
     //leftSphere.setRefractiveIndex(GLASS*25);
 
-    Sphere rightSphere(Sphere(0.35f, Point(0.f, -0.6f, 0.4f)));
+    /*Sphere rightSphere(Sphere(0.35f, Point(0.f, -0.6f, 0.4f)));
     rightSphere.setMaterial(BLACK, GREEN, BLACK, BLACK);
     rightSphere.setShininess(5);
     //rightSphere.setRefractiveIndex(GLASS);
@@ -71,7 +66,7 @@ Scene::Scene() {
     pyramid4.setMaterial(RED, BLACK, BLACK, BLACK);
 
     Box box(quad, 0.6);
-    box.setMaterial(RED, BLACK, BLACK, BLACK);
+    box.setMaterial(RED, BLACK, BLACK, BLACK);*/
 
 
 
@@ -101,8 +96,8 @@ Scene::Scene() {
     //addShape(cone);
     //addShape(pyramid4);
     //addShape(pyramid3);
-    addShape(box);
-    //addShape(leftSphere);
+    //addShape(box);
+    addShape(leftSphere);
     //addShape(rightSphere);
     //addShape(triangle);
     //addShape(triangle2);

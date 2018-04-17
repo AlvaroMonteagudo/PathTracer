@@ -39,11 +39,12 @@ float Box::intersect(const Ray &ray) const {
 }
 
 Dir Box::getNormal(const Point &intersectedPoint) const {
-   return faceHitted->getNormal(intersectedPoint);
+   //return faceHitted->getNormal(intersectedPoint);
+    return {1, 0, 0};
 }
 
-void Box::setMaterial(const RGB &kd, const RGB &ks, const RGB &kr, const RGB &kt) {
+/*void Box::setMaterial(const RGB &kd, const RGB &ks, const RGB &kr, const RGB &kt) {
     for (const shared_ptr<Quad> &face: faces) {
         face->setMaterial(kd, ks, kr, kt);
     }
-}
+}*/
