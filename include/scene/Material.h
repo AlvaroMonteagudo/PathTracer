@@ -19,6 +19,8 @@ public:
 
     const RGB &getKt() const;
 
+
+
 private:
 
     RGB kd, ks, kr, kt;

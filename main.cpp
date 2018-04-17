@@ -26,7 +26,7 @@ using namespace std;
 int main(int argc, char * argv[]){
 
     string fileScene, outfileName = "../images/image" + currentDate() + ".ppm";
-    int indirectSamples = 1024;//*10;
+    int indirectSamples = 128;//*10;
 
     vector<string> arguments;
 

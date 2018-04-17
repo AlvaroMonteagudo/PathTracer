@@ -3,12 +3,11 @@ project(PathTracer)                     # Create project
 
 add_definitions( -DPROJECT_DIR=\"${PROJECT_SOURCE_DIR}\")
 
-set(CMAKE_CXX_STANDARD 14)              # Enable c++14 standard
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -O3 -fpermissive -Wall -pthread")
 
 set (SOURCE_FILES main.cpp)
 
-add_executable(render main.cpp include/scene/Material.h src/scene/Material.cpp)
+add_executable(render main.cpp)
 
 include_directories(
         ${PROJECT_SOURCE_DIR}/include/algebraUtils

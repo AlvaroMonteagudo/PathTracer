@@ -60,12 +60,12 @@ float Pyramid::intersect(const Ray &ray) const {
 }
 
 Dir Pyramid::getNormal(const Point &intersectedPoint) const {
-    return {1, 0, 0}; // Temporal
+    throw 1; // Temporal
 }
 
-/*void Pyramid::setMaterial(const RGB &kd, const RGB &ks, const RGB &kr, const RGB &kt) {
+void Pyramid::setMaterial(shared_ptr<Material> material) {
     for (const shared_ptr<Shape> &face: faces) {
-        face->setMaterial(kd, ks, kr, kt);
+        face->setMaterial(material);
     }
-}*/
+}
 

@@ -12,7 +12,16 @@ public:
 
     Dir getNormal(const Point &intersectedPoint) const;
 
-    void setMaterial(const RGB &kd, const RGB &ks, const RGB &kr, const RGB & kt);
+    void setMaterial(shared_ptr<Material> material);
+
+    template <class M>
+    void setMaterial(M material)
+    {
+        for (const shared_ptr<Quad> &face : faces)
+        {
+            face->setMaterial(material);
+        }
+    }
 
 protected:
 
@@ -20,6 +29,6 @@ protected:
 
 private:
 
-    shared_ptr<Quad> faceHitted = nullptr;
+    shared_ptr<Quad> faceHitted;
 
 };

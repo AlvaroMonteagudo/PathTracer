@@ -43,6 +43,14 @@ public:
 
     float getMax() const;
 
+    /// SETTERS
+
+    void setRed(float red);
+
+    void setBlue(float blue);
+
+    void setGreen(float green);
+
     /// Useful operators
     RGB operator + (const RGB &color) const;
 
@@ -75,7 +83,6 @@ public:
     friend std::ofstream& operator << (std::ofstream &file, const RGB &rgb);
 
     RGB toInt();
-
 
 private:
 

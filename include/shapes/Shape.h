@@ -52,18 +52,6 @@ public:
      */
     virtual Dir getNormal(const Point &intersectedPoint) const = 0;
 
-    /**
-     * Inline function, clamp for ray refraction
-     * @param lo lower bound
-     * @param hi higher bound
-     * @param v value itself
-     * @return max between lo and min between hi and v
-     */
-    inline
-    float clamp(const float &lo, const float &hi, const float &v)
-    {
-        return std::max(lo, std::min(hi, v));
-    }
 
     /**
      * Get dir of ray reflected
@@ -85,9 +73,9 @@ public:
      *       Source: https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel
      *       Author: @ 2009-2016 Scratchapixel
      */
-    Dir getDirRayRefracted(const Dir &rayDir, const Dir& normal){
+    Dir getDirRayRefracted(const Dir &rayDir, const Dir& normal) const {
 
-        float cosi = clamp(-1, 1, normal.dot(rayDir));
+        float cosi = std::max(-1.0f, std::min(1.0f, normal.dot(rayDir)));
 
         float refrIndexFrom = 1, refrIndexTo = refractiveIndex ;
 

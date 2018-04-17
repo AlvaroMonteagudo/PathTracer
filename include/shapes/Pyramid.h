@@ -21,6 +21,17 @@ public:
 
     void setMaterial(const RGB &kd, const RGB &ks, const RGB &kr, const RGB & kt);
 
+    void setMaterial(shared_ptr<Material> material);
+
+    template <class M>
+    void setMaterial(M material)
+    {
+        for (const shared_ptr<Shape> &face : faces)
+        {
+            face->setMaterial(material);
+        }
+    }
+
 
 protected:
 

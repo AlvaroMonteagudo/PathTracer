@@ -122,3 +122,15 @@ bool RGB::operator==(const RGB &rhs) const {
 bool RGB::operator!=(const RGB &rhs) const {
     return !(rhs == *this);
 }
+
+void RGB::setRed(float red) {
+    RGB::red = red;
+}
+
+void RGB::setBlue(float blue) {
+    RGB::blue = blue;
+}
+
+void RGB::setGreen(float green) {
+    RGB::green = green;
+}
