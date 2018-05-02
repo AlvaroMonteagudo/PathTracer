@@ -9,6 +9,8 @@ public:
 
     Quad(const Point &a, const Point &b, const Point &c, const Point &d);
 
+    Quad(const Point &a, const Point &b, const Point &c);
+
     float intersect(const Ray &ray) const;
 
     Dir getNormal(const Point &intersectedPoint) const;
@@ -19,9 +21,11 @@ public:
 
 protected:
 
-    Point v00, v10, v11, v01;
+    Point a, b, c, d;
 
     Point center;
+
+    Point half_bc;
 
     Triangle t1, t2;
 

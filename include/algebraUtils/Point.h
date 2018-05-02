@@ -85,6 +85,14 @@ public:
         return { x / num, y / num, z / num };
     }
 
+    Point getMiddlePointWith(const Point &p) const {
+        return { (x + p.x) / 2.0f, (y + p.y) / 2.0f, (z + p.z) / 2.0f };
+    }
+
+    Point getTwiceDistanceWith(const Point &p) const {
+        return  *this + (p - *this) * 2.0f ;
+    }
+
     bool operator <= (const Point &point) const {
         return (x - point.x <= 0.00001) &&
                (y - point.y <= 0.00001) &&

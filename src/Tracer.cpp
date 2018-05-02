@@ -57,7 +57,7 @@ void Tracer::renderImage() const {
             printProgress(camera.getWidth() * i + j, totalPixels);
 
             Ray ray(camera.getFocal(), pixel);
-            image(i,j) = radiance(ray);
+            image(i,j) = radiance(ray, 0);
 
             pixel = pixel + colAdd;
         }
@@ -146,7 +146,7 @@ void Tracer::renderImageLines(int start, int end) {
                         Point(pixel.x + randomWidthOffset,
                               pixel.y + randomHeightOffset,
                               pixel.z));
-                image(i,j) += radiance(ray);
+                image(i,j) += radiance(ray, 0);
             }
             image(i, j) /= SAMPLES;
 
@@ -172,11 +172,12 @@ inline bool Tracer::intersect(const Ray &ray, float &distance, int &id) const {
     return distance < MAX_FLOAT;
 }
 
-RGB Tracer::radiance(const Ray &ray) const {
+RGB Tracer::radiance(const Ray &ray, int depth) const {
 
     float dist  = MAX_FLOAT;
     int id = -1;
 
+    if (++depth == MAX_DEPTH) return BLACK;
     if (!intersect(ray, dist, id)) return BLACK;
 
     shared_ptr<Shape> shape = shapes.at(id);
@@ -190,14 +191,14 @@ RGB Tracer::radiance(const Ray &ray) const {
     Dir normal = shape->getNormal(intersectedPoint).normalize();
 
     // Revert normal in order to work with the visible normal of the shape
-    float cosi = normal.dot(ray.getDirection());
-    Dir nl = ((cosi > 0) || (cosi == 0)) && (normal == ray.getDirection()) ? normal * -1 : normal;
+    float cosine = normal.dot(ray.getDirection());
+    Dir nl = ((cosine > 0) || (cosine == 0)) && (normal == ray.getDirection()) ? normal * -1 : normal;
 
-    return russianRoulette(ray, *shape, intersectedPoint, nl);
+    return russianRoulette(ray, *shape, intersectedPoint, nl, depth);
 
 }
 
-RGB Tracer::russianRoulette(const Ray &ray, const Shape &shape, const Point &intersectedPoint, const Dir &normal) const {
+RGB Tracer::russianRoulette(const Ray &ray, const Shape &shape, const Point &intersectedPoint, const Dir &normal, int depth) const {
 
     shared_ptr<Material> material = shape.getMaterial();
 
@@ -226,7 +227,7 @@ RGB Tracer::russianRoulette(const Ray &ray, const Shape &shape, const Point &int
 
         Ray sample(intersectedPoint, transformToGlobalCoordinates * rayDirLocal);
 
-        return radiance(sample) * material->getKd() / pd;
+        return radiance(sample, depth) * material->getKd() / pd;
     } else if (random < pd + ps) {
 
         Dir zAxis = shape.getNormal(intersectedPoint);
@@ -245,18 +246,18 @@ RGB Tracer::russianRoulette(const Ray &ray, const Shape &shape, const Point &int
 
         Ray sample(intersectedPoint, transformToGlobalCoordinates * rayDirLocal);
 
-        return radiance(sample) * material->getKs() *
+        return radiance(sample, depth) * material->getKs() *
                ((shape.getShininess() + 2.0f) /
                 (shape.getShininess() + 1.0f)) / (pd + ps);
     } else if (random < pd + ps + pr) {
         if (material->getKr() != BLACK) {
             Ray reflectedRay(intersectedPoint, shape.getDirRayReflected(ray.getDirection(), normal));
-            return radiance(reflectedRay) * material->getKr() / (pd + ps + pr);
+            return radiance(reflectedRay, depth) * material->getKr() / (pd + ps + pr);
         }
     } else if (random < pd + ps + pr + pt) {
         if (material->getKt() != BLACK) {
             Ray refractedRay(intersectedPoint, shape.getDirRayRefracted(ray.getDirection(), normal));
-            return radiance(refractedRay) * material->getKt() / (pd + ps + pr + pt);
+            return radiance(refractedRay, depth) * material->getKt() / (pd + ps + pr + pt);
         }
     } else {
         return BLACK;

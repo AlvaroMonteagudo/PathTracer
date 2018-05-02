@@ -1,10 +1,12 @@
 #pragma once
 
+#include <vector>
 #include "Quad.h"
 
 class Box : public Shape {
 
 public:
+    const vector<shared_ptr<Quad>> &getFaces() const;
 
     Box(const Quad &quad, const float depth);
 
@@ -17,7 +19,7 @@ public:
     template <class M>
     void setMaterial(M material)
     {
-        for (const shared_ptr<Quad> &face : faces)
+        for (const auto &face : faces)
         {
             face->setMaterial(material);
         }
@@ -25,10 +27,6 @@ public:
 
 protected:
 
-    shared_ptr<Quad> faces[6];
-
-private:
-
-    shared_ptr<Quad> faceHitted;
+    std::vector<shared_ptr<Quad>> faces;
 
 };

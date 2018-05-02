@@ -45,7 +45,7 @@ Pyramid::Pyramid(const Triangle &triangle, const Point &top) :
 
 }
 
-float Pyramid::intersect(const Ray &ray) const {
+/*float Pyramid::intersect(const Ray &ray) const {
 
     float min = MAX_FLOAT;
 
@@ -57,15 +57,15 @@ float Pyramid::intersect(const Ray &ray) const {
     }
 
     return min;
-}
-
-Dir Pyramid::getNormal(const Point &intersectedPoint) const {
-    throw 1; // Temporal
-}
+}*/
 
 void Pyramid::setMaterial(shared_ptr<Material> material) {
     for (const shared_ptr<Shape> &face: faces) {
         face->setMaterial(material);
     }
+}
+
+const vector<shared_ptr<Shape>> &Pyramid::getFaces() const {
+    return faces;
 }
 

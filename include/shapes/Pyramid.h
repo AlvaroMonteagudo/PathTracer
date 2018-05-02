@@ -3,7 +3,7 @@
 #include <vector>
 #include "Quad.h"
 
-class Pyramid : public Shape {
+class Pyramid {
 
 public:
 
@@ -15,12 +15,6 @@ public:
 
     Pyramid(const Triangle &triangle, const Point &top);
 
-    float intersect(const Ray &ray) const;
-
-    Dir getNormal(const Point &intersectedPoint) const;
-
-    void setMaterial(const RGB &kd, const RGB &ks, const RGB &kr, const RGB & kt);
-
     void setMaterial(shared_ptr<Material> material);
 
     template <class M>
@@ -31,6 +25,8 @@ public:
             face->setMaterial(material);
         }
     }
+
+    const vector<shared_ptr<Shape>> &getFaces() const;
 
 
 protected:

@@ -56,14 +56,14 @@ public:
      * @param indirectSteps: number of bounces for indirect light
      * @return color obtained of the path this ray follows
      */
-    RGB radiance(const Ray &_ray) const;
+    RGB radiance(const Ray &_ray, int depth) const;
 
-    RGB russianRoulette(const Ray &ray, const Shape &shape, const Point &intersectedPoint, const Dir &normal) const;
+    RGB russianRoulette(const Ray &ray, const Shape &shape, const Point &intersectedPoint, const Dir &normal, int depth) const;
 
     inline bool intersect(const Ray &ray, float &distance, int &id) const;
 
     /// PUBLIC PARAMETERS
-    int SAMPLES = 8;
+    int SAMPLES = 8, MAX_DEPTH = 8;
 
 private:
 

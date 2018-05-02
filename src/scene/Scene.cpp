@@ -26,13 +26,19 @@
  */
 Scene::Scene() {
 
-    Quad light(Point(-0.4f, 0.99f, -0.4f), Point(0.4f, 0.99f, -0.4f), Point(0.4f , 0.99f, 0.4f), Point(-0.4f , 0.99f , 0.4f));
+    Quad light(Point(-0.4f, 0.99f, -0.8f), Point(0.4f, 0.99f, -0.8f), Point(0.4f , 0.99f, 0), Point(-0.4f , 0.99f , 0));
     light.setEmit(WHITE);
 
+    Circle light_c(Point(0, -0.9f, -0.5f), Dir(0, -1, 0), 0.5f);
+    light_c.setMaterial(DIFF_R);
+
+
     Plane rightWall(Dir(-1, 0, 0), Point(1, 0, 0));
+    //rightWall.setEmit(WHITE);
     rightWall.setMaterial(DIFF_G);
 
     Plane leftWall(Dir(1, 0, 0), Point(-1, 0, 0));
+    //leftWall.setEmit(WHITE);
     leftWall.setMaterial(DIFF_R);
 
     Plane floor(Dir(0, 1, 0), Point(0, -1, 0));
@@ -42,60 +48,56 @@ Scene::Scene() {
     Plane bottom(Dir(0, 0, -1), Point(0, 0, 1));
 
     Plane backWall(Dir(0, 0, 1), Point(0, 0, -3));
+    backWall.setEmit(WHITE);
 
-    Sphere leftSphere(0.35f, Point(-0.5f, -0.6f, 0.2f));
-    leftSphere.setMaterial(DIFF_B);
-    //leftSphere.setRefractiveIndex(GLASS*25);
+    Sphere leftSphere(0.35f, Point(-0.5f, -0.6f, 0.6f));
+    leftSphere.setMaterial(Material(BLACK, BLUE, BLACK, BLACK));
+    leftSphere.setShininess(5.0f);
 
-    Sphere rightSphere(0.35f, Point(0.5f, -0.6f, 0.4f));
-    rightSphere.setMaterial(MIRROR);
+    Sphere rightSphere(0.35f, Point(0.5f, -0.6f, 0.6f));
+    rightSphere.setMaterial(DIFF_B);
 
-    Quad quad(Point(-0.5f, -0.9f, -0.5f), Point(0.3f, -0.9f, -0.3f), Point(0.5f , -0.9f, 0.3f), Point(-0.3f , -0.9f , 0.6f));
-    //quad.setMaterial(MIRROR);
+    Quad q(Point(-0.5f, -0.9f, -0.5f), Point(0.5f, -0.9f, -0.5f), Point(-0.5f , -0.9f , 0.5f));
+    q.setMaterial(DIFF_R);
 
-    Box box(quad, 0.6);
-    box.setMaterial(DIFF_R);
+    Triangle t(Point(-0.5f, -0.9f, -0.5f), Point(0.5f, -0.9f, -0.5f), Point(-0.5f , -0.9f , 0.5f));
+    t.setMaterial(DIFF_R);
 
-    Triangle triangle(Point(-0.2f, -0.9f, -0.5f), Point(0.3f, -0.9f , 0.4f), Point(-0.7f , -0.9f, 0.6f));
-    triangle.setMaterial(DIFF_R);
+    /*Dir normal = q.getNormal();
 
-    Pyramid pyramid3(triangle, 1);
-    pyramid3.setMaterial(DIFF_B);
+    Point b1, b2, b3, b4;
 
+    tie(b1, b2, b3, b4) = q.getCorners();
 
+    Point t1 = b1 + normal * -0.6;
+    Point t2 = b2 + normal * -0.6;
+    Point t3 = b3 + normal * -0.6;
+    Point t4 = b4 + normal * -0.6;
 
-    /*
-    rightSphere.setShininess(5);
-    //rightSphere.setRefractiveIndex(GLASS);
+    Quad q1(Quad(t1, t2, t3, t4));
+    q1.setMaterial(MIRROR);
+    Quad q2(Quad(b1, b2, t2, t1));
+    q2.setMaterial(MIRROR);
+    Quad q3(Quad(b2, b3, t3, t2));
+    q3.setMaterial(MIRROR);
+    Quad q4(Quad(b3, b4, t4, t3));
+    q4.setMaterial(MIRROR);
+    Quad q5(Quad(b4, b1, t1, t4));
+    q5.setMaterial(MIRROR);
 
+    //addShape(q);
+    addShape(q1);
+    addShape(q2);
+    addShape(q3);
+    //addShape(q4);
+    addShape(q5);*/
 
-    triangle.setRefractiveIndex(GLASS*25);
+    /*Pyramid pyramid4(q, 0.6f);
+    pyramid4.setMaterial(DIFF_R);
+    for (const auto &i : pyramid4.getFaces()) {
+        addShape(i);
+    }*/
 
-    Triangle triangle2(Point(0.9f, -0.9f, 0), Point(0.05f, -0.9f , 0.9f), Point(0.9f , 0, 0.9f));
-    triangle2.setMaterial(BLACK, BLACK, BLACK, WHITE);
-    triangle2.setRefractiveIndex(GLASS*25);
-
-    Pyramid pyramid4(quad, 1);
-    pyramid4.setMaterial(RED, BLACK, BLACK, BLACK);
-
-    */
-
-
-
-    /*Triangle triangle2(Point(0.8f, 0.4f, -0.3f), Point(0.8f, 0.4f , 0.5f), Point(0.8f , 0.8f , 0.1f));
-    triangle.setFeatures(BLUE, BLACK, BLACK, BLACK);
-
-    Circle circle(Point(0, -0.5f, 0.2), Dir(0, 1, 0), 0.25f);
-    circle.setFeatures(BLUE, BLACK, BLACK, BLACK);
-
-
-
-
-    Pyramid pyramid3(triangle, 0.5);
-    pyramid4.setMaterial(BLUE, BLACK, BLACK, BLACK);
-
-    Cone cone(circle, 0.5f);
-    cone.setMaterial(BLUE, BLACK, BLACK, BLACK);*/
 
     setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
                     Point(0.f, -0.f, -2.8f), 1.0, 720, 720, PI/3.0f));
@@ -107,9 +109,10 @@ Scene::Scene() {
     addShape(bottom);
     //addShape(cone);
     //addShape(pyramid4);
-   // addShape(pyramid3);
-    //addShape(quad);
-    addShape(leftSphere);
+    //addShape(pyramid3);
+    addShape(light_c);
+    //addShape(quad2);
+    //addShape(leftSphere);
     //addShape(rightSphere);
     //addShape(triangle);
     //addShape(triangle2);

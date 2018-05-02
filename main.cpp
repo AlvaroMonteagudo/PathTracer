@@ -26,7 +26,7 @@ using namespace std;
 int main(int argc, char * argv[]){
 
     string fileScene, outfileName = "../images/image" + currentDate() + ".ppm";
-    int indirectSamples = 128;//*10;
+    int indirectSamples = 1024;//*10;
 
     vector<string> arguments;
 
@@ -53,7 +53,7 @@ int main(int argc, char * argv[]){
             return 0;
         } else if (arguments.at(j) == "-of" || arguments.at(j) == "--outfile") {
             ++j;
-            outfileName = arguments.at(j) + ".ppm";
+            outfileName = "../images/" + arguments.at(j) + ".ppm";
         } else {
             cerr << arguments.at(j) << " could not be recognized as a supported argument. Check typo." << endl;
             printUsage();

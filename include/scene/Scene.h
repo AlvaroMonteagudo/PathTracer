@@ -46,25 +46,20 @@ public:
     void setCamera(const Camera &camera);
 
     template <class S>
-    void addShape(const S &shape)
-    {
+    void addShape(const S &shape) {
         shapes.push_back(make_shared<S>(shape));
     }
 
+    template <class S>
+    void addShape(const shared_ptr<S> &shape) {
+        shapes.push_back(shape);
+    }
 
     /**
      * Get shapes usd in this scene
      * @return vector with shapes of this scene
      */
     const std::vector<std::shared_ptr<Shape>> &getShapes() const;
-
-    /**
-     * Get lights usd in this scene
-     * @return vector with lights of this scene
-     */
-    const std::vector<LightSource> &getLights() const;
-
-
 
 private:
 
