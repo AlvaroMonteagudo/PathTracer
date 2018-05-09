@@ -9,7 +9,8 @@ Triangle::Triangle(const Point &a, const Point &b, const Point &c) :
         d00(v0.dot(v0)),
         d01(v0.dot(v1)),
         d11(v1.dot(v1)),
-        denominator(d00 * d11 - d01 * d01)
+        denominator(d00 * d11 - d01 * d01),
+        center((a + b + c) / 3.0)
 {}
 
 tuple<Point, Point, Point> Triangle::getCorners() const {
@@ -33,5 +34,9 @@ float Triangle::intersect(const Ray &ray) const {
     // Gamma is not necessary: float gamma = 1.0f - alpha - beta;
     // Check if the intersection point is inside the triangle bounds.
     return ((alpha >= 0) & (beta >= 0) & (alpha + beta < 1)) ? t : MAX_FLOAT;
+}
+
+const Point &Triangle::getCenter() const {
+    return center;
 }
 

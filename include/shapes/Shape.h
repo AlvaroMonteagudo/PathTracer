@@ -59,7 +59,7 @@ public:
      * @param nhit: normal of the shape in the intersection point
      * @return direction of ray reflected in this shape
      */
-    Dir getDirRayReflected(const Dir &rayDir, const Dir &nhit) const {
+    static Dir getDirRayReflected(const Dir &rayDir, const Dir &nhit) {
         float product = rayDir.dot(nhit) * 2.0f;
         return rayDir - nhit*product;
     }
@@ -111,13 +111,6 @@ public:
         return emit;
     }
 
-    float getShininess() const {
-        return shininess;
-    }
-
-    void setShininess(float shininess) {
-        Shape::shininess = shininess;
-    }
 
     void setRefractiveIndex(float refractiveIndex) {
         Shape::refractiveIndex = refractiveIndex;
@@ -136,17 +129,6 @@ public:
         material = make_shared<M>(m);
     }
 
-    RGB phong(const Ray &ray, const Ray &light,  const Point &point) const {
-
-        Dir normal = this->getNormal(point);
-        Dir reflectedLight = getDirRayReflected(light.getDirection() * -1, normal);
-
-        float cos = ray.getDirection().dot(reflectedLight);
-
-        if (cos < 0) cos = -cos;
-
-        return ((material->getKd() / PI) + (material->getKs() * ((shininess + 2.0f) / (2.0f * PI)) * pow(cos, shininess)));
-    }
 
 private:
 
@@ -155,6 +137,6 @@ private:
     RGB emit = BLACK;
 
     /// Other shape values
-    float shininess = 0.0f, refractiveIndex = AIR_RI;
+    float refractiveIndex = AIR_RI;
 
 };

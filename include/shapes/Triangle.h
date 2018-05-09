@@ -12,9 +12,11 @@ public:
 
     tuple<Point, Point, Point> getCorners() const;
 
+    const Point &getCenter() const;
+
 protected:
 
-    Point a, b, c;
+    Point a, b, c, center;
 
     /** Cached values to make a triangle intersection faster. */
     Dir v0, v1;

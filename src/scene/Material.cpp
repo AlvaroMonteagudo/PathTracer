@@ -1,8 +1,8 @@
 #include <Material.h>
 #include <iostream>
 
-Material::Material(const RGB &d, const RGB &s, const RGB &r, const RGB &t) :
-        kd(d), ks(s), kr(r), kt(t) {
+Material::Material(const RGB &d, const RGB &s, const RGB &r, const RGB &t, float shininess) :
+        kd(d), ks(s), kr(r), kt(t), shininess(shininess) {
     float max = 0;
     if ((max = d.getRed() + s.getRed() + r.getRed() + t.getRed()) > 0.9f) {
         cout << "Red color exceed maximum conservative value 0.9. It will be readjusted proportionally to satisfy the limit established." << endl;
@@ -44,5 +44,9 @@ const RGB &Material::getKr() const {
 
 const RGB &Material::getKt() const {
     return kt;
+}
+
+float Material::getShininess() const {
+    return shininess;
 }
 

@@ -55,6 +55,13 @@ public:
         shapes.push_back(shape);
     }
 
+    template <class S>
+    void addAllShapes(const std::vector<std::shared_ptr<S>> shape_vector) {
+        for (int i = 0; i < shape_vector.size(); ++i) {
+            shapes.push_back(shape_vector.at(i));
+        }
+    }
+
     /**
      * Get shapes usd in this scene
      * @return vector with shapes of this scene

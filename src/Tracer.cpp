@@ -194,24 +194,23 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
     float cosine = normal.dot(ray.getDirection());
     Dir nl = ((cosine > 0) || (cosine == 0)) && (normal == ray.getDirection()) ? normal * -1 : normal;
 
-    return russianRoulette(ray, *shape, intersectedPoint, nl, depth);
+    return russianRoulette(ray, *shape, *shape->getMaterial(), intersectedPoint, nl, depth);
 
 }
 
-RGB Tracer::russianRoulette(const Ray &ray, const Shape &shape, const Point &intersectedPoint, const Dir &normal, int depth) const {
-
-    shared_ptr<Material> material = shape.getMaterial();
+RGB Tracer::russianRoulette(const Ray &ray, const Shape &shape, const Material &material, const Point &intersectedPoint, const Dir &normal, int depth) const {
 
     float random = randomValue();
 
-    float pd = material->getKd().getMean();
-    float ps = material->getKs().getMean();
-    float pr = material->getKr().getMean();
-    float pt = material->getKt().getMean();
+    float pd = material.getKd().getMean();
+    float ps = material.getKs().getMean();
+    float pr = material.getKr().getMean();
+    float pt = material.getKt().getMean();
+    float shininess = material.getShininess();
 
     if (random < pd) {
 
-        Dir zAxis = shape.getNormal(intersectedPoint);
+        Dir zAxis = normal;
         Dir xAxis = (zAxis.x != 0) ? zAxis.cross(Dir(0, 0, 1)).normalize()
                                    : zAxis.cross(Dir(1, 0, 0)).normalize();
         Dir yAxis = xAxis.cross(zAxis);
@@ -227,10 +226,10 @@ RGB Tracer::russianRoulette(const Ray &ray, const Shape &shape, const Point &int
 
         Ray sample(intersectedPoint, transformToGlobalCoordinates * rayDirLocal);
 
-        return radiance(sample, depth) * material->getKd() / pd;
+        return radiance(sample, depth) * material.getKd() / pd;
     } else if (random < pd + ps) {
 
-        Dir zAxis = shape.getNormal(intersectedPoint);
+        Dir zAxis = normal;
         Dir xAxis = (zAxis.x != 0) ? zAxis.cross(Dir(0, 0, 1)).normalize()
                                    : zAxis.cross(Dir(1, 0, 0)).normalize();
         Dir yAxis = xAxis.cross(zAxis);
@@ -238,7 +237,7 @@ RGB Tracer::russianRoulette(const Ray &ray, const Shape &shape, const Point &int
 
         // lobe specular
         float inclination, azimuth;
-        std::tie(inclination, azimuth) = specularLobeSampling(shape.getShininess());
+        std::tie(inclination, azimuth) = specularLobeSampling(shininess);
 
         Dir rayDirLocal = Dir(sin(inclination) * cos(azimuth),
                               sin(inclination) * sin(azimuth),
@@ -246,18 +245,18 @@ RGB Tracer::russianRoulette(const Ray &ray, const Shape &shape, const Point &int
 
         Ray sample(intersectedPoint, transformToGlobalCoordinates * rayDirLocal);
 
-        return radiance(sample, depth) * material->getKs() *
-               ((shape.getShininess() + 2.0f) /
-                (shape.getShininess() + 1.0f)) / (pd + ps);
+        return radiance(sample, depth) * material.getKs() *
+               ((shininess + 2.0f) /
+                (shininess + 1.0f)) / (pd + ps);
     } else if (random < pd + ps + pr) {
-        if (material->getKr() != BLACK) {
-            Ray reflectedRay(intersectedPoint, shape.getDirRayReflected(ray.getDirection(), normal));
-            return radiance(reflectedRay, depth) * material->getKr() / (pd + ps + pr);
+        if (material.getKr() != BLACK) {
+            Ray reflectedRay(intersectedPoint, Shape::getDirRayReflected(ray.getDirection(), normal));
+            return radiance(reflectedRay, depth) * material.getKr() / (pd + ps + pr);
         }
     } else if (random < pd + ps + pr + pt) {
-        if (material->getKt() != BLACK) {
+        if (material.getKt() != BLACK) {
             Ray refractedRay(intersectedPoint, shape.getDirRayRefracted(ray.getDirection(), normal));
-            return radiance(refractedRay, depth) * material->getKt() / (pd + ps + pr + pt);
+            return radiance(refractedRay, depth) * material.getKt() / (pd + ps + pr + pt);
         }
     } else {
         return BLACK;

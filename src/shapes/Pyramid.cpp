@@ -3,7 +3,7 @@
 
 Pyramid::Pyramid(const Quad &quad, float height) {
     tie(a, b, c, d) = quad.getCorners();
-    center = (a + b + c + d) / 4.0f;
+    center = quad.getCenter();
     top = center + quad.getNormal() * -height;
     faces.push_back(make_shared<Quad>(quad));
     faces.push_back(make_shared<Triangle>(Triangle(a, b, top)));
@@ -26,7 +26,7 @@ Pyramid::Pyramid(const Quad &quad, const Point &top) :
 
 Pyramid::Pyramid(const Triangle &triangle, float height) {
     tie(a, b, c) = triangle.getCorners();
-    center = (a + b + c) / 3.0f;
+    center = triangle.getCenter();
     top = center + triangle.getNormal() * height;
     faces.push_back(make_shared<Triangle>(triangle));
     faces.push_back(make_shared<Triangle>(Triangle(a, b, top)));
@@ -45,19 +45,6 @@ Pyramid::Pyramid(const Triangle &triangle, const Point &top) :
 
 }
 
-/*float Pyramid::intersect(const Ray &ray) const {
-
-    float min = MAX_FLOAT;
-
-    for (const shared_ptr<Shape> &face : faces) {
-        float dist_face = face->intersect(ray);
-        if (dist_face < min) {
-            min = dist_face;
-        }
-    }
-
-    return min;
-}*/
 
 void Pyramid::setMaterial(shared_ptr<Material> material) {
     for (const shared_ptr<Shape> &face: faces) {

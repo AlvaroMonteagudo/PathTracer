@@ -19,13 +19,13 @@ public:
 
     tuple<Point, Point, Point, Point> getCorners() const;
 
+    const Point &getCenter() const;
+
 protected:
 
     Point a, b, c, d;
 
     Point center;
-
-    Point half_bc;
 
     Triangle t1, t2;
 

@@ -5,13 +5,16 @@ Quad::Quad(const Point &a, const Point &b, const Point &c, const Point &d)
     : Plane((b - a).cross(c - a).normalize(), a),
       a(a), b(b), c(c), d(d),
       t1(Triangle(a, b, c)),
-      t2(Triangle(a, c, d)) { }
+      t2(Triangle(a, c, d)) {
+
+    center = (a + b + c + d) / 4.0f;
+}
 
 Quad::Quad(const Point &a, const Point &b, const Point &c)
     : Plane((b - a).cross(c - a).normalize(), a),
-      a(a), b(b), c(c), half_bc(b.getMiddlePointWith(c)), d(a.getTwiceDistanceWith(half_bc)),
-      t1(Triangle(a, b, c)), t2(Triangle(b, c, d))   {
-}
+      a(a), b(b), c(c), d(a.getTwiceDistanceWith(b.getMiddlePointWith(c))),
+      t1(Triangle(a, b, c)), t2(Triangle(b, c, d)),
+      center(b.getMiddlePointWith(c))  { }
 
 
 float Quad::intersect(const Ray &ray) const {
@@ -31,5 +34,9 @@ Dir Quad::getNormal(const Point &intersectedPoint) const {
 
 Dir Quad::getNormal() const {
     return Plane::getNormal();
+}
+
+const Point &Quad::getCenter() const {
+    return center;
 }
 

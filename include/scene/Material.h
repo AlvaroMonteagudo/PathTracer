@@ -9,7 +9,7 @@ class Material {
 
 public:
 
-    Material(const RGB &kd, const RGB &ks, const RGB &kr, const RGB &kt);
+    Material(const RGB &kd, const RGB &ks, const RGB &kr, const RGB &kt, float shininess = 0.0f);
 
     const RGB &getKd() const;
 
@@ -19,11 +19,13 @@ public:
 
     const RGB &getKt() const;
 
-
+    float getShininess() const;
 
 private:
 
     RGB kd, ks, kr, kt;
+
+    float shininess;
 };
 
 static const shared_ptr<Material> MIRROR = make_shared<Material>(Material(BLACK, BLACK, WHITE, BLACK));

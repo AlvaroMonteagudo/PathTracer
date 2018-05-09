@@ -15,6 +15,9 @@
 
 #include <ostream>
 #include "Dir.h"
+#include <iostream>
+
+using namespace std;
 
 class Point {
 

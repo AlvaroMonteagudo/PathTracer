@@ -26,7 +26,7 @@ using namespace std;
 int main(int argc, char * argv[]){
 
     string fileScene, outfileName = "../images/image" + currentDate() + ".ppm";
-    int indirectSamples = 1024;//*10;
+    int indirectSamples = 128;//*10;
 
     vector<string> arguments;
 
@@ -83,7 +83,7 @@ string currentDate() {
     time_t t = time(nullptr);   // get time now
     struct tm * now = localtime( & t );
 
-    strftime(buffer,sizeof(buffer),"_%d_%m_%Y_%I:%M:%S", now);
+    strftime(buffer,sizeof(buffer),"_%m_%d_%Y_%I:%M:%S", now);
     std::string str(buffer);
     return str;
 }

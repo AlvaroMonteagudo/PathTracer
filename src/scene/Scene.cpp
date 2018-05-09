@@ -29,7 +29,7 @@ Scene::Scene() {
     Quad light(Point(-0.4f, 0.99f, -0.8f), Point(0.4f, 0.99f, -0.8f), Point(0.4f , 0.99f, 0), Point(-0.4f , 0.99f , 0));
     light.setEmit(WHITE);
 
-    Circle light_c(Point(0, -0.9f, -0.5f), Dir(0, -1, 0), 0.5f);
+    Circle light_c(Point(0.5, -0.9f, -0.5f), Dir(0, 1, 0), 0.4f);
     light_c.setMaterial(DIFF_R);
 
 
@@ -52,7 +52,6 @@ Scene::Scene() {
 
     Sphere leftSphere(0.35f, Point(-0.5f, -0.6f, 0.6f));
     leftSphere.setMaterial(Material(BLACK, BLUE, BLACK, BLACK));
-    leftSphere.setShininess(5.0f);
 
     Sphere rightSphere(0.35f, Point(0.5f, -0.6f, 0.6f));
     rightSphere.setMaterial(DIFF_B);
@@ -63,40 +62,10 @@ Scene::Scene() {
     Triangle t(Point(-0.5f, -0.9f, -0.5f), Point(0.5f, -0.9f, -0.5f), Point(-0.5f , -0.9f , 0.5f));
     t.setMaterial(DIFF_R);
 
-    /*Dir normal = q.getNormal();
 
-    Point b1, b2, b3, b4;
-
-    tie(b1, b2, b3, b4) = q.getCorners();
-
-    Point t1 = b1 + normal * -0.6;
-    Point t2 = b2 + normal * -0.6;
-    Point t3 = b3 + normal * -0.6;
-    Point t4 = b4 + normal * -0.6;
-
-    Quad q1(Quad(t1, t2, t3, t4));
-    q1.setMaterial(MIRROR);
-    Quad q2(Quad(b1, b2, t2, t1));
-    q2.setMaterial(MIRROR);
-    Quad q3(Quad(b2, b3, t3, t2));
-    q3.setMaterial(MIRROR);
-    Quad q4(Quad(b3, b4, t4, t3));
-    q4.setMaterial(MIRROR);
-    Quad q5(Quad(b4, b1, t1, t4));
-    q5.setMaterial(MIRROR);
-
-    //addShape(q);
-    addShape(q1);
-    addShape(q2);
-    addShape(q3);
-    //addShape(q4);
-    addShape(q5);*/
-
-    /*Pyramid pyramid4(q, 0.6f);
+    Pyramid pyramid4(q, 0.6f);
     pyramid4.setMaterial(DIFF_R);
-    for (const auto &i : pyramid4.getFaces()) {
-        addShape(i);
-    }*/
+    addAllShapes(pyramid4.getFaces());
 
 
     setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
@@ -110,8 +79,8 @@ Scene::Scene() {
     //addShape(cone);
     //addShape(pyramid4);
     //addShape(pyramid3);
-    addShape(light_c);
-    //addShape(quad2);
+    //addShape(light_c);
+    addShape(q);
     //addShape(leftSphere);
     //addShape(rightSphere);
     //addShape(triangle);
