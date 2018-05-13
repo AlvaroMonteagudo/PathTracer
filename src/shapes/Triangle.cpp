@@ -41,17 +41,14 @@ const Point &Triangle::getCenter() const {
 }
 
 Triangle Triangle::moveX(float offset) const {
-    Dir offsetDir(offset, 0, 0);
-    return { a + offsetDir, b + offsetDir, c + offsetDir };
+    return { a.moveX(offset), b.moveX(offset), c.moveX(offset) };
 }
 
 Triangle Triangle::moveY(float offset) const {
-    Dir offsetDir(0, offset, 0);
-    return { a + offsetDir, b + offsetDir, c + offsetDir };
+    return { a.moveY(offset), b.moveY(offset), c.moveY(offset) };
 }
 
 Triangle Triangle::moveZ(float offset) const {
-    Dir offsetDir(0, 0, offset);
-    return { a + offsetDir, b + offsetDir, c + offsetDir };
+    return { a.moveZ(offset), b.moveZ(offset), c.moveZ(offset) };
 }
 

@@ -20,14 +20,14 @@ float Circle::getRadius() const {
 }
 
 Circle Circle::moveX(const float offset) const {
-    return { point + Dir(offset, 0, 0), Plane::getNormal(), radius };
+    return { point.moveX(offset), Plane::getNormal(), radius };
 }
 
 Circle Circle::moveY(float offset) const {
-    return { point + Dir(0, offset, 0), Plane::getNormal(), radius  };
+    return { point.moveY(offset), Plane::getNormal(), radius  };
 }
 
 Circle Circle::moveZ(float offset) const {
-    return { point + Dir(0, 0, offset), Plane::getNormal(), radius };
+    return { point.moveZ(offset), Plane::getNormal(), radius };
 }
 

@@ -52,15 +52,15 @@ Dir Plane::getNormal() const {
 }
 
 Plane Plane::moveX(const float offset) const {
-    return { normal, point + Dir(offset, 0, 0) };
+    return { normal, point.moveX(offset) };
 }
 
 Plane Plane::moveY(float offset) const {
-    return { normal, point + Dir(0, offset, 0) };
+    return { normal, point.moveY(offset) };
 }
 
 Plane Plane::moveZ(float offset) const {
-    return { normal, point + Dir(0, 0, offset) };
+    return { normal, point.moveZ(offset) };
 }
 
 void Plane::invertNornal() {

@@ -70,15 +70,15 @@ Dir Sphere::getNormal(const Point &intersectedPoint) const {
 }
 
 Sphere Sphere::moveX(const float offset) const {
-    return { radius, center + Dir(offset, 0, 0) };
+    return { radius, center.moveX(offset) };
 }
 
 Sphere Sphere::moveY(float offset) const {
-    return { radius, center + Dir(0, offset, 0) };
+    return { radius, center.moveY(offset) };
 }
 
 Sphere Sphere::moveZ(float offset) const {
-    return { radius, center + Dir(0, 0, offset) };
+    return { radius, center.moveZ(offset) };
 }
 
 

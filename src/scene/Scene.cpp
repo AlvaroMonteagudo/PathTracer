@@ -26,7 +26,7 @@
  */
 Scene::Scene() {
 
-    Quad light(Point(-0.5f, 0.99f, -0.5f), Point(0.5f, 0.99f, -0.5f), Point(0.5f , 0.99f, 0.2), Point(-0.5f , 0.99f , 0.2));
+    Quad light(Point(-0.5f, 0.99f, -0.5f), Point(0.5f, 0.99f, -0.5f), Point(-0.5f , 0.99f, 0.2), Point(0.5f , 0.99f , 0.2));
     light.setEmit(WHITE);
 
     Plane rightWall(Dir(-1, 0, 0), Point(1, 0, 0));
@@ -48,15 +48,14 @@ Scene::Scene() {
     Sphere leftSphere(0.35f, Point(-0.5f, -0.6f, 0.6f));
     leftSphere.setMaterial(Material(BLACK, BLUE, BLACK, BLACK, 25.0));
 
-    Sphere rightSphere(leftSphere.moveX(1));
+    Sphere rightSphere(leftSphere.moveX(1).moveY(1).moveZ(-0.4f));
     rightSphere.setMaterial(Material(BLACK, RED, BLACK, BLACK, 5.0));
 
-    Triangle triangle(Point(-0.8f, -0.5f, 0.5f), Point(-0.5f, -0.5f, -0.2f), Point(-0.2f , -0.5f, 0.5));
-    triangle.setMaterial(DIFF_R);
+    Quad quad(Point(-0.8f, -0.7f, -0.5f), Point(-0.1f, -0.7f, -0.5f), Point(-0.8f , -0.7f, 0.2));
+    quad.setMaterial(DIFF_B);
 
-    Triangle triangle2(triangle.moveX(1).moveY(-0.2f).moveZ(-0.4f));
-    triangle2.setMaterial(DIFF_B);
-
+    Quad quad2(quad.moveX(1).moveY(1).moveZ(-0.5f));
+    quad2.setMaterial(DIFF_B);
 
     setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
                     Point(0.f, -0.f, -2.8f), 1.0, 720, 720, PI/3.0f));
@@ -67,8 +66,10 @@ Scene::Scene() {
     addShape(ceiling);
     addShape(bottom);
     addShape(light);
-    addShape(triangle);
-    addShape(triangle2);
+    //addShape(leftSphere);
+    //addShape(rightSphere);
+    addShape(quad);
+    addShape(quad2);
 }
 
 /*Scene::Scene() {

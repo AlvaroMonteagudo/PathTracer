@@ -21,6 +21,12 @@ public:
 
     const Point &getCenter() const;
 
+    Quad moveX(float offset) const;
+
+    Quad moveY(float offset) const;
+
+    Quad moveZ(float offset) const;
+
 protected:
 
     Point a, b, c, d;

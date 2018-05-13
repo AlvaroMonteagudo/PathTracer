@@ -5,7 +5,7 @@ Quad::Quad(const Point &a, const Point &b, const Point &c, const Point &d)
     : Plane((b - a).cross(c - a).normalize(), a),
       a(a), b(b), c(c), d(d),
       t1(Triangle(a, b, c)),
-      t2(Triangle(a, c, d)) {
+      t2(Triangle(b, c, d)) {
 
     center = (a + b + c + d) / 4.0f;
 }
@@ -38,5 +38,17 @@ Dir Quad::getNormal() const {
 
 const Point &Quad::getCenter() const {
     return center;
+}
+
+Quad Quad::moveX(float offset) const {
+    return { a.moveX(offset), b.moveX(offset), c.moveX(offset), d.moveX(offset) };
+}
+
+Quad Quad::moveY(float offset) const {
+    return { a.moveY(offset), b.moveY(offset), c.moveY(offset), d.moveY(offset) };
+}
+
+Quad Quad::moveZ(float offset) const {
+    return { a.moveZ(offset), b.moveZ(offset), c.moveZ(offset), d.moveZ(offset) };
 }
 

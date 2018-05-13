@@ -96,6 +96,18 @@ public:
         return  *this + (p - *this) * 2.0f ;
     }
 
+    Point moveX(float offset) const {
+        return { x + offset, y, z };
+    }
+
+    Point moveY(float offset) const {
+        return { x , y + offset, z };
+    }
+
+    Point moveZ(float offset) const {
+        return { x, y, z + offset };
+    }
+
     bool operator <= (const Point &point) const {
         return (x - point.x <= 0.00001) &&
                (y - point.y <= 0.00001) &&
