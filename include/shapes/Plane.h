@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include <vector>
 #include "Dir.h"
 #include "Shape.h"
 #include "Point.h"
@@ -50,10 +51,22 @@ public:
 
     void invertNornal();
 
+    template <class S>
+    void addHole(const S &shape) {
+        holes.push_back(make_shared<S>(shape));
+    }
+
+    template <class S>
+    void addHole(const shared_ptr<S> &shape) {
+        holes.push_back(shape);
+    }
+
 private:
 
     /// PLANE PARAMETERS
     Dir normal;
 
     Point point;
+
+    std::vector<shared_ptr<Shape>> holes;
 };

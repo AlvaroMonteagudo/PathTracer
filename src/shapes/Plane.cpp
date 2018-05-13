@@ -27,6 +27,13 @@ Plane::Plane(const Dir &normal, const Point &point) :
  * @return distance from ray origin to intersection point if intersects, max float value otherwise
  */
 float Plane::intersect(const Ray &ray) const {
+
+    for (auto shape : holes) {
+        if (shape->intersect(ray) != MAX_FLOAT) { // Intersects a hole return max float
+            return MAX_FLOAT;
+        }
+    }
+
     float num = (point - ray.getSource()).dot(normal);
     float den = ray.getDirection().dot(normal);
 

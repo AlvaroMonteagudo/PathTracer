@@ -30,16 +30,27 @@ Scene::Scene() {
     light = light.moveZ(-0.6f);
     light.setEmit(WHITE);
 
+    Sphere globalLight(3.0, Point(0, 0, -1));
+    globalLight.setEmit(WHITE);
+
+    Quad light2(light.moveX(-2));
+    light2.setEmit(WHITE);
+
     Plane rightWall(Dir(-1, 0, 0), Point(1, 0, 0));
     //rightWall.setEmit(WHITE);
     rightWall.setMaterial(DIFF_G);
 
     Plane leftWall(Dir(1, 0, 0), Point(-1, 0, 0));
+    //leftWall.addHole(Circle(Point(-1, 0, -0.7f), leftWall.getNormal(), 0.8f));
     leftWall.setMaterial(DIFF_R);
 
     Plane floor(Dir(0, 1, 0), Point(0, -1, 0));
 
     Plane ceiling(Dir(0, -1, 0), Point(0, 1, 0));
+    ceiling.addHole(Quad(Point(-0.5f, 1, -0.2f), Point(0.5f, 1, -0.2f), Point(-0.5f , 1, 0.8), Point(0.5f , 1 , 0.8)));
+
+    Plane lightPlane(ceiling.moveY(0.2f));
+    lightPlane.setEmit(WHITE);
 
     Plane bottom(Dir(0, 0, -1), Point(0, 0, 1));
 
@@ -70,11 +81,13 @@ Scene::Scene() {
     addShape(floor);
     addShape(ceiling);
     addShape(bottom);
-    addShape(light);
+    addShape(lightPlane);
+    //addShape(light);
+    //addShape(light2);
     //addShape(leftSphere);
     //addShape(rightSphere);
-    addAllShapes(box.getFaces());
-    addAllShapes(box2.getFaces());
+    //addAllShapes(box.getFaces());
+    //addAllShapes(box2.getFaces());
     //addShape(quad2);
 }
 
