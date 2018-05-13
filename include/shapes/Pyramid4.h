@@ -3,17 +3,13 @@
 #include <vector>
 #include "Quad.h"
 
-class Pyramid {
+class Pyramid4 {
 
 public:
 
-    Pyramid(const Quad &quad, float height);
+    Pyramid4(const Quad &quad, float height);
 
-    Pyramid(const Quad &quad, const Point &top);
-
-    Pyramid(const Triangle &triangle, float height);
-
-    Pyramid(const Triangle &triangle, const Point &top);
+    Pyramid4(const Quad &quad, const Point &top);
 
     void setMaterial(shared_ptr<Material> material);
 
@@ -28,10 +24,22 @@ public:
 
     const vector<shared_ptr<Shape>> &getFaces() const;
 
+    Pyramid4 moveX(float offset) const;
+
+    Pyramid4 moveY(float offset) const;
+
+    Pyramid4 moveZ(float offset) const;
+
+    void setHeight(float height);
+
 
 protected:
 
     Point a, b, c, d, center, top;
 
     std::vector<shared_ptr<Shape>> faces;
+
+    Quad base;
+
+    float height = 0.0f;
 };

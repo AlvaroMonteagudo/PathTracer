@@ -3,23 +3,23 @@ set(SOURCE_FILES
         Circle.cpp
         Cone.cpp
         Plane.cpp
-        Pyramid.cpp
+        Pyramid4.cpp
         Quad.cpp
         Sphere.cpp
         Triangle.cpp
-        )
+        Pyramid3.cpp)
 
 set(HEADER_FILES
         ${PROJECT_SOURCE_DIR}/include/shapes/Box.h
         ${PROJECT_SOURCE_DIR}/include/shapes/Circle.h
         ${PROJECT_SOURCE_DIR}/include/shapes/Cone.h
         ${PROJECT_SOURCE_DIR}/include/shapes/Plane.h
-        ${PROJECT_SOURCE_DIR}/include/shapes/Pyramid.h
+        ${PROJECT_SOURCE_DIR}/include/shapes/Pyramid4.h
         ${PROJECT_SOURCE_DIR}/include/shapes/Quad.h
         ${PROJECT_SOURCE_DIR}/include/shapes/Sphere.h
         ${PROJECT_SOURCE_DIR}/include/shapes/Triangle.h
         ${PROJECT_SOURCE_DIR}/include/shapes/Shape.h
-        )
+        ../../include/shapes/Pyramid3.h)
 
 include_directories(
         ${PROJECT_SOURCE_DIR}/include/algebraUtils

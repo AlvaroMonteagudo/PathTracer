@@ -17,7 +17,7 @@
 #include "Circle.h"
 #include "Quad.h"
 #include "Box.h"
-#include "Pyramid.h"
+#include "Pyramid4.h"
 #include "Cone.h"
 
 
@@ -26,7 +26,8 @@
  */
 Scene::Scene() {
 
-    Quad light(Point(-0.5f, 0.99f, -0.5f), Point(0.5f, 0.99f, -0.5f), Point(-0.5f , 0.99f, 0.2), Point(0.5f , 0.99f , 0.2));
+    Quad light(Point(-0.5f, 0.99f, -0.2f), Point(0.5f, 0.99f, -0.2f), Point(-0.5f , 0.99f, 0.8), Point(0.5f , 0.99f , 0.8));
+    light = light.moveZ(-0.6f);
     light.setEmit(WHITE);
 
     Plane rightWall(Dir(-1, 0, 0), Point(1, 0, 0));
@@ -51,8 +52,12 @@ Scene::Scene() {
     Sphere rightSphere(leftSphere.moveX(1).moveY(1).moveZ(-0.4f));
     rightSphere.setMaterial(Material(BLACK, RED, BLACK, BLACK, 5.0));
 
-    Quad quad(Point(-0.8f, -0.7f, -0.5f), Point(-0.1f, -0.7f, -0.5f), Point(-0.8f , -0.7f, 0.2));
-    quad.setMaterial(DIFF_B);
+    Quad quad(Point(-0.8f, -0.9f, 0.2), Point(-0.4f, -0.9f, 0.2), Point(-0.8f , -0.9f, 0.8));
+    Pyramid4 box(quad, 0.7f);
+    box.setMaterial(DIFF_B);
+
+    Pyramid4 box2(box.moveX(1.2f));
+    box2.setMaterial(*DIFF_R + *DIFF_B);
 
     Quad quad2(quad.moveX(1).moveY(1).moveZ(-0.5f));
     quad2.setMaterial(DIFF_B);
@@ -68,8 +73,9 @@ Scene::Scene() {
     addShape(light);
     //addShape(leftSphere);
     //addShape(rightSphere);
-    addShape(quad);
-    addShape(quad2);
+    addAllShapes(box.getFaces());
+    addAllShapes(box2.getFaces());
+    //addShape(quad2);
 }
 
 /*Scene::Scene() {
@@ -115,7 +121,7 @@ Scene::Scene() {
     t.setMaterial(DIFF_R);
 
 
-    Pyramid pyramid4(q, 0.4f);
+    Pyramid4 pyramid4(q, 0.4f);
     pyramid4.setMaterial(DIFF_R);
     addAllShapes(pyramid4.getFaces());
 

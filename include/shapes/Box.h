@@ -6,13 +6,10 @@
 class Box {
 
 public:
+
     const vector<shared_ptr<Quad>> &getFaces() const;
 
-    Box(const Quad &quad, const float depth);
-
-    float intersect(const Ray &ray) const;
-
-    Dir getNormal(const Point &intersectedPoint) const;
+    Box(const Quad &quad, float height);
 
     void setMaterial(shared_ptr<Material> material);
 
@@ -25,8 +22,20 @@ public:
         }
     }
 
+    Box moveX(float offset) const;
+
+    Box moveY(float offset) const;
+
+    Box moveZ(float offset) const;
+
+    void setHeight(float height);
+
 protected:
 
     std::vector<shared_ptr<Quad>> faces;
+
+    Quad base;
+
+    float height;
 
 };

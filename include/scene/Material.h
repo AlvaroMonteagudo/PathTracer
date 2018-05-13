@@ -21,6 +21,8 @@ public:
 
     float getShininess() const;
 
+    Material operator + (const Material &m) const;
+
 private:
 
     RGB kd, ks, kr, kt;

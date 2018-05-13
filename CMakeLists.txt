@@ -7,7 +7,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -O3 -fpermissive -Wall -pthre
 
 set (SOURCE_FILES main.cpp)
 
-add_executable(render main.cpp)
+add_executable(render main.cpp include/shapes/Pyramid3.h)
 
 include_directories(
         ${PROJECT_SOURCE_DIR}/include/algebraUtils
