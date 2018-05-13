@@ -50,3 +50,19 @@ Dir Plane::getNormal(const Point &intersectedPoint) const {
 Dir Plane::getNormal() const {
     return normal;
 }
+
+Plane Plane::moveX(const float offset) const {
+    return { normal, point + Dir(offset, 0, 0) };
+}
+
+Plane Plane::moveY(float offset) const {
+    return { normal, point + Dir(0, offset, 0) };
+}
+
+Plane Plane::moveZ(float offset) const {
+    return { normal, point + Dir(0, 0, offset) };
+}
+
+void Plane::invertNornal() {
+    normal *= -1;
+}

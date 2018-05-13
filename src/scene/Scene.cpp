@@ -26,6 +26,53 @@
  */
 Scene::Scene() {
 
+    Quad light(Point(-0.5f, 0.99f, -0.5f), Point(0.5f, 0.99f, -0.5f), Point(0.5f , 0.99f, 0.2), Point(-0.5f , 0.99f , 0.2));
+    light.setEmit(WHITE);
+
+    Plane rightWall(Dir(-1, 0, 0), Point(1, 0, 0));
+    //rightWall.setEmit(WHITE);
+    rightWall.setMaterial(DIFF_G);
+
+    Plane leftWall(Dir(1, 0, 0), Point(-1, 0, 0));
+    leftWall.setMaterial(DIFF_R);
+
+    Plane floor(Dir(0, 1, 0), Point(0, -1, 0));
+
+    Plane ceiling(Dir(0, -1, 0), Point(0, 1, 0));
+
+    Plane bottom(Dir(0, 0, -1), Point(0, 0, 1));
+
+    Plane backWall(Dir(0, 0, 1), Point(0, 0, -3));
+    backWall.setEmit(WHITE);
+
+    Sphere leftSphere(0.35f, Point(-0.5f, -0.6f, 0.6f));
+    leftSphere.setMaterial(Material(BLACK, BLUE, BLACK, BLACK, 25.0));
+
+    Sphere rightSphere(leftSphere.moveX(1));
+    rightSphere.setMaterial(Material(BLACK, RED, BLACK, BLACK, 5.0));
+
+    Triangle triangle(Point(-0.8f, -0.5f, 0.5f), Point(-0.5f, -0.5f, -0.2f), Point(-0.2f , -0.5f, 0.5));
+    triangle.setMaterial(DIFF_R);
+
+    Triangle triangle2(triangle.moveX(1).moveY(-0.2f).moveZ(-0.4f));
+    triangle2.setMaterial(DIFF_B);
+
+
+    setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
+                    Point(0.f, -0.f, -2.8f), 1.0, 720, 720, PI/3.0f));
+
+    addShape(rightWall);
+    addShape(leftWall);
+    addShape(floor);
+    addShape(ceiling);
+    addShape(bottom);
+    addShape(light);
+    addShape(triangle);
+    addShape(triangle2);
+}
+
+/*Scene::Scene() {
+
     Quad light(Point(-0.4f, 0.99f, -0.8f), Point(0.4f, 0.99f, -0.8f), Point(0.4f , 0.99f, 0), Point(-0.4f , 0.99f , 0));
     light.setEmit(WHITE);
 
@@ -56,20 +103,24 @@ Scene::Scene() {
     Sphere rightSphere(0.35f, Point(0.5f, -0.6f, 0.6f));
     rightSphere.setMaterial(DIFF_B);
 
-    Quad q(Point(-0.5f, -0.9f, -0.5f), Point(0.5f, -0.9f, -0.5f), Point(-0.5f , -0.9f , 0.5f));
+    Quad q(Point(-0.7f, -0.9f, -0.5f), Point(0.7f, -0.9f, -0.5f), Point(-0.7f , -0.9f , 0.7f));
     q.setMaterial(DIFF_R);
+
+    Box box(q, 0.8f);
+    box.setMaterial(DIFF_R);
+    //addAllShapes(box.getFaces());
 
     Triangle t(Point(-0.5f, -0.9f, -0.5f), Point(0.5f, -0.9f, -0.5f), Point(-0.5f , -0.9f , 0.5f));
     t.setMaterial(DIFF_R);
 
 
-    Pyramid pyramid4(q, 0.6f);
+    Pyramid pyramid4(q, 0.4f);
     pyramid4.setMaterial(DIFF_R);
     addAllShapes(pyramid4.getFaces());
 
 
     setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
-                    Point(0.f, -0.f, -2.8f), 1.0, 720, 720, PI/3.0f));
+                     Point(0.f, -0.f, -2.8f), 1.0, 720, 720, PI/3.0f));
 
     addShape(rightWall);
     addShape(leftWall);
@@ -91,7 +142,7 @@ Scene::Scene() {
     //addShape(airSphere));
     //addShape(waterSphere));
     //addShape(glassSphere));
-}
+}*/
 
 /**
  * Get camera used in this scene

@@ -14,6 +14,12 @@ public:
 
     const Point &getCenter() const;
 
+    Triangle moveX(float offset) const;
+
+    Triangle moveY(float offset) const;
+
+    Triangle moveZ(float offset) const;
+
 protected:
 
     Point a, b, c, center;
@@ -21,4 +27,5 @@ protected:
     /** Cached values to make a triangle intersection faster. */
     Dir v0, v1;
     float d00, d01, d11, denominator;
+
 };

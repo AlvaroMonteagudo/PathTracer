@@ -69,6 +69,18 @@ Dir Sphere::getNormal(const Point &intersectedPoint) const {
     return (intersectedPoint - center).normalize(); //  DIV radius;
 }
 
+Sphere Sphere::moveX(const float offset) const {
+    return { radius, center + Dir(offset, 0, 0) };
+}
+
+Sphere Sphere::moveY(float offset) const {
+    return { radius, center + Dir(0, offset, 0) };
+}
+
+Sphere Sphere::moveZ(float offset) const {
+    return { radius, center + Dir(0, 0, offset) };
+}
+
 
 
 

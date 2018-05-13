@@ -40,7 +40,15 @@ public:
     /// GETTERS
     Dir getNormal() const;
 
-    Dir getNormal(const Point &intersectedPoint) const;
+    Dir getNormal(const Point &intersectedPoint) const override;
+
+    Plane moveX(float offset) const;
+
+    Plane moveY(float offset) const;
+
+    Plane moveZ(float offset) const;
+
+    void invertNornal();
 
 private:
 

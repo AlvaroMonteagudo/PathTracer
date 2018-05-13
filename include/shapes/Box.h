@@ -3,7 +3,7 @@
 #include <vector>
 #include "Quad.h"
 
-class Box : public Shape {
+class Box {
 
 public:
     const vector<shared_ptr<Quad>> &getFaces() const;

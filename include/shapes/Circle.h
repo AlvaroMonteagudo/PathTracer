@@ -14,6 +14,12 @@ public:
 
     float getRadius() const;
 
+    Circle moveX(float offset) const;
+
+    Circle moveY(float offset) const;
+
+    Circle moveZ(float offset) const;
+
 protected:
 
     Point point;

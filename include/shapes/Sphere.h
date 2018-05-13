@@ -45,6 +45,12 @@ public:
      */
     Dir getNormal(const Point &intersectedPoint) const;
 
+    Sphere moveX(float offset) const;
+
+    Sphere moveY(float offset) const;
+
+    Sphere moveZ(float offset) const;
+
 private:
 
     /// SPHERE PARAMETERS

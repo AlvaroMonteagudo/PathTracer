@@ -1,6 +1,6 @@
 #include "Box.h"
 
-Box::Box(const Quad &quad, const float depth) : Shape() {
+Box::Box(const Quad &quad, const float depth) {
 
     Dir normal = quad.getNormal();
 
