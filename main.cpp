@@ -65,6 +65,7 @@ int main(int argc, char * argv[]){
 
     Tracer tracer = Tracer(outfileName, scene);
     tracer.SAMPLES = indirectSamples;
+    //tracer.renderImage();
     tracer.renderImageMultithread();
 
     return 0;

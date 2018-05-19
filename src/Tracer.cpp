@@ -52,12 +52,20 @@ void Tracer::renderImage() const {
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    for (int i = 0; i < camera.getHeight(); ++i){
-        for (int j = 0; j < camera.getWidth(); ++j) {
-            printProgress(camera.getWidth() * i + j, totalPixels);
+    for (int i = 0; i < image.getHeight(); ++i){
+        for (int j = 0; j < image.getWidth(); ++j) {
 
-            Ray ray(camera.getFocal(), pixel);
-            image(i,j) = radiance(ray, 0);
+            for (int k = 0; k < SAMPLES; ++k) {
+                printProgress(camera.getWidth() * i + j, totalPixels);
+                float randomWidthOffset, randomHeightOffset;
+                randomRaySampling(randomWidthOffset, randomHeightOffset, camera.getPixelSize());
+                Ray ray(camera.getFocal(),
+                        Point(pixel.x + randomWidthOffset,
+                              pixel.y + randomHeightOffset,
+                              pixel.z));
+                image(i,j) += radiance(ray, 0);
+            }
+            image(i, j) /= SAMPLES;
 
             pixel = pixel + colAdd;
         }
@@ -192,7 +200,7 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
 
     // Revert normal in order to work with the visible normal of the shape
     float cosine = normal.dot(ray.getDirection());
-    Dir nl = ((cosine > 0) || (cosine == 0)) && (normal == ray.getDirection()) ? normal * -1 : normal;
+    Dir nl = (cosine > 0) ? normal.changeDirection() : normal;
 
     return russianRoulette(ray, *shape, *shape->getMaterial(), intersectedPoint, nl, depth);
 

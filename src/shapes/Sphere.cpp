@@ -47,10 +47,10 @@ float Sphere::intersect(const Ray &ray) const {
         float x1 = (-b - sqrt(discriminant)) / (2.0f * a);
         float x2 = (-b + sqrt(discriminant)) / (2.0f * a);
 
-        if ((x1 < x2) | (x2 <= THRESHOLD)) {
-            return x1 > THRESHOLD ? x1 : MAX_FLOAT;
-        } else if ((x2 < x1) | (x1 <= THRESHOLD)) {
-            return x2 > THRESHOLD ? x2 : MAX_FLOAT;
+        if ((x1 > THRESHOLD) & ((x1 < x2) | (x2 <= THRESHOLD))) {
+            return x1;
+        } else if ((x2 > THRESHOLD) & ((x2 < x1) | (x1 <= THRESHOLD))) {
+            return x2;
         } else {
             return MAX_FLOAT;
         }

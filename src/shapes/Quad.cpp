@@ -29,11 +29,11 @@ tuple<Point, Point, Point, Point> Quad::getCorners() const {
 }
 
 Dir Quad::getNormal(const Point &intersectedPoint) const {
-    return Plane::getNormal(intersectedPoint);
+    return t1.getNormal(intersectedPoint);
 }
 
 Dir Quad::getNormal() const {
-    return Plane::getNormal();
+    return t1.getNormal();
 }
 
 const Point &Quad::getCenter() const {
