@@ -61,7 +61,7 @@ int main(int argc, char * argv[]){
         }
     }
 
-    Scene scene = Scene();
+    Scene scene = Scene("cornell");
 
     Tracer tracer = Tracer(outfileName, scene);
     tracer.SAMPLES = indirectSamples;
@@ -84,8 +84,7 @@ string currentDate() {
     time_t t = time(nullptr);   // get time now
     struct tm * now = localtime( & t );
 
-    strftime(buffer,sizeof(buffer),"_%m_%d_%Y_%I:%M:%S", now);
+    strftime(buffer,sizeof(buffer),"_%m_%d_%Y_%H:%M:%S", now);
     std::string str(buffer);
     return str;
 }
-

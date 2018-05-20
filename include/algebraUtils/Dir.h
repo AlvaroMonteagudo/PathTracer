@@ -44,7 +44,7 @@ public:
      */
     Dir(float x, float y, float z) : x(x), y(y), z(z) {}
 
-    Dir changeDirection() {
+    Dir changeDirection() const {
         return { -x, -y, -z };
     }
 

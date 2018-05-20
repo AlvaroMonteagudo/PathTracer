@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <vector>
+#include <map>
 #include "LightSource.h"
 #include "Triangle.h"
 #include "Sphere.h"
@@ -26,12 +27,13 @@
 
 class Scene {
 
+
 public:
 
     /**
      * Default constructor
      */
-    Scene();
+    Scene(string name="cornell");
 
     /**
      * Get camera used in this scene
@@ -74,6 +76,10 @@ private:
     std::vector<std::shared_ptr<Shape>> shapes;
 
     Camera camera;
+
+    void buildCornellBox();
+
+    void buildSphereMaterials();
 };
 
 

@@ -53,4 +53,3 @@ float Material::getShininess() const {
 Material Material::operator + (const Material &m) const {
     return { kd + m.getKd(), ks + m.getKs(), kr + m.getKr(), kt + m.getKt(), shininess + m.getShininess() };
 }
-

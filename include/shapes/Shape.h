@@ -73,31 +73,21 @@ public:
      *       Source: https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel
      *       Author: @ 2009-2016 Scratchapixel
      */
-    Dir getDirRayRefracted(const Dir &rayDir, const Dir& normal) const {
+    Dir getDirRayRefracted(const Dir &rayDir, const Point &point, const Dir& normal) const {
 
-        float cosi = std::max(-1.0f, std::min(1.0f, normal.dot(rayDir)));
+        float eta;
+        if (normal == getNormal(point))
+            eta = refractiveIndex;
+        else eta = 1 / refractiveIndex;
 
-        float refrIndexFrom = 1, refrIndexTo = refractiveIndex ;
-
-        Dir nRefr = normal;
-
-        if (cosi < 0) {
-            // We are outside the surface, we want cos(theta) to be positive
-            cosi = cosi*-1.0f;
-        } else {
-            std::swap(refrIndexFrom, refrIndexTo);
-            nRefr = normal*-1.0f;
-        }
-
-        float eta = refrIndexFrom / refrIndexTo;
+        float cosi = normal.changeDirection().dot(rayDir);
 
         float k = 1 - eta * eta * (1 - cosi * cosi);
 
         if (k < 0) {
-            return getDirRayReflected(rayDir * -1, nRefr);
+            return getDirRayReflected(rayDir * -1, normal);
         }
-
-        return rayDir  * eta + nRefr * (eta * cosi - sqrtf(k));
+        return rayDir  * eta + normal * (eta * cosi - sqrtf(k));
 
     }
 

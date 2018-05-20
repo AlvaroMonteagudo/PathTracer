@@ -91,6 +91,7 @@ void Tracer::renderImage() const {
 void Tracer::renderImageMultithread() const {
     //may return 0 when not able to detect
     int numThreads = std::thread::hardware_concurrency();
+    numThreads = numThreads - 1;
 
     if (numThreads == 0) {
         renderImage();
@@ -263,7 +264,7 @@ RGB Tracer::russianRoulette(const Ray &ray, const Shape &shape, const Material &
         }
     } else if (random < pd + ps + pr + pt) {
         if (material.getKt() != BLACK) {
-            Ray refractedRay(intersectedPoint, shape.getDirRayRefracted(ray.getDirection(), normal));
+            Ray refractedRay(intersectedPoint, shape.getDirRayRefracted(ray.getDirection(), intersectedPoint, normal));
             return radiance(refractedRay, depth) * material.getKt() / (pd + ps + pr + pt);
         }
     } else {

@@ -9,9 +9,9 @@ Pyramid4::Pyramid4(const Quad &quad, float height) :
     top = center + quad.getNormal() * -height;
     faces.push_back(make_shared<Quad>(quad));
     faces.push_back(make_shared<Triangle>(Triangle(a, b, top)));
-    faces.push_back(make_shared<Triangle>(Triangle(b, c, top)));
-    faces.push_back(make_shared<Triangle>(Triangle(c, d, top)));
-    faces.push_back(make_shared<Triangle>(Triangle(d, a, top)));
+    faces.push_back(make_shared<Triangle>(Triangle(b, d, top)));
+    faces.push_back(make_shared<Triangle>(Triangle(d, c, top)));
+    faces.push_back(make_shared<Triangle>(Triangle(c, a, top)));
 
 }
 
@@ -21,9 +21,9 @@ Pyramid4::Pyramid4(const Quad &quad, const Point &top) :
     tie(a, b, c, d) = quad.getCorners();
     faces.push_back(make_shared<Quad>(quad));
     faces.push_back(make_shared<Triangle>(Triangle(a, b, top)));
-    faces.push_back(make_shared<Triangle>(Triangle(b, c, top)));
-    faces.push_back(make_shared<Triangle>(Triangle(c, d, top)));
-    faces.push_back(make_shared<Triangle>(Triangle(d, a, top)));
+    faces.push_back(make_shared<Triangle>(Triangle(b, d, top)));
+    faces.push_back(make_shared<Triangle>(Triangle(d, c, top)));
+    faces.push_back(make_shared<Triangle>(Triangle(c, a, top)));
 
 }
 

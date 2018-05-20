@@ -47,9 +47,9 @@ float Sphere::intersect(const Ray &ray) const {
         float x1 = (-b - sqrt(discriminant)) / (2.0f * a);
         float x2 = (-b + sqrt(discriminant)) / (2.0f * a);
 
-        if ((x1 > THRESHOLD) & ((x1 < x2) | (x2 <= THRESHOLD))) {
+        if ((x1 > THRESHOLD) && ((x1 < x2) || (x2 <= THRESHOLD))) {
             return x1;
-        } else if ((x2 > THRESHOLD) & ((x2 < x1) | (x1 <= THRESHOLD))) {
+        } else if ((x2 > THRESHOLD) && ((x2 < x1) || (x1 <= THRESHOLD))) {
             return x2;
         } else {
             return MAX_FLOAT;
@@ -66,7 +66,7 @@ float Sphere::intersect(const Ray &ray) const {
  * @return normal between itnersected point and sphere center
  */
 Dir Sphere::getNormal(const Point &intersectedPoint) const {
-    return (intersectedPoint - center).normalize(); //  DIV radius;
+    return (center - intersectedPoint).normalize(); //  DIV radius;
 }
 
 Sphere Sphere::moveX(const float offset) const {
