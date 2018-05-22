@@ -27,6 +27,12 @@ public:
 
     Quad moveZ(float offset) const;
 
+    /*void setRefractiveIndex(float refrIndex)
+    {
+        t1.setRefractiveIndex(refrIndex);
+        t2.setRefractiveIndex(refrIndex)
+    }*/
+
 protected:
 
     Point a, b, c, d;

@@ -80,6 +80,10 @@ private:
     void buildCornellBox();
 
     void buildSphereMaterials();
+
+    void buildSpecularSpheres();
+
+    void buildBoxesMaterials();
 };
 
 

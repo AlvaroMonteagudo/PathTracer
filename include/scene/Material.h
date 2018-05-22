@@ -34,7 +34,7 @@ inline Material Diffuse(const RGB &color) {
     return { color, BLACK, BLACK, BLACK };
 }
 
-inline Material Specular(const RGB &color, float shininess) {
+inline Material Specular(const RGB &color, float shininess = 0.0f) {
     return { BLACK, color, BLACK, BLACK, shininess };
 }
 

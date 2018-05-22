@@ -30,6 +30,15 @@ public:
 
     void setHeight(float height);
 
+    template <class RI>
+    void setRefractiveIndex(RI refrIndex)
+    {
+        for (const auto &face : faces)
+        {
+            face->setRefractiveIndex(refrIndex);
+        }
+    }
+
 protected:
 
     std::vector<shared_ptr<Quad>> faces;

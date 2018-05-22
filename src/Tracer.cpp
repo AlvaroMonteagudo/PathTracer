@@ -91,7 +91,7 @@ void Tracer::renderImage() const {
 void Tracer::renderImageMultithread() const {
     //may return 0 when not able to detect
     int numThreads = std::thread::hardware_concurrency();
-    numThreads = numThreads - 1;
+    //numThreads = numThreads - 1;
 
     if (numThreads == 0) {
         renderImage();

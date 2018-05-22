@@ -32,6 +32,10 @@ Scene::Scene(string name) {
         buildCornellBox();
     } else if (name == "sphere_materials") {
         buildSphereMaterials();
+    } else if (name == "specular_spheres") {
+        buildSpecularSpheres();
+    } else if (name == "boxes") {
+        buildBoxesMaterials();
     }
 
 
@@ -268,6 +272,121 @@ void Scene::buildSphereMaterials() {
     transmittive.setMaterial(Transmittive(WHITE));
     transmittive.setRefractiveIndex(GLASS);
     addShape(transmittive);
+
+
+}
+
+void Scene::buildSpecularSpheres() {
+
+    setCamera(Camera(Dir(0, 0.7, 0.3), Dir(1, 0, 0), Dir(0, -0.3f, 0.7),
+                     Point(0, 0, -2), 1.0, 900, 720, PI/3.0f));
+
+
+    Sphere globalLight(5, Point(0, 0, 0));
+    globalLight.setEmit(WHITE);
+    addShape(globalLight);
+
+    /*addShape(Plane(Dir(0, 0, -1), Point(0, 0, 1)));
+    addShape(Plane(Dir(0, 1, 0), Point(0, -1, 0))); // Floor
+    addShape(Plane(Dir(0, 0, 1), Point(0, 0, -2.1f)));
+    addShape(Plane(Dir(-1, 0, 0), Point(2, 0, 0)));
+    addShape(Plane(Dir(1, 0, 0), Point(2, 0, 0)));*/
+
+    //Plane rightWall(Dir(-1, 0, 0), Point(1, 0, 0));
+    Quad rightWall(Point(2, -1, 1), Point(2, -1, -3), Point(2, 1, 1));
+    //rightWall.setMaterial(DIFF_G);
+    addShape(rightWall);
+
+    //Plane leftWall(Dir(1, 0, 0), Point(-1, 0, 0));
+    Quad leftWall(Point(-2, -1, 1), Point(-2, -1, -3), Point(-2, 1, 1));
+    //leftWall.setMaterial(DIFF_R);
+    addShape(leftWall);
+
+    //Plane floor(Dir(0, 1, 0), Point(0, -1, 0));
+    Quad floor(Point(-2, -1, -3), Point(2, -1, -3), Point(-2, -1, 1));
+    addShape(floor);
+
+
+    //Plane bottom(Dir(0, 0, -1), Point(0, 0, 1));
+    Quad bottom(Point(-2, -1, 1), Point(2, -1, 1), Point(-2, 1, 1));
+    addShape(bottom);
+
+    //Plane backWall(Dir(0, 0, 1), Point(0, 0, -3));
+    Quad backWall(bottom.moveZ(-4));
+    addShape(backWall);
+
+
+    Sphere diffuse(0.35f, Point(-1.3f, -0.6f, 0));
+    diffuse.setMaterial(Specular(RED, 25.0f));
+    addShape(diffuse);
+
+    Sphere specular(diffuse.moveX(0.9));
+    specular.setMaterial(Specular(GREEN, 80.0f));
+    addShape(specular);
+
+    Sphere reflective(specular.moveX(0.9));
+    reflective.setMaterial(Specular(BLUE, 170.0f));
+    addShape(reflective);
+
+    Sphere transmittive(reflective.moveX(0.9));
+    transmittive.setMaterial(Specular(YELLOW, 250.0f));
+    //transmittive.setRefractiveIndex(GLASS);
+    addShape(transmittive);
+
+
+}
+
+void Scene::buildBoxesMaterials() {
+
+    setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
+                     Point(0.f, -0.f, -2.8f), 1.0, 720, 720, PI/3.0f));
+
+    Quad light(Point(-0.5f, 0.99f, -0.2f), Point(0.5f, 0.99f, -0.2f), Point(-0.5f , 0.99f, 0.8), Point(0.5f , 0.99f , 0.8));
+    light = light.moveZ(-0.6f);
+    light.setEmit(WHITE);
+    addShape(light);
+
+
+    //Plane rightWall(Dir(-1, 0, 0), Point(1, 0, 0));
+    Quad rightWall(Point(1, -1, 1), Point(1, -1, -3), Point(1, 1, 1));
+    rightWall.setMaterial(DIFF_G);
+    addShape(rightWall);
+
+    //Plane leftWall(Dir(1, 0, 0), Point(-1, 0, 0));
+    Quad leftWall(Point(-1, -1, 1), Point(-1, -1, -3), Point(-1, 1, 1));
+    leftWall.setMaterial(DIFF_R);
+    addShape(leftWall);
+
+    //Plane floor(Dir(0, 1, 0), Point(0, -1, 0));
+    Quad floor(Point(-1, -1, -3), Point(1, -1, -3), Point(-1, -1, 1));
+    addShape(floor);
+
+    //Plane ceiling(Dir(0, -1, 0), Point(0, 1, 0));
+    Quad ceiling(floor.moveY(2));
+    addShape(ceiling);
+
+    //Plane bottom(Dir(0, 0, -1), Point(0, 0, 1));
+    Quad bottom(Point(-1, -1, 1), Point(1, -1, 1), Point(-1, 1, 1));
+    addShape(bottom);
+
+    //Plane backWall(Dir(0, 0, 1), Point(0, 0, -3));
+    Quad backWall(bottom.moveZ(-4));
+    addShape(backWall);
+
+    Quad q(Point(0.2, -1, 0), Point(0.8, -1, 0), Point(0.2 , -1 , 0.7f));
+    //q.setMaterial(Transmittive(WHITE));
+    //q.setRefractiveIndex(GLASS);
+    //q = q.moveX(0.5f);
+    Box box(q, 0.8f);
+    box.setMaterial(Transmittive(WHITE));
+    box.setRefractiveIndex(GLASS);
+    addAllShapes(box.getFaces());
+
+    Box box2(box.moveX(-1));
+    box2.setMaterial(Transmittive(WHITE));
+    box2.setRefractiveIndex(WATER);
+    addAllShapes(box2.getFaces());
+    //addShape(q);
 
 
 }
