@@ -36,6 +36,8 @@ Scene::Scene(string name) {
         buildSpecularSpheres();
     } else if (name == "boxes") {
         buildBoxesMaterials();
+    } else if(name == "window"){
+        buildWindow();
     }
 
 
@@ -437,4 +439,59 @@ void Scene::buildCornellBox() {
     addShape(rightSphere);
 }
 
+//Red room
+void Scene::buildWindow() {
+
+    setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
+                     Point(0, 0, -2.8f), 1.0, 720, 720, PI/3.0f));
+
+    Sphere light(3,Point(6.5f, 0.99f, -0.2f));
+    light = light.moveZ(-0.6f);
+    light.setEmit(WHITE);
+    light.setIntensity(5);
+    addShape(light);
+
+    Plane backPlane(Dir(0,0,-1),Point(0,0,20));
+    backPlane.setMaterial(Diffuse(RGB(0,0.25f,1)));//azul cielo
+    addShape(backPlane);
+    //Plane rightWall(Dir(-1, 0, 0), Point(1, 0, 0));
+    Quad rightWall(Point(1, -1, 1), Point(1, -1, -3), Point(1, 1, 1));
+    //rightWall.setMaterial(DIFF_G);
+    rightWall.addHole(Circle(Point(1,0,-1),Dir(-1,0,0),0.5f));
+    //rightWall.addHole(Quad(Point(0.4f,-0.4f,0.4f),Point(0.4f,-0.4f,-1.5f),Point(0.4f,0.4f,0.4f)));
+    addShape(rightWall);
+
+    //Plane leftWall(Dir(1, 0, 0), Point(-1, 0, 0));
+    Quad leftWall(Point(-1, -1, 1), Point(-1, -1, -3), Point(-1, 1, 1));
+    leftWall.setMaterial(DIFF_R);
+    addShape(leftWall);
+
+    //Plane floor(Dir(0, 1, 0), Point(0, -1, 0));
+    Quad floor(Point(-1, -1, -3), Point(1, -1, -3), Point(-1, -1, 1));
+    addShape(floor);
+
+    //Plane ceiling(Dir(0, -1, 0), Point(0, 1, 0));
+    Quad ceiling(floor.moveY(2));
+    addShape(ceiling);
+
+    //Plane bottom(Dir(0, 0, -1), Point(0, 0, 1));
+    Quad bottom(Point(-1, -1, 1), Point(1, -1, 1), Point(-1, 1, 1));
+    addShape(bottom);
+
+    //Plane backWall(Dir(0, 0, 1), Point(0, 0, -3));
+    Quad backWall(bottom.moveZ(-4));
+    addShape(backWall);
+
+    Sphere leftSphere(0.35f, Point(-0.5f, -0.6f, 0.6f));
+    leftSphere.setMaterial(DIFF_R);
+    //leftSphere.setRefractiveIndex(GLASS);
+    addShape(leftSphere);
+
+    Sphere rightSphere(leftSphere.moveX(1.1f));
+    rightSphere.setMaterial(MIRROR);
+    addShape(rightSphere);
+
+    //Box box1();
+    // box1.setMaterial();
+}
 
