@@ -84,6 +84,8 @@ private:
     void buildSpecularSpheres();
 
     void buildBoxesMaterials();
+
+    void buildWindow();
 };
 
 
