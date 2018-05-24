@@ -110,6 +110,14 @@ public:
         emit = _emit;
     }
 
+    void setIntensity(float inte){
+        intensity = inte;
+    }
+
+    float getIntensity(){
+        return  intensity;
+    }
+
     virtual void setMaterial(const shared_ptr<Material> m){
         material = m;
     }
@@ -125,7 +133,7 @@ private:
     /// Shape features coefficients
     shared_ptr<Material> material = LAMBERTIAN;
     RGB emit = BLACK;
-
+    float intensity;
     /// Other shape values
     float refractiveIndex = AIR_RI;
 
