@@ -108,9 +108,9 @@ void Tracer::renderImageMultithread() const {
         int start = i*linesPerThread;
         int end = start + linesPerThread;
         if (i != numThreads - 1){
-            threads[i] = thread(&Tracer::renderImageLines, this, start, end);
+            threads[i] = thread(&Tracer::renderImageLines, *this, start, end);
         } else {
-            threads[i] = thread(&Tracer::renderImageLines, this, start, camera.getHeight());
+            threads[i] = thread(&Tracer::renderImageLines, *this, start, camera.getHeight());
         }
     }
 
@@ -191,7 +191,7 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
 
     shared_ptr<Shape> shape = shapes.at(id);
 
-    if (shape->getEmit() != BLACK) return shape->getEmit();
+    if (shape->getEmit() != BLACK) return shape->getEmit()*shape->getIntensity();
 
     // Getting intersection point coordinates
     Point intersectedPoint = ray.getSource() + (ray.getDirection() * dist);
