@@ -14,7 +14,7 @@ set(HEADER_FILES
         ${PROJECT_SOURCE_DIR}/include/scene/Ray.h
         ${PROJECT_SOURCE_DIR}/include/scene/RGB.h
         ${PROJECT_SOURCE_DIR}/include/scene/Scene.h
-        ../../include/scene/Material.h)
+        ${PROJECT_SOURCE_DIR}/include/scene/Material.h)
 
 include_directories(
         ${PROJECT_SOURCE_DIR}/include/scene

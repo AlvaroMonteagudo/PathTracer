@@ -61,7 +61,7 @@ int main(int argc, char * argv[]){
         }
     }
 
-    Scene scene = Scene("boxes");
+    Scene scene = Scene("cornell_holes");
 
     Tracer tracer = Tracer(outfileName, scene);
     tracer.SAMPLES = indirectSamples;

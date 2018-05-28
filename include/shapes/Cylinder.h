@@ -1,23 +1,28 @@
 #pragma once
 
-
-#include "Circle.h"
+#include "Shape.h"
 
 class Cylinder : public Shape {
 
 public:
 
-    Cylinder(Circle &base, float height);
+    Cylinder();
+
+    Cylinder(const Point &_point, const Dir &_axis, float _radius);
 
     float intersect(const Ray &ray) const;
 
-    Dir getNormal(Point &intersectedPoint);
+    Dir getNormal(const Point &intersectedPoint) const;
 
 private:
 
-    Circle base, top;
+    //Circle base, top;
 
-    float height;
+    Point point;
+
+    Dir axis;
+
+    float radius, sqrd_radius;
 
 };
 

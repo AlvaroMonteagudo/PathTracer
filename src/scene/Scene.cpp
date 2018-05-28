@@ -13,6 +13,7 @@
 
 #include <sstream>
 #include <cstring>
+#include <Cylinder.h>
 #include "Scene.h"
 #include "Circle.h"
 #include "Quad.h"
@@ -36,6 +37,10 @@ Scene::Scene(string name) {
         buildSpecularSpheres();
     } else if (name == "boxes") {
         buildBoxesMaterials();
+    } else if (name == "cornell_holes") {
+        buildCornellBoxHole();
+    } else {
+        buildTest();
     }
 
 
@@ -336,6 +341,55 @@ void Scene::buildSpecularSpheres() {
 
 }
 
+void Scene::buildTest() {
+
+    setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
+                     Point(0.f, -0.f, -2.8f), 1.0, 720, 720, PI/3.0f));
+
+    Quad light(Point(-0.5f, 0.99f, -0.2f), Point(0.5f, 0.99f, -0.2f), Point(-0.5f , 0.99f, 0.4f), Point(0.5f , 0.99f , 0.4f));
+    light = light.moveZ(-0.8f);
+    light.setEmit(WHITE);
+    addShape(light);
+
+
+    //Plane rightWall(Dir(-1, 0, 0), Point(1, 0, 0));
+    Quad rightWall(Point(1, -1, 1), Point(1, -1, -3), Point(1, 1, 1));
+    rightWall.setMaterial(DIFF_G);
+    addShape(rightWall);
+
+    //Plane leftWall(Dir(1, 0, 0), Point(-1, 0, 0));
+    Quad leftWall(Point(-1, -1, 1), Point(-1, -1, -3), Point(-1, 1, 1));
+    leftWall.setMaterial(DIFF_R);
+    addShape(leftWall);
+
+    //Plane floor(Dir(0, 1, 0), Point(0, -1, 0));
+    Quad floor(Point(-1, -1, -3), Point(1, -1, -3), Point(-1, -1, 1));
+    addShape(floor);
+
+    //Plane ceiling(Dir(0, -1, 0), Point(0, 1, 0));
+    Quad ceiling(floor.moveY(2));
+    addShape(ceiling);
+
+    //Plane bottom(Dir(0, 0, -1), Point(0, 0, 1));
+    Quad bottom(Point(-1, -1, 1), Point(1, -1, 1), Point(-1, 1, 1));
+    addShape(bottom);
+
+    //Plane backWall(Dir(0, 0, 1), Point(0, 0, -3));
+    Quad backWall(bottom.moveZ(-4));
+    addShape(backWall);
+
+    Cone cone(X_AXIS, Point(0, 0, 0.5f), 0.5f);
+    cone.setMaterial(Diffuse(BLUE));
+    addShape(cone);
+
+    Cylinder cylinder(Point(0, 0, 0.5f), Dir(0, 1, 0), 0.35f);
+    cylinder.setMaterial(TRANSP);
+    cylinder.setRefractiveIndex(GLASS);
+    //addShape(cylinder);
+
+}
+
+
 void Scene::buildBoxesMaterials() {
 
     setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
@@ -437,4 +491,58 @@ void Scene::buildCornellBox() {
     addShape(rightSphere);
 }
 
+void Scene::buildCornellBoxHole() {
+
+    setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
+                     Point(0.f, -0.f, -2.8f), 1.0, 720, 720, PI/3.0f));
+
+    Sphere sun(1.5f, Point(2, 3, 1));
+    sun.setEmit(WHITE);
+    addShape(sun);
+
+    Sphere sky(4.0f, Point(0, 0, 0));
+    sky.setMaterial(Diffuse(BLUE * 0.25f));
+    addShape(sky);
+
+    Quad hole(Point(-0.55f, 1, -0.5f), Point(-0.25f, 1, -0.5f), Point(-0.55f , 1, 0.6), Point(-0.25f , 1 , 0.6));
+    Quad hole2(hole.moveX(0.4f));
+    Quad hole3(hole2.moveX(0.4f));
+
+    //Plane rightWall(Dir(-1, 0, 0), Point(1, 0, 0));
+    Quad rightWall(Point(1, -1, 1), Point(1, -1, -3), Point(1, 1, 1));
+    rightWall.setMaterial(DIFF_G);
+    addShape(rightWall);
+
+    //Plane leftWall(Dir(1, 0, 0), Point(-1, 0, 0));
+    Quad leftWall(Point(-1, -1, 1), Point(-1, -1, -3), Point(-1, 1, 1));
+    leftWall.setMaterial(DIFF_R);
+    addShape(leftWall);
+
+    //Plane floor(Dir(0, 1, 0), Point(0, -1, 0));
+    Quad floor(Point(-1, -1, -3), Point(1, -1, -3), Point(-1, -1, 1));
+    addShape(floor);
+
+    //Plane ceiling(Dir(0, -1, 0), Point(0, 1, 0));
+    Quad ceiling(floor.moveY(2));
+    ceiling.addHole(hole);
+    ceiling.addHole(hole2);
+    ceiling.addHole(hole3);
+    addShape(ceiling);
+
+    //Plane bottom(Dir(0, 0, -1), Point(0, 0, 1));
+    Quad bottom(Point(-1, -1, 1), Point(1, -1, 1), Point(-1, 1, 1));
+    addShape(bottom);
+
+    //Plane backWall(Dir(0, 0, 1), Point(0, 0, -3));
+    Quad backWall(bottom.moveZ(-4));
+    addShape(backWall);
+
+    Sphere leftSphere(0.35f, Point(-0.5f, -0.6f, 0.6f));
+    leftSphere.setMaterial(Diffuse(RED));
+    addShape(leftSphere);
+
+    Sphere rightSphere(leftSphere.moveX(1.1f));
+    rightSphere.setMaterial(Specular(YELLOW, 15));
+    addShape(rightSphere);
+}
 

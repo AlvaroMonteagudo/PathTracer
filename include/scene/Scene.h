@@ -84,6 +84,10 @@ private:
     void buildSpecularSpheres();
 
     void buildBoxesMaterials();
+
+    void buildTest();
+
+    void buildCornellBoxHole();
 };
 
 

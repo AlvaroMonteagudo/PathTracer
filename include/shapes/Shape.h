@@ -20,14 +20,9 @@
 #include "RGB.h"
 #include "Camera.h"
 #include <iostream>
-#include <limits>
 #include <memory>
 #include <Material.h>
-
-#define THRESHOLD 0.0001
-#define MIN_FLOAT std::numeric_limits<float>::min()
-#define MAX_FLOAT std::numeric_limits<float>::max()
-#define EPSILON   std::numeric_limits<float>::epsilon()
+#include "mathUtils.h"
 
 #define AIR_RI 1.000293
 #define WATER 1.333

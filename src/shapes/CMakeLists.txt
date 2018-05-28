@@ -7,7 +7,9 @@ set(SOURCE_FILES
         Quad.cpp
         Sphere.cpp
         Triangle.cpp
-        Pyramid3.cpp Cylinder.cpp ../../include/shapes/Cylinder.h)
+        Pyramid3.cpp
+        Cylinder.cpp
+        )
 
 set(HEADER_FILES
         ${PROJECT_SOURCE_DIR}/include/shapes/Box.h
@@ -19,11 +21,13 @@ set(HEADER_FILES
         ${PROJECT_SOURCE_DIR}/include/shapes/Sphere.h
         ${PROJECT_SOURCE_DIR}/include/shapes/Triangle.h
         ${PROJECT_SOURCE_DIR}/include/shapes/Shape.h
-        ../../include/shapes/Pyramid3.h Cylinder.cpp ../../include/shapes/Cylinder.h)
+        ${PROJECT_SOURCE_DIR}/include/shapes/Pyramid3.h
+        ${PROJECT_SOURCE_DIR}/include/shapes/Cylinder.h
+        )
 
 include_directories(
         ${PROJECT_SOURCE_DIR}/include/algebraUtils
-        ${PROJECT_SOURCE_DIR}/include/shapes/
+        ${PROJECT_SOURCE_DIR}/include/shapes
 )
 
 add_library(shapes STATIC ${SOURCE_FILES} ${HEADER_FILES})

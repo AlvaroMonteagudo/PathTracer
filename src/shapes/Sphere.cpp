@@ -38,26 +38,8 @@ float Sphere::intersect(const Ray &ray) const {
     float a = 1.0f;
     float b = 2.0f * ray.getDirection().dot(d);
     float c = d.dot(d) - sqrd_radius;
-    float discriminant = b*b - 4*a*c;
 
-    // Abort if less than 0
-    if (discriminant < 0.0) {
-        return MAX_FLOAT;
-    } else if (discriminant > 0.0) {
-        float x1 = (-b - sqrt(discriminant)) / (2.0f * a);
-        float x2 = (-b + sqrt(discriminant)) / (2.0f * a);
-
-        if ((x1 > THRESHOLD) && ((x1 < x2) || (x2 <= THRESHOLD))) {
-            return x1;
-        } else if ((x2 > THRESHOLD) && ((x2 < x1) || (x1 <= THRESHOLD))) {
-            return x2;
-        } else {
-            return MAX_FLOAT;
-        }
-    } else {
-        float x = -b / (2.0f * a);
-        return x > THRESHOLD ? x : MAX_FLOAT;
-    }
+    return solveQuadratic(a, b, c);
 }
 
 /**

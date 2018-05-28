@@ -63,7 +63,7 @@ public:
     inline bool intersect(const Ray &ray, float &distance, int &id) const;
 
     /// PUBLIC PARAMETERS
-    int SAMPLES = 128, MAX_DEPTH = 15;
+    int SAMPLES = 128, MAX_DEPTH = 25;
 
 private:
 

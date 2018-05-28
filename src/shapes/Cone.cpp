@@ -2,7 +2,7 @@
 #include "Cone.h"
 #include <cmath>
 
-Cone::Cone(const Circle &base, float height) :
+/*Cone::Cone(const Circle &base, float height) :
     base(make_shared<Circle>(base)),
     radius(base.getRadius()),
     center(base.getPoint()),
@@ -11,9 +11,29 @@ Cone::Cone(const Circle &base, float height) :
     angle(atan(radius / height)) // en radianes
 {
 
+}*/
+
+Cone::Cone(const Dir &_axis, const Point &_point, float _angle) :
+        Shape(), axis(_axis), angle(_angle), point(_point) {
+    cos2 = cos(angle) * cos(angle);
+    sin2 = sin(angle) * sin(angle);
 }
 
 float Cone::intersect(const Ray &ray) const {
+    float dotVyVa = ray.getDirection().dot(axis);
+    Dir A = ray.getDirection() - axis * (dotVyVa);
+    Dir dP = ray.getSource() - point;
+    float dotDpVa = dP.dot(axis);
+    Dir B = dP - axis * dotDpVa;
+
+    float a = A.dot(A) * cos2 - (dotVyVa * dotVyVa) * sin2;
+    float b = 2 * cos2 * A.dot(B) - 2 * sin2 * dotVyVa * dotDpVa;
+    float c = cos2 * B.dot(B) - sin2 * dotDpVa * dotDpVa;
+
+    return solveQuadratic(a, b, c);
+}
+
+/*float Cone::intersect(const Ray &ray) const {
 
     float tbase = base->intersect(ray);
 
@@ -57,7 +77,7 @@ float Cone::intersect(const Ray &ray) const {
 
     if (angle < PI / 2 && (P - top).dot(V) > 0) return tbase > t ? tbase : t;
     else return MAX_FLOAT;
-}
+}*/
 
 /*void Cone::setMaterial(const RGB &kd, const RGB &ks, const RGB &kr, const RGB &kt) {
     base->setMaterial(kd, ks, kr, kt);

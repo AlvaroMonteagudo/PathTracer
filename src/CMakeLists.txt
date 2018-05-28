@@ -3,6 +3,7 @@ set(SOURCE_FILES
         )
 
 set(HEADER_FILES
+        ${PROJECT_SOURCE_DIR}/include/mathUtils.h
         ${PROJECT_SOURCE_DIR}/include/samplingUtils.h
         ${PROJECT_SOURCE_DIR}/include/Tracer.h
         )

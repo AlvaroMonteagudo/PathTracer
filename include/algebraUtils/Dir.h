@@ -181,6 +181,10 @@ public:
 
     }
 
+    float getCosWith(const Dir &dir) const {
+        return this->dot(dir) / (this->module() * dir.module());
+    }
+
     /**
      * Utility to ease visualization of object Dir
      * @param os: stream to be written
@@ -193,6 +197,10 @@ public:
     }
 
 };
+
+#define X_AXIS Dir(1, 0, 0)
+#define Y_AXIS Dir(0, 1, 0)
+#define Z_AXIS Dir(0, 0, 1)
 
 
 
