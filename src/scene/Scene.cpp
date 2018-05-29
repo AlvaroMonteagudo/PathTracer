@@ -41,6 +41,8 @@ Scene::Scene(string name) {
         buildCornellBoxHole();
     } else {
         buildTest();
+    } else if(name == "window"){
+        buildWindow();
     }
 
 
@@ -491,26 +493,26 @@ void Scene::buildCornellBox() {
     addShape(rightSphere);
 }
 
-void Scene::buildCornellBoxHole() {
+//Red room
+void Scene::buildWindow() {
 
     setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
-                     Point(0.f, -0.f, -2.8f), 1.0, 720, 720, PI/3.0f));
+                     Point(0, 0, -2.8f), 1.0, 720, 720, PI/3.0f));
 
-    Sphere sun(1.5f, Point(2, 3, 1));
-    sun.setEmit(WHITE);
-    addShape(sun);
+    Sphere light(3,Point(6.5f, 0.99f, -0.2f));
+    light = light.moveZ(-0.6f);
+    light.setEmit(WHITE);
+    light.setIntensity(5);
+    addShape(light);
 
-    Sphere sky(4.0f, Point(0, 0, 0));
-    sky.setMaterial(Diffuse(BLUE * 0.25f));
-    addShape(sky);
-
-    Quad hole(Point(-0.55f, 1, -0.5f), Point(-0.25f, 1, -0.5f), Point(-0.55f , 1, 0.6), Point(-0.25f , 1 , 0.6));
-    Quad hole2(hole.moveX(0.4f));
-    Quad hole3(hole2.moveX(0.4f));
-
+    Plane backPlane(Dir(0,0,-1),Point(0,0,20));
+    backPlane.setMaterial(Diffuse(RGB(0,0.25f,1)));//azul cielo
+    addShape(backPlane);
     //Plane rightWall(Dir(-1, 0, 0), Point(1, 0, 0));
     Quad rightWall(Point(1, -1, 1), Point(1, -1, -3), Point(1, 1, 1));
-    rightWall.setMaterial(DIFF_G);
+    //rightWall.setMaterial(DIFF_G);
+    rightWall.addHole(Circle(Point(1,0,-1),Dir(-1,0,0),0.5f));
+    //rightWall.addHole(Quad(Point(0.4f,-0.4f,0.4f),Point(0.4f,-0.4f,-1.5f),Point(0.4f,0.4f,0.4f)));
     addShape(rightWall);
 
     //Plane leftWall(Dir(1, 0, 0), Point(-1, 0, 0));
@@ -524,9 +526,6 @@ void Scene::buildCornellBoxHole() {
 
     //Plane ceiling(Dir(0, -1, 0), Point(0, 1, 0));
     Quad ceiling(floor.moveY(2));
-    ceiling.addHole(hole);
-    ceiling.addHole(hole2);
-    ceiling.addHole(hole3);
     addShape(ceiling);
 
     //Plane bottom(Dir(0, 0, -1), Point(0, 0, 1));
@@ -538,11 +537,15 @@ void Scene::buildCornellBoxHole() {
     addShape(backWall);
 
     Sphere leftSphere(0.35f, Point(-0.5f, -0.6f, 0.6f));
-    leftSphere.setMaterial(Diffuse(RED));
+    leftSphere.setMaterial(DIFF_R);
+    //leftSphere.setRefractiveIndex(GLASS);
     addShape(leftSphere);
 
     Sphere rightSphere(leftSphere.moveX(1.1f));
-    rightSphere.setMaterial(Specular(YELLOW, 15));
+    rightSphere.setMaterial(MIRROR);
     addShape(rightSphere);
+
+    //Box box1();
+    // box1.setMaterial();
 }
 

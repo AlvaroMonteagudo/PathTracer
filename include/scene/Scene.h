@@ -88,6 +88,8 @@ private:
     void buildTest();
 
     void buildCornellBoxHole();
+
+    void buildWindow();
 };
 
 
