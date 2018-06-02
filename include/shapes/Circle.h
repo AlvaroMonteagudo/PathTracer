@@ -20,6 +20,8 @@ public:
 
     Circle moveZ(float offset) const;
 
+    void setRadius(float radius);
+
 protected:
 
     Point point;

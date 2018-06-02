@@ -22,6 +22,23 @@ public:
         }
     }
 
+    template <class RI>
+    void setRefractiveIndex(RI refrIndex)
+    {
+        for (const auto &face : faces)
+        {
+            face->setRefractiveIndex(refrIndex);
+        }
+    }
+
+    void setEmit(RGB &rgb)
+    {
+        for (const auto &face : faces)
+        {
+            face->setEmit(rgb);
+        }
+    }
+
     const vector<shared_ptr<Shape>> &getFaces() const;
 
     Pyramid4 moveX(float offset) const;

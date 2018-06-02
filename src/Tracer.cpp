@@ -18,14 +18,13 @@
 
 using namespace std;
 
-Tracer::Tracer(string filename, const Scene &scene) : scene(scene) {
-    camera = this->scene.getCamera();
-    shapes = this->scene.getShapes();
+Tracer::Tracer(string filename, const Scene &_scene) : scene(_scene) {
+    camera = scene.getCamera();
+    shapes = scene.getShapes();
     totalPixels = camera.getHeight() * camera.getWidth();
     image = Image(camera.getWidth(), camera.getHeight());
     camera.calculateFirstPixel();
     outfileName = std::move(filename);
-
 }
 
 
@@ -109,9 +108,9 @@ void Tracer::renderImageMultithread() const {
         int start = i*linesPerThread;
         int end = start + linesPerThread;
         if (i != numThreads - 1){
-            threads[i] = thread(&Tracer::renderImageLines, *this, start, end);
+            threads[i] = thread(&Tracer::renderImageLines, this, start, end);
         } else {
-            threads[i] = thread(&Tracer::renderImageLines, *this, start, camera.getHeight());
+            threads[i] = thread(&Tracer::renderImageLines, this, start, camera.getHeight());
         }
     }
 

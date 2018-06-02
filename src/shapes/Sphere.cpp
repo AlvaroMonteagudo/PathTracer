@@ -63,6 +63,10 @@ Sphere Sphere::moveZ(float offset) const {
     return { radius, center.moveZ(offset) };
 }
 
+void Sphere::setRadius(float radius) {
+    Sphere::radius = radius;
+}
+
 
 
 

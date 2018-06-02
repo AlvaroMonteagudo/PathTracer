@@ -49,6 +49,10 @@ float RGB::getMax() const {
     return max(red, max(blue, green));
 }
 
+float RGB::getMin() const {
+    return min(red, min(blue, green));
+}
+
 /// Useful operators
 
 std::ostream& operator << (std::ostream &os, const RGB &rgb){
@@ -72,6 +76,17 @@ RGB RGB::toInt() {
     return *this;
 }
 
+RGB RGB::cvtToSepia() {
+    red = red * 0.393f + green * 0.769f + blue * 0.189f;
+    green = red * 0.349f + green * 0.686f + blue * 0.168f;
+    blue = red * 0.272f + green * 0.534f + blue * 0.131f;
+    return *this;
+}
+
+RGB RGB::cvtToBW() {
+    float value = (this->getMax() + this->getMin()) / 2.0f;
+    return { value, value, value };
+}
 
 RGB RGB::operator + (const RGB &color) const {
     return { red + color.getRed(), green + color.getGreen(), blue + color.getBlue()  };

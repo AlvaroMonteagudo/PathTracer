@@ -31,3 +31,7 @@ Circle Circle::moveZ(float offset) const {
     return { point.moveZ(offset), Plane::getNormal(), radius };
 }
 
+void Circle::setRadius(float radius) {
+    Circle::radius = radius;
+}
+

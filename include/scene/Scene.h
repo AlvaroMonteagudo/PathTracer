@@ -33,7 +33,7 @@ public:
     /**
      * Default constructor
      */
-    Scene(string name="cornell");
+    Scene(string name, int width, int height);
 
     /**
      * Get camera used in this scene
@@ -70,12 +70,15 @@ public:
      */
     const std::vector<std::shared_ptr<Shape>> &getShapes() const;
 
+
 private:
 
     /// SCENE ATTRIBUTES
     std::vector<std::shared_ptr<Shape>> shapes;
 
     Camera camera;
+
+    int width, height;
 
     void buildCornellBox();
 
@@ -90,6 +93,14 @@ private:
     void buildCornellBoxHole();
 
     void buildWindow();
+
+    void manyLights();
+
+    void buildManyLights();
+
+    void buildHoleLetters();
+
+    void buildHiddenMirror();
 };
 
 

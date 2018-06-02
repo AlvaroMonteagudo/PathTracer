@@ -23,7 +23,7 @@ set(HEADER_FILES
         ${PROJECT_SOURCE_DIR}/include/shapes/Shape.h
         ${PROJECT_SOURCE_DIR}/include/shapes/Pyramid3.h
         ${PROJECT_SOURCE_DIR}/include/shapes/Cylinder.h
-        )
+        ../../include/shapes/MeshTriangle.h MeshTriangle.cpp)
 
 include_directories(
         ${PROJECT_SOURCE_DIR}/include/algebraUtils

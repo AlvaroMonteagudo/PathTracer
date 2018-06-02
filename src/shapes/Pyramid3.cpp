@@ -9,7 +9,7 @@ Pyramid3::Pyramid3(const Triangle &triangle, float height) :
 
     tie(a, b, c) = triangle.getCorners();
     center = triangle.getCenter();
-    top = center + triangle.getNormal() * height;
+    top = center + triangle.getNormal() * -height;
     faces.push_back(make_shared<Triangle>(triangle));
     faces.push_back(make_shared<Triangle>(Triangle(a, b, top)));
     faces.push_back(make_shared<Triangle>(Triangle(b, c, top)));

@@ -12,6 +12,7 @@
 
 #include "Image.h"
 #include <fstream>
+#include <iostream>
 
 /**
  * Default constructor
@@ -67,6 +68,8 @@ void Image::saveImage(string filename)const {
     }
 
     file.close();
+
+    std::cout << "Image saved in" << filename << std::endl;
 }
 
 

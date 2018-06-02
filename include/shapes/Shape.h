@@ -127,9 +127,12 @@ private:
 
     /// Shape features coefficients
     shared_ptr<Material> material = LAMBERTIAN;
+
     RGB emit = BLACK;
-    float intensity;
-    /// Other shape values
+
+    float intensity = 1.0f;
+
+
     float refractiveIndex = AIR_RI;
 
 };

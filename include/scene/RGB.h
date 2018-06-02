@@ -43,6 +43,8 @@ public:
 
     float getMax() const;
 
+    float getMin() const;
+
     /// SETTERS
 
     void setRed(float red);
@@ -84,6 +86,10 @@ public:
 
     RGB toInt();
 
+    RGB cvtToSepia();
+
+    RGB cvtToBW();
+
 private:
 
     float red, blue, green;
@@ -97,8 +103,8 @@ private:
 #define GREEN   RGB(0, 0.95f, 0)
 #define BLUE    RGB(0, 0, 0.95f)
 #define GRAY    RGB(0.5, 0.5, 0.5)
-#define PURPLE  RGB(0.85f, 0.2f, 1.0f)
-#define ORANGE  RGB(0.85f, 0.55f, 0.2f)
+#define PURPLE  RGB(0.43f, 0.18f, 0.65f)
+#define ORANGE  RGB(0.95f, 0.47f, 0)
 #define YELLOW  RGB(0.95f, 0.95f, 0)
-#define L_GRAY  GRAY * 1.25f
-#define D_GRAY  GRAY * 0.75f
+#define L_GRAY  (GRAY * 1.25f)
+#define D_GRAY  (GRAY * 0.75f)

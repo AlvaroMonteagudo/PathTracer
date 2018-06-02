@@ -51,6 +51,8 @@ public:
 
     Sphere moveZ(float offset) const;
 
+    void setRadius(float radius);
+
 private:
 
     /// SPHERE PARAMETERS

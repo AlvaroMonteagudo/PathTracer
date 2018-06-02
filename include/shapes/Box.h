@@ -39,6 +39,14 @@ public:
         }
     }
 
+    void setEmit(const RGB &rgb)
+    {
+        for (const auto &face : faces)
+        {
+            face->setEmit(rgb);
+        }
+    }
+
 protected:
 
     std::vector<shared_ptr<Quad>> faces;

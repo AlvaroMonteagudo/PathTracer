@@ -37,8 +37,8 @@ float LightSource::getIntensity() const {
 
 /// SETTERS
 
-void LightSource::setPoint(const Point &plane) {
-    LightSource::point = plane;
+void LightSource::setPoint(const Point &point) {
+    LightSource::point = point;
 }
 
 void LightSource::setIntensity(float intensity) {
