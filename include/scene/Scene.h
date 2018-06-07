@@ -101,6 +101,8 @@ private:
     void buildHoleLetters();
 
     void buildHiddenMirror();
+
+    void addWalls();
 };
 
 

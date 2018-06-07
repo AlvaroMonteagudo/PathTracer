@@ -169,7 +169,7 @@ class Mat {
          * @param angle: value of angle
          * @return this rotated by angle in axis x
          */
-        Mat rotateX(float angle){
+        static Mat rotateX(float angle){
             return { 1, 0, 0, 0,
                      0, cosf(angle), (-1)*sinf(angle), 0,
                      0, sinf(angle), cosf(angle), 0,
@@ -181,7 +181,7 @@ class Mat {
          * @param angle: value of angle
          * @return this rotated by angle in axis y
          */
-        Mat rotateY(float angle){
+        static Mat rotateY(float angle){
             return { cosf(angle), 0, sinf(angle), 0,
                      0, 1, 0, 0,
                      (-1)*sinf(angle), 0, cosf(angle), 0,
@@ -193,7 +193,7 @@ class Mat {
          * @param angle: value of angle
          * @return this rotated by angle in axis z
          */
-        Mat rotateZ(float angle){
+        static Mat rotateZ(float angle){
             return { cosf(angle), (-1)*sinf(angle), 0, 0,
                      sinf(angle), cosf(angle), 0, 0,
                      0, 0, 1, 0,

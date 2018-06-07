@@ -15,6 +15,7 @@
 #include <cstring>
 #include <Cylinder.h>
 #include <Pyramid3.h>
+#include <Mat.h>
 #include "Scene.h"
 #include "Circle.h"
 #include "Quad.h"
@@ -80,59 +81,139 @@ const std::vector<std::shared_ptr<Shape>> &Scene::getShapes() const {
     return shapes;
 }
 
-void Scene::buildSphereMaterials() {
+void Scene::addWalls() {
 
-    setCamera(Camera(Dir(0, 0.7, 0.3), Dir(1, 0, 0), Dir(0, -0.3f, 0.7),
-                     Point(0, 0, -2), 1.0,  width, height, PI/3.0f));
+    Plane rightWall(Dir(-1, 0, 0), Point(1.5, 0, 0));
+    //Quad rightWall(Point(1, -1, 1), Point(1, -1, -3), Point(1, 1, 1));
+    rightWall.setMaterial(DIFF_G);
+    addShape(rightWall);
 
+    Plane leftWall(Dir(1, 0, 0), Point(-1.5f, 0, 0));
+    //Quad leftWall(Point(-1, -1, 1), Point(-1, -1, -3), Point(-1, 1, 1));
+    leftWall.setMaterial(DIFF_R);
+    addShape(leftWall);
 
-    Sphere globalLight(5, Point(0, 0, 0));
-    globalLight.setEmit(WHITE);
-    addShape(globalLight);
+    Plane floor(Dir(0, 1, 0), Point(0, -1, 0));
+    //Quad floor(Point(-1, -1, -3), Point(1, -1, -3), Point(-1, -1, 1));
+    addShape(floor);
 
-    /*addShape(Plane(Dir(0, 0, -1), Point(0, 0, 1)));
-    addShape(Plane(Dir(0, 1, 0), Point(0, -1, 0))); // Floor
-    addShape(Plane(Dir(0, 0, 1), Point(0, 0, -2.1f)));
-    addShape(Plane(Dir(-1, 0, 0), Point(2, 0, 0)));
-    addShape(Plane(Dir(1, 0, 0), Point(2, 0, 0)));*/
+    Plane ceiling(Dir(0, -1, 0), Point(0, 1, 0));
+    // Quad ceiling(floor.moveY(2));
+    addShape(ceiling);
+
+    Plane bottom(Dir(0, 0, -1), Point(0, 0, 1));
+    //Quad bottom(Point(-1, -1, 1), Point(1, -1, 1), Point(-1, 1, 1));
+    addShape(bottom);
+}
+
+void Scene::buildCornellBox() {
+    
+
+    setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
+                     Point(0.f, -0.f, -2.2f), 1.0,  width, height, PI/3.0f));
+
+    Quad light(Point(-0.7f, 0.999f, -0.3f), Point(0.7f, 0.999f, -0.3f), Point(-0.7f , 0.999f, 0.5), Point(0.7f , 0.999f , 0.5));
+    //light = light.moveZ(-0.6f);
+    light.setEmit(WHITE);
+    addShape(light);
+
+    addWalls();
+
+    Sphere leftSphere(0.35f, Point(-1, -0.6f, 0.6f));
+    leftSphere.setMaterial(Diffuse(ORANGE));
+    addShape(leftSphere);
+
+    Sphere rightSphere(leftSphere.moveX(2));
+    rightSphere.setMaterial(Reflective(PURPLE));
+    addShape(rightSphere);
+}
+
+void Scene::buildCornellBoxHole() {
+
+    setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
+                     Point(0.f, -0.f, -2.8f), 1.0,  width, height, PI/3.0f));
+
+    Sphere sky(8.75f, Point(0, 10, 0));
+    //sky.setMaterial(Diffuse(RGB(0.1f, 0.6f, 0.85f)));
+    sky.setEmit(WHITE);
+    addShape(sky);
+
+    Sphere sun(3, Point(0, 5, 1));
+    sun.setEmit(WHITE);
+    //sun.setIntensity(5.0f);
+    //addShape(sun);
 
     //Plane rightWall(Dir(-1, 0, 0), Point(1, 0, 0));
-    Quad rightWall(Point(2, -1, 1), Point(2, -1, -3), Point(2, 1, 1));
-    //rightWall.setMaterial(DIFF_G);
+    Quad rightWall(Point(1, -1, 1), Point(1, -1, -3), Point(1, 1, 1));
+    rightWall.setMaterial(DIFF_G);
     addShape(rightWall);
 
     //Plane leftWall(Dir(1, 0, 0), Point(-1, 0, 0));
-    Quad leftWall(Point(-2, -1, 1), Point(-2, -1, -3), Point(-2, 1, 1));
-    //leftWall.setMaterial(DIFF_R);
+    Quad leftWall(Point(-1, -1, 1), Point(-1, -1, -3), Point(-1, 1, 1));
+    leftWall.setMaterial(DIFF_R);
     addShape(leftWall);
 
     //Plane floor(Dir(0, 1, 0), Point(0, -1, 0));
-    Quad floor(Point(-2, -1, -3), Point(2, -1, -3), Point(-2, -1, 1));
+    Quad floor(Point(-1, -1, -3), Point(1, -1, -3), Point(-1, -1, 1));
     addShape(floor);
 
+    //Plane ceiling(Dir(0, -1, 0), Point(0, 1, 0));
+    Quad ceiling(floor.moveY(2));
+    Quad hole(Point(-0.5f, 1, -0.2f), Point(0.5f, 1, -0.2f), Point(-0.5f , 1, 0.8), Point(0.5f, 1, 0.8));
+    hole = hole.moveZ(-0.6f);
+    //Quad hole2(hole.moveX(0.4f));
+    //Quad hole3(hole2.moveX(0.4f));
+    ceiling.addHole(hole);
+    //ceiling.addHole(hole2);
+    //ceiling.addHole(hole3);
+    addShape(ceiling);
 
     //Plane bottom(Dir(0, 0, -1), Point(0, 0, 1));
-    Quad bottom(Point(-2, -1, 1), Point(2, -1, 1), Point(-2, 1, 1));
+    Quad bottom(Point(-1, -1, 1), Point(1, -1, 1), Point(-1, 1, 1));
     addShape(bottom);
 
     //Plane backWall(Dir(0, 0, 1), Point(0, 0, -3));
     Quad backWall(bottom.moveZ(-4));
     addShape(backWall);
 
+    Sphere leftSphere(0.35f, Point(-0.5f, -0.6f, 0.6f));
+    leftSphere.setMaterial(Diffuse(ORANGE));
+    addShape(leftSphere);
 
-    Sphere diffuse(0.35f, Point(-1.3f, -0.6f, 0));
-    diffuse.setMaterial(Diffuse(GREEN));
+    Sphere rightSphere(leftSphere.moveX(1.1f));
+    rightSphere.setMaterial(Specular(PURPLE, 25.0f));
+    addShape(rightSphere);
+}
+
+void Scene::buildSphereMaterials() {
+
+    setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
+                     Point(0, -0.5f, -1.7f), 1,  width, height, PI/3.0f));
+
+
+    Quad light(Point(-0.7f, 0.999f, -0.3f), Point(0.7f, 0.999f, -0.3f), Point(-0.7f , 0.999f, 0.5), Point(0.7f , 0.999f , 0.5));
+    //light = light.moveZ(-0.6f);
+    light.setEmit(WHITE);
+    addShape(light);
+
+    addWalls();
+
+    Plane backWall(Dir(0, 0, 1), Point(0, 0, -3));
+    addShape(backWall);
+
+    Sphere diffuse(0.25f, Point(-1.15f, -0.7f, 0));
+    diffuse.setMaterial(Specular(BLUE, 50));
     addShape(diffuse);
 
-    Sphere specular(diffuse.moveX(0.9));
-    specular.setMaterial(Specular(RED, 50));
+    Sphere specular(diffuse.moveX(0.75));
+    specular.setMaterial(Diffuse(YELLOW));
     addShape(specular);
 
-    Sphere reflective(specular.moveX(0.9));
-    reflective.setMaterial(Reflective(WHITE));
+    Sphere reflective(specular.moveX(0.75));
+    reflective.setMaterial(Reflective(PURPLE));
     addShape(reflective);
 
-    Sphere transmittive(reflective.moveX(0.9));
+    Sphere transmittive(reflective.moveX(0.75));
     transmittive.setMaterial(Transmittive(WHITE));
     transmittive.setRefractiveIndex(GLASS);
     addShape(transmittive);
@@ -255,109 +336,6 @@ void Scene::buildBoxesMaterials() {
 
 }
 
-void Scene::buildCornellBox() {
-
-    setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
-                     Point(0.f, -0.f, -2.8f), 1.0,  width, height, PI/3.0f));
-
-    Quad light(Point(-0.5f, 0.999f, -0.2f), Point(0.5f, 0.999f, -0.2f), Point(-0.5f , 0.999f, 0.8), Point(0.5f , 0.999f , 0.8));
-    light = light.moveZ(-0.6f);
-    light.setEmit(WHITE);
-    addShape(light);
-
-
-    //Plane rightWall(Dir(-1, 0, 0), Point(1, 0, 0));
-    Quad rightWall(Point(1, -1, 1), Point(1, -1, -3), Point(1, 1, 1));
-    rightWall.setMaterial(DIFF_G);
-    addShape(rightWall);
-
-    //Plane leftWall(Dir(1, 0, 0), Point(-1, 0, 0));
-    Quad leftWall(Point(-1, -1, 1), Point(-1, -1, -3), Point(-1, 1, 1));
-    leftWall.setMaterial(DIFF_R);
-    addShape(leftWall);
-
-    //Plane floor(Dir(0, 1, 0), Point(0, -1, 0));
-    Quad floor(Point(-1, -1, -3), Point(1, -1, -3), Point(-1, -1, 1));
-    addShape(floor);
-
-    //Plane ceiling(Dir(0, -1, 0), Point(0, 1, 0));
-    Quad ceiling(floor.moveY(2));
-    addShape(ceiling);
-
-    //Plane bottom(Dir(0, 0, -1), Point(0, 0, 1));
-    Quad bottom(Point(-1, -1, 1), Point(1, -1, 1), Point(-1, 1, 1));
-    addShape(bottom);
-
-    //Plane backWall(Dir(0, 0, 1), Point(0, 0, -3));
-    Quad backWall(bottom.moveZ(-4));
-    addShape(backWall);
-
-    Sphere leftSphere(0.35f, Point(-0.5f, -0.6f, 0.6f));
-    leftSphere.setMaterial(Diffuse(ORANGE));
-    addShape(leftSphere);
-
-    Sphere rightSphere(leftSphere.moveX(1.1f));
-    rightSphere.setMaterial(Specular(PURPLE, 25));
-    addShape(rightSphere);
-}
-
-void Scene::buildCornellBoxHole() {
-
-    setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
-                     Point(0.f, -0.f, -2.8f), 1.0,  width, height, PI/3.0f));
-
-    Sphere sky(8.75f, Point(0, 10, 0));
-    //sky.setMaterial(Diffuse(RGB(0.1f, 0.6f, 0.85f)));
-    sky.setEmit(WHITE);
-    addShape(sky);
-
-    Sphere sun(3, Point(0, 5, 1));
-    sun.setEmit(WHITE);
-    //sun.setIntensity(5.0f);
-    //addShape(sun);
-
-    //Plane rightWall(Dir(-1, 0, 0), Point(1, 0, 0));
-    Quad rightWall(Point(1, -1, 1), Point(1, -1, -3), Point(1, 1, 1));
-    rightWall.setMaterial(DIFF_G);
-    addShape(rightWall);
-
-    //Plane leftWall(Dir(1, 0, 0), Point(-1, 0, 0));
-    Quad leftWall(Point(-1, -1, 1), Point(-1, -1, -3), Point(-1, 1, 1));
-    leftWall.setMaterial(DIFF_R);
-    addShape(leftWall);
-
-    //Plane floor(Dir(0, 1, 0), Point(0, -1, 0));
-    Quad floor(Point(-1, -1, -3), Point(1, -1, -3), Point(-1, -1, 1));
-    addShape(floor);
-
-    //Plane ceiling(Dir(0, -1, 0), Point(0, 1, 0));
-    Quad ceiling(floor.moveY(2));
-    Quad hole(Point(-0.5f, 1, -0.2f), Point(0.5f, 1, -0.2f), Point(-0.5f , 1, 0.8), Point(0.5f, 1, 0.8));
-    hole = hole.moveZ(-0.6f);
-    //Quad hole2(hole.moveX(0.4f));
-    //Quad hole3(hole2.moveX(0.4f));
-    ceiling.addHole(hole);
-    //ceiling.addHole(hole2);
-    //ceiling.addHole(hole3);
-    addShape(ceiling);
-
-    //Plane bottom(Dir(0, 0, -1), Point(0, 0, 1));
-    Quad bottom(Point(-1, -1, 1), Point(1, -1, 1), Point(-1, 1, 1));
-    addShape(bottom);
-
-    //Plane backWall(Dir(0, 0, 1), Point(0, 0, -3));
-    Quad backWall(bottom.moveZ(-4));
-    addShape(backWall);
-
-    Sphere leftSphere(0.35f, Point(-0.5f, -0.6f, 0.6f));
-    leftSphere.setMaterial(Diffuse(ORANGE));
-    addShape(leftSphere);
-
-    Sphere rightSphere(leftSphere.moveX(1.1f));
-    rightSphere.setMaterial(Specular(PURPLE, 25.0f));
-    addShape(rightSphere);
-}
-
 void Scene::buildWindow() {
 
     setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
@@ -418,7 +396,7 @@ void Scene::buildManyLights() {
     setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
                      Point(0.f, -0.f, -2.8f), 1.0,  width, height, PI/3.0f));
 
-    Quad light(Point(-0.9f, 0.999f, -1), Point(-0.6f, 0.999f, -1), Point(-0.9f , 0.999f, -0.7f), Point(-0.6f , 0.999f , -0.7f));
+    Quad light(Point(-1.3f, 0.999f, -1), Point(-0.5f, 0.999f, -1), Point(-1.3f , 0.999f, -0.6f), Point(-0.5f , 0.999f , -0.6f));
     //light = light.moveZ(-0.6f);
     //light.setEmit(WHITE);
     //addShape(light);
@@ -428,35 +406,35 @@ void Scene::buildManyLights() {
     //light.setEmit(WHITE);
     //addShape(light);
 
-    Box lightBox2(lightBox.moveX(0.75f).moveZ(0.75f));
+    Box lightBox2(lightBox.moveX(0.9).moveZ(0.65f));
     lightBox2.setEmit(WHITE);
     addAllShapes(lightBox2.getFaces());
 
-    Box lightBox3(lightBox.moveX(1.5));
+    Box lightBox3(lightBox.moveX(1.8));
     lightBox3.setEmit(WHITE);
     addAllShapes(lightBox3.getFaces());
 
-    Box lightBox4(lightBox.moveZ(1.5));
+    Box lightBox4(lightBox.moveZ(1.2));
     lightBox4.setEmit(WHITE);
     addAllShapes(lightBox4.getFaces());
 
-    Box lightBox5(lightBox.moveX(1.5).moveZ(1.5));
+    Box lightBox5(lightBox.moveX(1.8).moveZ(1.2));
     lightBox5.setEmit(WHITE);
     addAllShapes(lightBox5.getFaces());
 
 
     //Plane rightWall(Dir(-1, 0, 0), Point(1, 0, 0));
-    Quad rightWall(Point(1, -1, 1), Point(1, -1, -3), Point(1, 1, 1));
+    Quad rightWall(Point(1.5, -1, 1), Point(1.5, -1, -3), Point(1.5, 1, 1));
     rightWall.setMaterial(DIFF_G);
     addShape(rightWall);
 
     //Plane leftWall(Dir(1, 0, 0), Point(-1, 0, 0));
-    Quad leftWall(Point(-1, -1, 1), Point(-1, -1, -3), Point(-1, 1, 1));
+    Quad leftWall(Point(-1.5f, -1, 1), Point(-1.5f, -1, -3), Point(-1.5f, 1, 1));
     leftWall.setMaterial(DIFF_R);
     addShape(leftWall);
 
     //Plane floor(Dir(0, 1, 0), Point(0, -1, 0));
-    Quad floor(Point(-1, -1, -3), Point(1, -1, -3), Point(-1, -1, 1));
+    Quad floor(Point(-1.5f, -1, -3), Point(1.5, -1, -3), Point(-1.5f, -1, 1));
     addShape(floor);
 
     //Plane ceiling(Dir(0, -1, 0), Point(0, 1, 0));
@@ -464,8 +442,31 @@ void Scene::buildManyLights() {
     addShape(ceiling);
 
     //Plane bottom(Dir(0, 0, -1), Point(0, 0, 1));
-    Quad bottom(Point(-1, -1, 1), Point(1, -1, 1), Point(-1, 1, 1));
+    Quad bottom(Point(-1.5f, -1, 1), Point(1.5, -1, 1), Point(-1.5f, 1, 1));
     addShape(bottom);
+
+    Sphere transp(0.35f, Point(0, -0.5f, 0));
+    transp.setMaterial(Transmittive(WHITE));
+    transp.setRefractiveIndex(GLASS);
+    addShape(transp);
+
+    Sphere diffusseYellow(0.2, Point(-1, -0.8f, -0.2f));
+    diffusseYellow.setMaterial(Diffuse(YELLOW));
+    addShape(diffusseYellow);
+
+    Sphere reflectiveGreen(0.25f, Point(-0.6f, -0.4f, 0.2));
+    reflectiveGreen.setMaterial(Reflective(WHITE));
+    addShape(reflectiveGreen);
+
+    Sphere specularOrange(0.25f, Point(0.9, 0.5, 0.5));
+    specularOrange.setMaterial(Specular(ORANGE, 10));
+    addShape(specularOrange);
+
+    Quad base(Point(0.8, -0.8f, -0.3f), Point(1.1, -0.6f, -0.5f), Point(0.6, -0.5f, -0.1f));
+    Box box(base, 0.5f);
+    box.setMaterial(Transmittive(BLUE));
+    box.setRefractiveIndex(GLASS);
+    addAllShapes(box.getFaces());
 }
 
 void Scene::buildHoleLetters() {
