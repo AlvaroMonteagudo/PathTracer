@@ -28,11 +28,11 @@ using namespace std;
 int main(int argc, char * argv[]){
 
     string sceneStr = "cornell", fileName = "../images/image" + currentDate() + ".ppm";
-    int indirectSamples = 128, width = 720, height = 720;
+    int indirectSamples = 32, width = 720, height = 720;
 
     vector<string> arguments;
-    vector<string> scenes = { "cornell", "cornell_holes", "sphere_materials", "specular_spheres",
-                              "boxes", "window", "many_lights", "hole", "hidden_mirror" };
+    /*vector<string> scenes = { "cornell", "cornell_holes", "sphere_materials", "specular_spheres",
+                              "boxes", "window", "many_lights", "hole", "hidden_mirror" };*/
 
     for (int i = 1; i < argc; ++i) {
         arguments.emplace_back(argv[i]);
@@ -41,7 +41,8 @@ int main(int argc, char * argv[]){
     for (unsigned long j = 0; j < arguments.size(); ++j) {
         if (arguments.at(j) == "-s" || arguments.at(j) == "--scene") {
             ++j;
-            std::list<std::string>::iterator it;
+            sceneStr = arguments.at(j);
+            /*std::list<std::string>::iterator it;
 
             if (j > argc) {
                 cout << "Scene not provided, a cornell box will be rendered" << endl;
@@ -53,7 +54,7 @@ int main(int argc, char * argv[]){
                     cout << "\t- " << scene << endl;
                 }
                 return 0;
-            }
+            }*/
         } else if (arguments.at(j) == "-p" || arguments.at(j) == "--paths"){
             ++j;
             if (j > argc) {

@@ -24,16 +24,28 @@
 #include "Cone.h"
 #include "Material.h"
 
-
 /**
  * Default constructor
  */
 Scene::Scene(string name, int _width, int _height) {
 
+    loadSceneSamples();
+
     width = _width;
     height = _height;
 
-    if (name == "cornell") {
+    if (scenes.find(name) != scenes.end()) {
+        (this->*scenes[name])();
+    } else {
+        cout << "Unable to find " << name << " as a scene. Try one of the list" << endl;
+        for (auto &scene : scenes) {
+            cout << "\t- " << scene.first << endl;
+        }
+        exit(0);
+    }
+
+
+    /*if (name == "cornell") {
         buildCornellBox();
     } else if (name == "sphere_materials") {
         buildSphereMaterials();
@@ -53,7 +65,7 @@ Scene::Scene(string name, int _width, int _height) {
         buildHiddenMirror();
     } else {
         buildTest();
-    }
+    }*/
 
 }
 
@@ -201,7 +213,7 @@ void Scene::buildSphereMaterials() {
     Plane backWall(Dir(0, 0, 1), Point(0, 0, -3));
     addShape(backWall);
 
-    Sphere diffuse(0.25f, Point(-1.15f, -0.7f, 0));
+    Sphere diffuse(0.28f, Point(-1.15f, -0.7f, 0));
     diffuse.setMaterial(Specular(BLUE, 50));
     addShape(diffuse);
 
@@ -219,6 +231,36 @@ void Scene::buildSphereMaterials() {
     addShape(transmittive);
 
 
+}
+
+void Scene::buildPyramidMaterials() {
+
+    Mat mat = Mat::rotateX(PI/10);
+    setCamera(Camera(mat *Dir(0, 1, 0), mat * Dir(1, 0, 0), mat * Dir(0, 0, 1),
+                     Point(0, 0, -2.2f), 1,  width, height, PI/3.0f));
+
+    //Plane light(Y_AXIS * -1, Point(0, 0.999, 0));
+    Quad light(Point(-1, 0.999f, -0.5f), Point(1, 0.999f, -0.5f), Point(-1 , 0.999f, 0.5), Point(1 , 0.999f , 0.5));
+    //light = light.moveZ(-0.6f);
+    light.setEmit(WHITE);
+    addShape(light);
+
+    Plane light2(Z_AXIS, Point(0, 0, -2.5f));
+    light2.setEmit(WHITE);
+    addShape(light2);
+
+    addShape(FLOOR(-1));
+    addShape(BOTTOM(2));
+
+    Point p(-1.3f, -0.99f, 0.2);
+    Quad base(p, p.moveX(1), p.moveZ(1));
+    Pyramid4 pyramid4(base, 0.8);
+    pyramid4.setMaterial(Specular(BLUE, 50));
+    addAllShapes(pyramid4.getFaces());
+
+    Pyramid4 py(pyramid4.moveX(1.6));
+    py.setMaterial(Reflective(WHITE));
+    addAllShapes(py.getFaces());
 }
 
 void Scene::buildSpecularSpheres() {

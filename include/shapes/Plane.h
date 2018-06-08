@@ -70,3 +70,12 @@ private:
 
     std::vector<shared_ptr<Shape>> holes;
 };
+
+
+#define FLOOR(x) Plane(Dir(0, 1, 0), Point(0, x, 0))
+#define CEILING(x) Plane(Dir(0, -1, 0), Point(0, x, 0))
+#define LEFT(x) Plane(Dir(1, 0, 0), Point(x, 0, 0))
+#define RIGHT(x) Plane(Dir(-1, 0, 0), Point(x, 0, 0))
+#define BOTTOM(x) Plane(Dir(0, 0, -1), Point(0, 0, x))
+#define BACK(x) Plane(Dir(0, 0, 1), Point(0, 0, X))
+

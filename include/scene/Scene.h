@@ -24,6 +24,10 @@
 #include "Triangle.h"
 #include "Sphere.h"
 #include "Camera.h"
+#include <functional>
+#include <map>
+
+using namespace std;
 
 class Scene {
 
@@ -64,6 +68,13 @@ public:
         }
     }
 
+    void loadSceneSamples() {
+        scenes["cornell"] = &Scene::buildCornellBox;
+        scenes["spheres"] = &Scene::buildSphereMaterials;
+        scenes["cornell_hole"] = &Scene::buildCornellBoxHole;
+        scenes["pyramids"] = &Scene::buildPyramidMaterials;
+    }
+
     /**
      * Get shapes usd in this scene
      * @return vector with shapes of this scene
@@ -79,6 +90,8 @@ private:
     Camera camera;
 
     int width, height;
+
+    map<string, void (Scene::*)()> scenes;
 
     void buildCornellBox();
 
@@ -103,6 +116,8 @@ private:
     void buildHiddenMirror();
 
     void addWalls();
+
+    void buildPyramidMaterials();
 };
 
 
