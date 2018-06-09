@@ -132,11 +132,11 @@ void Scene::buildCornellBox() {
     addWalls();
 
     Sphere leftSphere(0.35f, Point(-1, -0.6f, 0.6f));
-    leftSphere.setMaterial(Diffuse(ORANGE));
+    leftSphere.setMaterial(Diffuse(CYAN));
     addShape(leftSphere);
 
     Sphere rightSphere(leftSphere.moveX(2));
-    rightSphere.setMaterial(Reflective(PURPLE));
+    rightSphere.setMaterial(Diffuse(OLIVE_DRAB));
     addShape(rightSphere);
 }
 
@@ -239,23 +239,35 @@ void Scene::buildPyramidMaterials() {
     setCamera(Camera(mat *Dir(0, 1, 0), mat * Dir(1, 0, 0), mat * Dir(0, 0, 1),
                      Point(0, 0, -2.2f), 1,  width, height, PI/3.0f));
 
-    //Plane light(Y_AXIS * -1, Point(0, 0.999, 0));
-    Quad light(Point(-1, 0.999f, -0.5f), Point(1, 0.999f, -0.5f), Point(-1 , 0.999f, 0.5), Point(1 , 0.999f , 0.5));
-    //light = light.moveZ(-0.6f);
+
+    Sphere globalLight(7, Point(0, 0, 0));
+    globalLight.setMaterial(Diffuse(RGB(0.1, 0.3, 0.8)));
+    addShape(globalLight);
+
+    Sphere light(3, Point(-2, 2, -5));
     light.setEmit(WHITE);
+    light.setIntensity(10);
     addShape(light);
 
-    Plane light2(Z_AXIS, Point(0, 0, -2.5f));
-    light2.setEmit(WHITE);
-    addShape(light2);
+    //Plane light(Y_AXIS * -1, Point(0, 0.999, 0));
+    //Quad light(Point(-1, 1.999f, -0.5f), Point(1, 1.999f, -0.5f), Point(-1 , 0.999f, 0.5), Point(1 , 0.999f , 0.5));
+    //light = light.moveZ(-0.6f);
+    //light.setEmit(WHITE);
+    //addShape(light);
 
-    addShape(FLOOR(-1));
-    addShape(BOTTOM(2));
+    //Plane light2(Z_AXIS, Point(0, 0, -2.5f));
+    //light2.setEmit(WHITE);
+    //addShape(light2);
+
+    Plane pe = FLOOR(-1);
+    pe.setMaterial(Diffuse(RED));
+    addShape(pe);
+    //addShape(BOTTOM(2));
 
     Point p(-1.3f, -0.99f, 0.2);
     Quad base(p, p.moveX(1), p.moveZ(1));
     Pyramid4 pyramid4(base, 0.8);
-    pyramid4.setMaterial(Specular(BLUE, 50));
+    pyramid4.setMaterial(Specular(RED, 50));
     addAllShapes(pyramid4.getFaces());
 
     Pyramid4 py(pyramid4.moveX(1.6));
