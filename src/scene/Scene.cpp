@@ -641,6 +641,33 @@ void Scene::buildHiddenMirror() {
 
 }
 
+void Scene::buildColorPalette() {
+
+    int spheresInLine = 17;
+    int lines = 8;
+    float radius = 0.25f;
+
+    setCamera(Camera(Dir(0, 0, 1), Dir(1, 0, 0), Dir(0, -1, 0),
+                     Point(spheresInLine * 0.5f / 2 - radius, 6.5, lines * 0.5f / 2 - radius),
+                     1.0,  width, height, PI/4.0f));
+
+    Plane light(CEILING(8));
+    light.setEmit(WHITE);
+    addShape(light);
+
+    Plane floor(FLOOR(0));
+    addShape(floor);
+
+    for (int i = 0; i < lines; ++i) {
+        for (int j = 0; j < spheresInLine; ++j) {
+            Sphere sphere = Sphere(radius, Point(j * 0.5f, 0.25, i * 0.5f));
+            sphere.setMaterial(Diffuse(COLORS.at(i * spheresInLine + j)));
+            addShape(sphere);
+        }
+    }
+
+}
+
 void Scene::buildTest() {
 
     setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
