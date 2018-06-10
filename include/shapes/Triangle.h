@@ -19,6 +19,11 @@ public:
     Triangle moveY(float offset) const;
 
     Triangle moveZ(float offset) const;
+	
+	vector<Point> sampleLight2(int samples){
+        vector<Point> resul = vector<Point>(2);
+        return resul;
+    }
 
 protected:
 

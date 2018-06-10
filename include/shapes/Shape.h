@@ -116,6 +116,11 @@ public:
     virtual void setMaterial(const shared_ptr<Material> m){
         material = m;
     }
+	
+    virtual vector<Point> sampleLight2(int samples){
+        vector<Point> resul = vector<Point>(1);
+        return resul;
+    };
 
     template <class M>
     void setMaterial(const M m) {
