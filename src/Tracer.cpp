@@ -18,13 +18,14 @@
 
 using namespace std;
 
-Tracer::Tracer(string filename, const Scene &_scene) : scene(_scene) {
-    camera = scene.getCamera();
-    shapes = scene.getShapes();
+Tracer::Tracer(string filename, const Scene &scene) : scene(scene) {
+    camera = this->scene.getCamera();
+    shapes = this->scene.getShapes();
     totalPixels = camera.getHeight() * camera.getWidth();
     image = Image(camera.getWidth(), camera.getHeight());
     camera.calculateFirstPixel();
     outfileName = std::move(filename);
+
 }
 
 
@@ -108,9 +109,9 @@ void Tracer::renderImageMultithread() const {
         int start = i*linesPerThread;
         int end = start + linesPerThread;
         if (i != numThreads - 1){
-            threads[i] = thread(&Tracer::renderImageLines, this, start, end);
+            threads[i] = thread(&Tracer::renderImageLines, *this, start, end);
         } else {
-            threads[i] = thread(&Tracer::renderImageLines, this, start, camera.getHeight());
+            threads[i] = thread(&Tracer::renderImageLines, *this, start, camera.getHeight());
         }
     }
 
@@ -196,6 +197,7 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
     // Getting intersection point coordinates
     Point intersectedPoint = ray.getSource() + (ray.getDirection() * dist);
 
+
     // Shape normal
     Dir normal = shape->getNormal(intersectedPoint).normalize();
 
@@ -203,9 +205,84 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
     float cosine = normal.dot(ray.getDirection());
     Dir nl = (cosine > 0) ? normal.changeDirection() : normal;
 
-    return russianRoulette(ray, *shape, *shape->getMaterial(), intersectedPoint, nl, depth);
+    if(depth==1){
+        return directLighting(intersectedPoint,normal,shape,ray);// + russianRoulette(ray, *shape, *shape->getMaterial(), intersectedPoint, nl, depth);
+    }
+    else{
+        return russianRoulette(ray, *shape, *shape->getMaterial(), intersectedPoint, nl, depth);
+    }
 
 }
+
+RGB Tracer::Phong(const Ray &ray, const Ray &shadow, const Dir &normal,
+          shared_ptr<Shape> shape, const Point &point) const{
+
+    Dir reflectedLight = shape->getDirRayReflected(shadow.getDirection() * -1, normal);
+
+    float cos = ray.getDirection().dot(reflectedLight);
+
+    if (cos < 0) cos = -cos;
+
+    RGB color = ((shape->getMaterial()->getKd() / PI) +
+                 (shape->getMaterial()->getKs() * ((shape->getMaterial()->getShininess() + 2.0f) / (2.0f * PI))
+                  * pow(cos, shape->getMaterial()->getShininess())));
+
+    return color;
+}
+
+
+RGB Tracer::directLighting(const Point &intersectedPoint, const Dir &normal,
+                           const shared_ptr<Shape> &shape, const Ray &ray) const{
+
+    RGB color = BLACK;
+    //recorremos las formas en busca de luces,
+    //separar las luces de las otras formas?
+    for(int i=0;i<shapes.size();i++){
+
+        bool inShadow;
+        Ray shadowF;
+        float lightDistF=99999;
+        if(shapes.at(i)->getEmit()!=BLACK){
+            shared_ptr<Shape> light = shapes.at(i);
+            vector<Point> lightPoints = light->sampleLight2(10);
+
+            for(Point p : lightPoints){
+                float lightDist = (p - intersectedPoint).module();
+                Ray shadow = Ray(intersectedPoint, p);
+                inShadow = false;
+                for(const shared_ptr<Shape> &item : shapes) {
+                    float disShape = item->intersect(shadow);
+                    if (disShape < lightDist && item != light) {
+                    //if (disShape < lightDist) {
+                        //cout<<"shadow"<<endl;
+                        inShadow = true;
+                        break;
+                    }
+                }
+                if(!inShadow){
+                    if(lightDistF>lightDist){
+                        lightDistF = lightDist;
+                        shadowF = shadow;
+                    }
+                }
+            }
+
+
+            float cos = shadowF.getDirection().dot(normal);
+
+            if (cos < 0.0f) {
+                cos = -cos;
+            }
+            color += Phong(Ray(ray.getSource(), ray.getDirection() * -1), shadowF, normal, shape,
+                           intersectedPoint)
+                     * (light->getIntensity() / (lightDistF * lightDistF))
+                     * cos;
+
+        }
+    }
+    return color;
+}
+
 
 RGB Tracer::russianRoulette(const Ray &ray, const Shape &shape, const Material &material, const Point &intersectedPoint, const Dir &normal, int depth) const {
 
