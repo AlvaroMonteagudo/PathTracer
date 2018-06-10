@@ -11,6 +11,11 @@ public:
     float intersect(const Ray &ray) const;
 
     Dir getNormal(const Point &intersectedPoint) const;
+	
+   vector<Point> sampleLight2(int samples){
+        vector<Point> resul = vector<Point>(2);
+        return resul;
+    }
 
 protected:
 

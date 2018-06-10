@@ -52,3 +52,38 @@ Quad Quad::moveZ(float offset) const {
     return { a.moveZ(offset), b.moveZ(offset), c.moveZ(offset), d.moveZ(offset) };
 }
 
+void Quad::bounds(){
+    for(int i=0;i<3;i++){
+        Point x;
+        if(i==0){
+            x=a;
+        } else if(i==1){
+            x=b;
+        } else{
+            x= c;
+        }
+        minX = (x.x<minX) ? x.x : minX;
+        minY = (x.y<minY) ? x.y : minY;
+        minZ = (x.z<minZ) ? x.z : minZ;
+
+        maxX = (x.x>maxX) ? x.x : maxX;
+        maxY = (x.y>maxY) ? x.y : maxY;
+        maxZ = (x.z>maxZ) ? x.z : maxZ;
+
+   }
+
+}
+
+vector<Point> Quad::sampleLight2(int samples){
+
+    this->bounds();
+    vector<Point> resul = vector<Point>(samples);
+    for(int i=0;i<samples;i++) {
+        resul[i] = Point(minX + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (maxX - minX))),
+              minY + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (maxY - minY))),
+              minZ + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (maxZ - minZ))));
+    }
+
+    return resul;
+}
+

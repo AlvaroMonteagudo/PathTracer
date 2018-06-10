@@ -52,6 +52,30 @@ public:
     Sphere moveZ(float offset) const;
 
     void setRadius(float radius);
+	
+	    vector<Point> sampleLight2(int samples){
+        vector<Point> resul = vector<Point>(samples);
+        for(int i=0;i<samples;i++){
+            float dirX = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/(radius*radius)));
+            float dirY = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/((radius*radius)-dirX)));
+            float dirZ = (radius * radius) - dirX - dirY;
+            //solo en cuadrente ++
+            dirX = (dirX!=0) ? sqrtf(dirX) : 0;
+            dirY = (dirY!=0) ? sqrtf(dirY) : 0;
+            dirZ = (dirZ!=0) ? sqrtf(dirZ) : 0;
+            //cambio a todos los cuadrantes
+            int randX = rand() % 2;
+            int randY = rand() % 2;
+            int randZ = rand() % 2;
+
+            dirX = (randX == 1) ? dirX : -dirX;
+            dirY = (randY == 1) ? dirY : -dirY;
+            dirZ = (randZ == 1) ? dirZ : -dirZ;
+
+            resul[i] = center+Dir(dirX,dirY,dirZ);
+        }
+        return resul;
+    }
 
 private:
 
