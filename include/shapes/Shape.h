@@ -17,12 +17,12 @@
 
 #include "Ray.h"
 #include "Point.h"
-#include "RGB.h"
 #include "Camera.h"
 #include <iostream>
 #include <memory>
-#include <Material.h>
 #include "mathUtils.h"
+#include <vector>
+#include <Material.h>
 
 #define AIR_RI 1.000293
 #define WATER 1.333
@@ -118,7 +118,7 @@ public:
     }
 	
     virtual vector<Point> sampleLight2(int samples){
-        vector<Point> resul = vector<Point>(1);
+        std::vector<Point> resul = std::vector<Point>(1);
         return resul;
     };
 

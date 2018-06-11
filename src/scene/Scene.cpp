@@ -44,29 +44,6 @@ Scene::Scene(string name, int _width, int _height) {
         exit(0);
     }
 
-
-    /*if (name == "cornell") {
-        buildCornellBox();
-    } else if (name == "sphere_materials") {
-        buildSphereMaterials();
-    } else if (name == "specular_spheres") {
-        buildSpecularSpheres();
-    } else if (name == "boxes") {
-        buildBoxesMaterials();
-    } else if (name == "cornell_holes") {
-        buildCornellBoxHole();
-    } else if (name == "window") {
-        buildWindow();
-    } else if (name == "many_lights") {
-        buildManyLights();
-    } else if (name == "hole") {
-        buildHoleLetters();
-    } else if (name == "hidden_mirror") {
-        buildHiddenMirror();
-    } else {
-        buildTest();
-    }*/
-
 }
 
 /**

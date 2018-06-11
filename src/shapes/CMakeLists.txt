@@ -9,6 +9,7 @@ set(SOURCE_FILES
         Triangle.cpp
         Pyramid3.cpp
         Cylinder.cpp
+        MeshTriangle.cpp
         )
 
 set(HEADER_FILES
@@ -23,7 +24,7 @@ set(HEADER_FILES
         ${PROJECT_SOURCE_DIR}/include/shapes/Shape.h
         ${PROJECT_SOURCE_DIR}/include/shapes/Pyramid3.h
         ${PROJECT_SOURCE_DIR}/include/shapes/Cylinder.h
-        ../../include/shapes/MeshTriangle.h MeshTriangle.cpp)
+        ${PROJECT_SOURCE_DIR}/include/shapes/MeshTriangle.h)
 
 include_directories(
         ${PROJECT_SOURCE_DIR}/include/algebraUtils

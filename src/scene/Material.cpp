@@ -1,5 +1,6 @@
 #include <Material.h>
 #include <iostream>
+#include <Shape.h>
 
 Material::Material(const RGB &d, const RGB &s, const RGB &r, const RGB &t, float shininess) :
         kd(d), ks(s), kr(r), kt(t), shininess(shininess) {
@@ -52,4 +53,15 @@ float Material::getShininess() const {
 
 Material Material::operator + (const Material &m) const {
     return { kd + m.getKd(), ks + m.getKs(), kr + m.getKr(), kt + m.getKt(), shininess + m.getShininess() };
+}
+
+RGB Material::Phong(const Ray &ray, const Ray &shadow, const Dir &normal) const {
+    Dir reflectedLight = Shape::getDirRayReflected(shadow.getDirection() * -1, normal);
+
+    float cos = ray.getDirection().dot(reflectedLight);
+
+    if (cos < 0) cos = 0;
+
+    return  ((kd / PI) + (ks * ((shininess + 2.0f) / (2.0f * PI)) * pow(cos, shininess)));
+
 }

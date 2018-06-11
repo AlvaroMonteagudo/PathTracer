@@ -2,6 +2,7 @@
 
 #include <RGB.h>
 #include <memory>
+#include <Ray.h>
 
 using namespace std;
 
@@ -22,6 +23,8 @@ public:
     float getShininess() const;
 
     Material operator + (const Material &m) const;
+
+    RGB Phong(const Ray &ray, const Ray &shadow, const Dir &normal) const;
 
 private:
 

@@ -25,14 +25,16 @@ string currentDate();
 
 using namespace std;
 
+static map<string, void (Scene::*)()> scenes;
+
 int main(int argc, char * argv[]){
 
     string sceneStr = "cornell", fileName = "../images/image" + currentDate() + ".ppm";
-    int indirectSamples = 32, width = 720, height = 720;
+    int paths = 32, width = 720, height = 720, depth = 5;
+    bool nee = false;
 
     vector<string> arguments;
-    /*vector<string> scenes = { "cornell", "cornell_holes", "sphere_materials", "specular_spheres",
-                              "boxes", "window", "many_lights", "hole", "hidden_mirror" };*/
+
 
     for (int i = 1; i < argc; ++i) {
         arguments.emplace_back(argv[i]);
@@ -42,33 +44,31 @@ int main(int argc, char * argv[]){
         if (arguments.at(j) == "-s" || arguments.at(j) == "--scene") {
             ++j;
             sceneStr = arguments.at(j);
-            /*std::list<std::string>::iterator it;
-
-            if (j > argc) {
-                cout << "Scene not provided, a cornell box will be rendered" << endl;
-            } else if (std::find(scenes.begin(), scenes.end(), arguments.at(j)) != scenes.end()) {
-                sceneStr = arguments.at(j);
-            } else {
-                cout << "Unable to find " << arguments.at(j) << " as a scene. Try one of the list" << endl;
-                for (const auto &scene : scenes) {
-                    cout << "\t- " << scene << endl;
-                }
-                return 0;
-            }*/
         } else if (arguments.at(j) == "-p" || arguments.at(j) == "--paths"){
             ++j;
             if (j > argc) {
                 cout << "Using default number of paths = 128, number not provided." << endl;
             } else {
-                indirectSamples = stoi(arguments.at(j));
-                if (indirectSamples > 256) {
+                paths = stoi(arguments.at(j));
+                if (paths > 256) {
                     cout << "Processing may be a bit slow due to high number of paths" << endl;
-                } else if (indirectSamples <= 0) {
-                    cout << "Number of paths can not be negative, using default value = 128" << endl;
-                    indirectSamples = 128;
+                } else if (paths <= 0) {
+                    cout << "Number of paths can not be negative, using default value = 32" << endl;
+                    paths = 32;
                 }
             }
-        } else if (arguments.at(j) == "-i" || arguments.at(j) == "--info") {
+        } else if (arguments.at(j) == "-d" || arguments.at(j) == "--depth"){
+            ++j;
+            if (j > argc) {
+                cout << "Using default max depth = 5, number not provided." << endl;
+            } else {
+                depth = stoi(arguments.at(j));
+                if (depth <= 0) {
+                    cout << "Max depth can not be negative, using default value = 5" << endl;
+                    depth = 5;
+                }
+            }
+        }else if (arguments.at(j) == "-i" || arguments.at(j) == "--info") {
             printUsage();
             return 0;
         } else if (arguments.at(j) == "-f" || arguments.at(j) == "--file") {
@@ -96,17 +96,21 @@ int main(int argc, char * argv[]){
                     height = 720;
                 }
             }
+        } else if (arguments.at(j) == "-nee") {
+            nee = true;
         } else {
             cerr << arguments.at(j) << " could not be recognized as a supported argument. Check typo." << endl;
             printUsage();
-            return -1;
+            return 0;
         }
     }
 
     Scene scene = Scene(sceneStr, width, height);
 
     Tracer tracer = Tracer(fileName, scene);
-    tracer.SAMPLES = indirectSamples;
+    tracer.SAMPLES = paths;
+    tracer.NEE = nee;
+    tracer.MAX_DEPTH = depth;
     tracer.renderImageMultithread();
 
     return 0;
@@ -115,11 +119,13 @@ int main(int argc, char * argv[]){
 void printUsage() {
     cout << "Usage: render [-h | --help] [-s | --samples] [-of | --outfile]\n"
             "Options description:\n"
-            "\t -s --samples <INTEGER>          : number of indirect samples rays, 128 if not specified.\n"
-            "\t -f --file <STRING>              : path for the image to be saved (extension no need) e.g: /home/image \n"
-            "\t -i --info                       : this message itself.\n"
-            "\t -w --width <INTEGER>            : width of the image in pixels.\n"
-            "\t -h --height                     : height of the image in pixels.\n" << endl;
+            "\t -p --paths <INTEGER> : number of indirect samples rays, 32 if not specified.\n"
+            "\t -d --depth <INTEGER> : Max depth of exploration for the algorithm, 5 if not specified.\n"
+            "\t -f --file <STRING>   : path for the image to be saved (extension no need) e.g: /home/image \n"
+            "\t -i --info            : this message itself.\n"
+            "\t -w --width <INTEGER> : width of the image in pixels.\n"
+            "\t -h --height          : height of the image in pixels.\n"
+            "\t -s --scene <STRING>  : height of the image in pixels.\n" << endl;
 }
 
 

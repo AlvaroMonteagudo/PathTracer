@@ -28,7 +28,6 @@ Tracer::Tracer(string filename, const Scene &scene) : scene(scene) {
 
 }
 
-
 void printProgress(int numPixel, int total) {
 
     auto percentCompleted = static_cast<int>(numPixel / static_cast<float>(total) * 100.0f);
@@ -92,7 +91,6 @@ void Tracer::renderImage() const {
 void Tracer::renderImageMultithread() const {
     //may return 0 when not able to detect
     int numThreads = std::thread::hardware_concurrency();
-    //numThreads = numThreads - 1;
 
     if (numThreads == 0) {
         renderImage();
@@ -205,8 +203,9 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
     float cosine = normal.dot(ray.getDirection());
     Dir nl = (cosine > 0) ? normal.changeDirection() : normal;
 
-    if(depth==1){
-        return directLighting(intersectedPoint,normal,shape,ray);// + russianRoulette(ray, *shape, *shape->getMaterial(), intersectedPoint, nl, depth);
+    if(NEE){
+        return directLighting(intersectedPoint, nl, shape, ray); // +
+               //russianRoulette(ray, *shape, *shape->getMaterial(), intersectedPoint, nl, depth);
     }
     else{
         return russianRoulette(ray, *shape, *shape->getMaterial(), intersectedPoint, nl, depth);
@@ -214,71 +213,44 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
 
 }
 
-RGB Tracer::Phong(const Ray &ray, const Ray &shadow, const Dir &normal,
-          shared_ptr<Shape> shape, const Point &point) const{
-
-    Dir reflectedLight = shape->getDirRayReflected(shadow.getDirection() * -1, normal);
-
-    float cos = ray.getDirection().dot(reflectedLight);
-
-    if (cos < 0) cos = -cos;
-
-    RGB color = ((shape->getMaterial()->getKd() / PI) +
-                 (shape->getMaterial()->getKs() * ((shape->getMaterial()->getShininess() + 2.0f) / (2.0f * PI))
-                  * pow(cos, shape->getMaterial()->getShininess())));
-
-    return color;
-}
-
 
 RGB Tracer::directLighting(const Point &intersectedPoint, const Dir &normal,
                            const shared_ptr<Shape> &shape, const Ray &ray) const{
 
     RGB color = BLACK;
-    //recorremos las formas en busca de luces,
-    //separar las luces de las otras formas?
-    for(int i=0;i<shapes.size();i++){
+    // Lights are pushed at the front of the vector of shapes
+    int i = 0;
+    while (shapes.at(static_cast<unsigned long>(i))->getEmit() != BLACK) {
+        //Ray shadowF;
+        const shared_ptr<Shape> &light = shapes.at(static_cast<unsigned long>(i));
+        vector<Point> lightPoints = light->sampleLight2(10);
 
-        bool inShadow;
-        Ray shadowF;
-        float lightDistF=99999;
-        if(shapes.at(i)->getEmit()!=BLACK){
-            shared_ptr<Shape> light = shapes.at(i);
-            vector<Point> lightPoints = light->sampleLight2(10);
+        for(Point p : lightPoints){
 
-            for(Point p : lightPoints){
-                float lightDist = (p - intersectedPoint).module();
-                Ray shadow = Ray(intersectedPoint, p);
-                inShadow = false;
-                for(const shared_ptr<Shape> &item : shapes) {
-                    float disShape = item->intersect(shadow);
-                    if (disShape < lightDist && item != light) {
-                    //if (disShape < lightDist) {
-                        //cout<<"shadow"<<endl;
-                        inShadow = true;
-                        break;
-                    }
-                }
-                if(!inShadow){
-                    if(lightDistF>lightDist){
-                        lightDistF = lightDist;
-                        shadowF = shadow;
-                    }
+            float lightDist = (p - intersectedPoint).module();
+            Ray shadow = Ray(intersectedPoint, p);
+            bool inShadow = false;
+
+            for(const shared_ptr<Shape> &item : shapes) {
+                float disShape = item->intersect(shadow);
+                if (disShape < lightDist && item != light) {
+                    inShadow = true;
+                    break;
                 }
             }
 
+            if(!inShadow){
+                float cos = shadow.getDirection().dot(normal);
 
-            float cos = shadowF.getDirection().dot(normal);
+                if (cos > 0.0f) {
 
-            if (cos < 0.0f) {
-                cos = -cos;
+                    color += shape->getMaterial()->Phong(Ray(ray.getSource(), ray.getDirection() * -1), shadow, normal)
+                             * (light->getIntensity() / (lightDist * lightDist))
+                             * cos;
+                }
             }
-            color += Phong(Ray(ray.getSource(), ray.getDirection() * -1), shadowF, normal, shape,
-                           intersectedPoint)
-                     * (light->getIntensity() / (lightDistF * lightDistF))
-                     * cos;
-
         }
+        i++;
     }
     return color;
 }

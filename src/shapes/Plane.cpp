@@ -69,7 +69,3 @@ Plane Plane::moveY(float offset) const {
 Plane Plane::moveZ(float offset) const {
     return { normal, point.moveZ(offset) };
 }
-
-void Plane::invertNornal() {
-    normal *= -1;
-}

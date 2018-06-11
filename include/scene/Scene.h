@@ -34,6 +34,8 @@ class Scene {
 
 public:
 
+    map<string, void (Scene::*)()> scenes;
+
     /**
      * Default constructor
      */
@@ -114,8 +116,6 @@ private:
     Camera camera;
 
     int width, height;
-
-    map<string, void (Scene::*)()> scenes;
 
     void buildCornellBox();
 

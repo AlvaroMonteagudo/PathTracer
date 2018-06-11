@@ -45,4 +45,5 @@ protected:
 
     Triangle t1, t2;
 
+	void bounds();
 };

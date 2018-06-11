@@ -65,11 +65,10 @@ public:
     RGB directLighting(const Point &intersectedPoint, const Dir &normal,
                        const shared_ptr<Shape> &shape, const Ray &ray) const;
 
-    RGB Phong(const Ray &ray, const Ray &shadow, const Dir &normal,
-                      shared_ptr<Shape> shape, const Point &point) const;
-
     /// PUBLIC PARAMETERS
-    int SAMPLES = 128, MAX_DEPTH = 25;
+    int SAMPLES = 32, MAX_DEPTH = 5;
+
+    bool NEE = false;
 
 private:
 

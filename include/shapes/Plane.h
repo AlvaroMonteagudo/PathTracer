@@ -49,8 +49,6 @@ public:
 
     Plane moveZ(float offset) const;
 
-    void invertNornal();
-
     template <class S>
     void addHole(const S &shape) {
         holes.push_back(make_shared<S>(shape));
