@@ -76,6 +76,7 @@ public:
         scenes["cornell_hole"] = &Scene::buildCornellBoxHole;
         scenes["pyramids"] = &Scene::buildPyramidMaterials;
         scenes["palette"] = &Scene::buildColorPalette;
+        scenes["mesh"] = &Scene::buildMesh;
     }
 
     /**
@@ -142,6 +143,8 @@ private:
     void buildPyramidMaterials();
 
     void buildColorPalette();
+
+    void buildMesh();
 };
 
 

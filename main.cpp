@@ -29,8 +29,9 @@ static map<string, void (Scene::*)()> scenes;
 
 int main(int argc, char * argv[]){
 
+
     string sceneStr = "cornell", fileName = "../images/image" + currentDate() + ".ppm";
-    int paths = 32, width = 720, height = 720, depth = 5;
+    int paths = 64, width = 720, height = 720, depth = 5;
     bool nee = false;
 
     vector<string> arguments;

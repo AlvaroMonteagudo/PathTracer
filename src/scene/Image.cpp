@@ -70,6 +70,9 @@ void Image::saveImage(string filename)const {
     file.close();
 
     std::cout << "Image saved in" << filename << std::endl;
+    string command = "eog " + filename;
+
+    system(command.c_str());
 }
 
 

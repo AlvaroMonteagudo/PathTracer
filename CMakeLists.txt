@@ -13,6 +13,7 @@ include_directories(
         ${PROJECT_SOURCE_DIR}/include/algebraUtils
         ${PROJECT_SOURCE_DIR}/include/scene
         ${PROJECT_SOURCE_DIR}/include/shapes
+        ${PROJECT_SOURCE_DIR}/include/utils
         ${PROJECT_SOURCE_DIR}/include
 )
 

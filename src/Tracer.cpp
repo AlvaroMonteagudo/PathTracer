@@ -96,6 +96,11 @@ void Tracer::renderImageMultithread() const {
         renderImage();
         return;
     }
+    // Using gpus
+    if (numThreads > 8) {
+        numThreads /= 2;
+        numThreads -= 1;
+    }
 
     int linesPerThread = camera.getHeight() / numThreads;
 

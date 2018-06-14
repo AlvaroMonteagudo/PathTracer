@@ -16,6 +16,7 @@
 #include <Cylinder.h>
 #include <Pyramid3.h>
 #include <Mat.h>
+#include <Mesh.h>
 #include "Scene.h"
 #include "Circle.h"
 #include "Quad.h"
@@ -108,21 +109,25 @@ void Scene::buildCornellBox() {
 
     addWalls();
 
+    Plane back(Dir(0, 0, 1), Point(0, 0, -3));
+    addShape(back);
+
     Sphere leftSphere(0.35f, Point(-1, -0.6f, 0.6f));
-    leftSphere.setMaterial(Diffuse(CYAN));
+    leftSphere.setMaterial(Specular(ORANGE, 25.0f));
     addShape(leftSphere);
 
     Sphere rightSphere(leftSphere.moveX(2));
-    rightSphere.setMaterial(Diffuse(OLIVE_DRAB));
+    rightSphere.setMaterial(Reflective(PURPLE));
     addShape(rightSphere);
 }
 
 void Scene::buildCornellBoxHole() {
 
     setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
-                     Point(0.f, -0.f, -2.8f), 1.0,  width, height, PI/3.0f));
+                     Point(0.f, -0.f, -2.2f), 1.0,  width, height, PI/3.0f));
 
-    Sphere sky(8.75f, Point(0, 10, 0));
+    Sphere sky(75.75f, Point(0, 80, 0));
+    //Plane sky(Dir(0, -1, 0), Point(0, 50, 0));
     //sky.setMaterial(Diffuse(RGB(0.1f, 0.6f, 0.85f)));
     sky.setEmit(WHITE);
     addShape(sky);
@@ -133,23 +138,23 @@ void Scene::buildCornellBoxHole() {
     //addShape(sun);
 
     //Plane rightWall(Dir(-1, 0, 0), Point(1, 0, 0));
-    Quad rightWall(Point(1, -1, 1), Point(1, -1, -3), Point(1, 1, 1));
+    Quad rightWall(Point(1.5, -1, 1), Point(1.5, -1, -3), Point(1.5, 1, 1));
     rightWall.setMaterial(DIFF_G);
     addShape(rightWall);
 
     //Plane leftWall(Dir(1, 0, 0), Point(-1, 0, 0));
-    Quad leftWall(Point(-1, -1, 1), Point(-1, -1, -3), Point(-1, 1, 1));
+    Quad leftWall(Point(-1.5f, -1, 1), Point(-1.5f, -1, -3), Point(-1.5f, 1, 1));
     leftWall.setMaterial(DIFF_R);
     addShape(leftWall);
 
     //Plane floor(Dir(0, 1, 0), Point(0, -1, 0));
-    Quad floor(Point(-1, -1, -3), Point(1, -1, -3), Point(-1, -1, 1));
+    Quad floor(Point(-1.5f, -1, -3), Point(1.5f, -1, -3), Point(-1.5f, -1, 1));
     addShape(floor);
 
     //Plane ceiling(Dir(0, -1, 0), Point(0, 1, 0));
     Quad ceiling(floor.moveY(2));
-    Quad hole(Point(-0.5f, 1, -0.2f), Point(0.5f, 1, -0.2f), Point(-0.5f , 1, 0.8), Point(0.5f, 1, 0.8));
-    hole = hole.moveZ(-0.6f);
+    Quad hole(Point(-0.7f, 1, -0.3f), Point(0.7f, 1, -0.3f), Point(-0.7f , 1, 0.5), Point(0.7f, 1, 0.5));
+    //hole = hole.moveZ(-0.6f);
     //Quad hole2(hole.moveX(0.4f));
     //Quad hole3(hole2.moveX(0.4f));
     ceiling.addHole(hole);
@@ -158,19 +163,19 @@ void Scene::buildCornellBoxHole() {
     addShape(ceiling);
 
     //Plane bottom(Dir(0, 0, -1), Point(0, 0, 1));
-    Quad bottom(Point(-1, -1, 1), Point(1, -1, 1), Point(-1, 1, 1));
+    Quad bottom(Point(-1.5f, -1, 1), Point(1.5, -1, 1), Point(-1.5f, 1, 1));
     addShape(bottom);
 
     //Plane backWall(Dir(0, 0, 1), Point(0, 0, -3));
     Quad backWall(bottom.moveZ(-4));
     addShape(backWall);
 
-    Sphere leftSphere(0.35f, Point(-0.5f, -0.6f, 0.6f));
-    leftSphere.setMaterial(Diffuse(ORANGE));
+    Sphere leftSphere(0.35f, Point(-1, -0.6f, 0.6f));
+    leftSphere.setMaterial(Specular(ORANGE, 25.0f));
     addShape(leftSphere);
 
-    Sphere rightSphere(leftSphere.moveX(1.1f));
-    rightSphere.setMaterial(Specular(PURPLE, 25.0f));
+    Sphere rightSphere(leftSphere.moveX(2));
+    rightSphere.setMaterial(Reflective(PURPLE));
     addShape(rightSphere);
 }
 
@@ -690,5 +695,50 @@ void Scene::buildTest() {
     cylinder.setMaterial(TRANSP);
     cylinder.setRefractiveIndex(GLASS);
     //addShape(cylinder);
+
+}
+
+void Scene::buildMesh() {
+
+    setCamera(Camera(Dir(0, 1, 0), Dir(-1, 0, 0), Dir(0, 0, -1),
+                     Point(0, 15, 60), 1.0,  width, height, PI/3.0f));
+
+    /*Quad light(Point(-0.7f, 2, -0.3f), Point(0.7f, 2, -0.3f), Point(-0.7f , 2, 0.5), Point(0.7f , 2 , 0.5));
+    //light = light.moveZ(-0.6f);
+    light.setEmit(WHITE);
+    addShape(light);*/
+
+    Sphere sky(110, Point(0, 0, 0));
+    //sky.setMaterial(Diffuse(RGB(0.1f, 0.6f, 0.85f)));
+    sky.setEmit(WHITE);
+    addShape(sky);
+
+    Plane rightWall(Dir(-1, 0, 0), Point(1.5, 0, 0));
+    //Quad rightWall(Point(1, -1, 1), Point(1, -1, -3), Point(1, 1, 1));
+    rightWall.setMaterial(DIFF_G);
+    //addShape(rightWall);
+
+    Plane leftWall(Dir(1, 0, 0), Point(-1.5f, 0, 0));
+    //Quad leftWall(Point(-1, -1, 1), Point(-1, -1, -3), Point(-1, 1, 1));
+    leftWall.setMaterial(DIFF_R);
+    //addShape(leftWall);
+
+    Plane floor(Dir(0, 1, 0), Point(0, -1, 0));
+    //Quad floor(Point(-1, -1, -3), Point(1, -1, -3), Point(-1, -1, 1));
+    addShape(floor);
+
+    /*Plane bottom(Dir(0, 0, -1), Point(0, 0, 1));
+    //Quad bottom(Point(-1, -1, 1), Point(1, -1, 1), Point(-1, 1, 1));
+    addShape(bottom);
+
+    Plane back(Dir(0, 0, 1), Point(0, 0, -3));
+    back.setEmit(WHITE);
+    addShape(back);*/
+
+    //addWalls();
+
+    Mesh mesh("../ply/Goku.obj.ply");
+    //mesh.setMaterial(Diffuse(RED));
+    addAllShapes(mesh.getFaces());
 
 }
