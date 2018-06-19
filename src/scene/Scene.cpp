@@ -117,7 +117,7 @@ void Scene::buildCornellBox() {
     addShape(leftSphere);
 
     Sphere rightSphere(leftSphere.moveX(2));
-    rightSphere.setMaterial(Reflective(PURPLE));
+    rightSphere.setMaterial(Reflective(SLATE_BLUE));
     addShape(rightSphere);
 }
 
@@ -175,7 +175,7 @@ void Scene::buildCornellBoxHole() {
     addShape(leftSphere);
 
     Sphere rightSphere(leftSphere.moveX(2));
-    rightSphere.setMaterial(Reflective(PURPLE));
+    rightSphere.setMaterial(Reflective(SLATE_BLUE));
     addShape(rightSphere);
 }
 
@@ -195,19 +195,19 @@ void Scene::buildSphereMaterials() {
     Plane backWall(Dir(0, 0, 1), Point(0, 0, -3));
     addShape(backWall);
 
-    Sphere diffuse(0.28f, Point(-1.15f, -0.7f, 0));
-    diffuse.setMaterial(Specular(BLUE, 50));
+    Sphere diffuse(0.25, Point(-1, -0.75f, 0));
+    diffuse.setMaterial(Specular(ROYAL_BLUE, 50));
     addShape(diffuse);
 
-    Sphere specular(diffuse.moveX(0.75));
-    specular.setMaterial(Diffuse(YELLOW));
+    Sphere specular(diffuse.moveX(0.66));
+    specular.setMaterial(Reflective(GOLDER_ROD));
     addShape(specular);
 
-    Sphere reflective(specular.moveX(0.75));
-    reflective.setMaterial(Reflective(PURPLE));
+    Sphere reflective(specular.moveX(0.66));
+    reflective.setMaterial(Diffuse(CHOCOLATE));
     addShape(reflective);
 
-    Sphere transmittive(reflective.moveX(0.75));
+    Sphere transmittive(reflective.moveX(0.66));
     transmittive.setMaterial(Transmittive(WHITE));
     transmittive.setRefractiveIndex(GLASS);
     addShape(transmittive);
@@ -215,21 +215,28 @@ void Scene::buildSphereMaterials() {
 
 }
 
-void Scene::buildPyramidMaterials() {
+void Scene::buildEgipcianPyramids() {
 
     Mat mat = Mat::rotateX(PI/10);
     setCamera(Camera(mat *Dir(0, 1, 0), mat * Dir(1, 0, 0), mat * Dir(0, 0, 1),
                      Point(0, 0, -2.2f), 1,  width, height, PI/3.0f));
 
 
-    Sphere globalLight(7, Point(0, 0, 0));
-    globalLight.setMaterial(Diffuse(RGB(0.1, 0.3, 0.8)));
-    addShape(globalLight);
+    //Sphere sky(7000, Point(0, -0, 0));
+    Plane sky(Z_AXIS * -1, Point(0, 0, 25));
+    sky.setMaterial(Diffuse(SKY_BLUE));
+    //sky.setEmit(SKY_BLUE);
+    //sky.setIntensity(0.1);
+    addShape(sky);
 
-    Sphere light(3, Point(-2, 2, -5));
-    light.setEmit(WHITE);
-    light.setIntensity(10);
-    addShape(light);
+    Sphere earth(400, Point(0, -401, -2));
+    earth.setMaterial(Diffuse(SANDY_BROWN * 0.6));
+    addShape(earth);
+
+    Sphere sun(100000, Point(-100002, 115000, -120000));
+    sun.setEmit(WHITE);
+    sun.setIntensity(5);
+    addShape(sun);
 
     //Plane light(Y_AXIS * -1, Point(0, 0.999, 0));
     //Quad light(Point(-1, 1.999f, -0.5f), Point(1, 1.999f, -0.5f), Point(-1 , 0.999f, 0.5), Point(1 , 0.999f , 0.5));
@@ -241,19 +248,19 @@ void Scene::buildPyramidMaterials() {
     //light2.setEmit(WHITE);
     //addShape(light2);
 
-    Plane pe = FLOOR(-1);
+    /*Plane pe = FLOOR(-1);
     pe.setMaterial(Diffuse(RED));
     addShape(pe);
-    //addShape(BOTTOM(2));
+    //addShape(BOTTOM(2));*/
 
-    Point p(-1.3f, -0.99f, 0.2);
-    Quad base(p, p.moveX(1), p.moveZ(1));
-    Pyramid4 pyramid4(base, 0.8);
-    pyramid4.setMaterial(Specular(RED, 50));
+    Point p(-1.9f, -1.1f, 0.2);
+    Quad base(p, p.moveX(1.4), p.moveZ(1.4));
+    Pyramid4 pyramid4(base, 1.1);
+    pyramid4.setMaterial(Diffuse(CHOCOLATE * 0.3));
     addAllShapes(pyramid4.getFaces());
 
-    Pyramid4 py(pyramid4.moveX(1.6));
-    py.setMaterial(Reflective(WHITE));
+    Pyramid4 py(pyramid4.moveX(1.8));
+    py.setMaterial(Diffuse(CHOCOLATE * 0.4));
     addAllShapes(py.getFaces());
 }
 
@@ -698,10 +705,19 @@ void Scene::buildTest() {
 
 }
 
-void Scene::buildMesh() {
+void Scene::buildTeapot() {
 
-    setCamera(Camera(Dir(0, 1, 0), Dir(-1, 0, 0), Dir(0, 0, -1),
-                     Point(0, 15, 60), 1.0,  width, height, PI/3.0f));
+    /*setCamera(Camera(Dir(0, 1, 0), Dir(-1, 0, 0), Dir(0, 0, -1),
+                     Point(0, 15, 60), 1.0,  width, height, PI/3.0f));*/
+
+    Mesh mesh("../ply/teapot.ply");
+    mesh.setMaterial(Reflective(WHITE));
+    float maxX = mesh.maxX, maxY = mesh.maxY, maxZ = mesh.maxZ;
+    float minX = mesh.minX, minY = mesh.minY, minZ = mesh.minZ;
+
+    Mat tm = Mat::rotateX(PI / 2);
+    setCamera(Camera(tm * Dir(0, 1, 0), tm * Dir(1, 0, 0), tm * Dir(0, 0, 1),
+                     Point(mean(maxX, minX), maxY + 3, mean(maxZ, minZ) + 2), 1.0,  width, height, PI/2.0f));
 
     /*Quad light(Point(-0.7f, 2, -0.3f), Point(0.7f, 2, -0.3f), Point(-0.7f , 2, 0.5), Point(0.7f , 2 , 0.5));
     //light = light.moveZ(-0.6f);
@@ -713,17 +729,80 @@ void Scene::buildMesh() {
     sky.setEmit(WHITE);
     addShape(sky);
 
-    Plane rightWall(Dir(-1, 0, 0), Point(1.5, 0, 0));
+    Plane rightWall(Dir(-1, 0, 0), Point(maxX + 3.5f, 0, 0));
+    //Quad rightWall(Point(1, -1, 1), Point(1, -1, -3), Point(1, 1, 1));
+    rightWall.setMaterial(DIFF_G);
+    addShape(rightWall);
+
+    Plane leftWall(Dir(1, 0, 0), Point(minX - 3.5f, 0, 0));
+    //Quad leftWall(Point(-1, -1, 1), Point(-1, -1, -3), Point(-1, 1, 1));
+    leftWall.setMaterial(DIFF_R);
+    addShape(leftWall);
+
+    Plane floor(Dir(0, 0, 1), Point(0, 0, minZ));
+    //Quad floor(Point(-1, -1, -3), Point(1, -1, -3), Point(-1, -1, 1));
+    addShape(floor);
+
+    Plane bottom(Dir(0, 1, 0), Point(0, minY - 2, 0));
+    //Quad bottom(Point(-1, -1, 1), Point(1, -1, 1), Point(-1, 1, 1));
+    addShape(bottom);
+
+    Plane ceiling(floor.moveZ(maxZ - minZ + 5));
+    //ceiling.setEmit(WHITE);
+    addShape(ceiling);
+
+    Point p = ceiling.getPoint();
+    Quad light(Point(-3, -2.3f, p.z -0.01f), Point(3, -2.3f, p.z - 0.01f), Point(-3, 0, p.z - 0.01f));
+    light.setEmit(WHITE);
+    addShape(light);
+
+    Plane back(bottom.moveY(maxY - minY + 10));
+    //back.setEmit(WHITE);
+    addShape(back);
+
+    //addWalls();
+
+    //Mesh mesh("../ply/Goku.obj.ply");
+    //Mesh mesh("../ply/dragon.ply");
+    //mesh.setMaterial(Diffuse(RED));
+    addAllShapes(mesh.getFaces());
+
+}
+
+void Scene::buildMesh() {
+
+    /*setCamera(Camera(Dir(0, 1, 0), Dir(-1, 0, 0), Dir(0, 0, -1),
+                     Point(0, 15, 60), 1.0,  width, height, PI/3.0f));*/
+
+    Mesh mesh("../ply/teapot.ply");
+    float maxX = mesh.maxX, maxY = mesh.maxY, maxZ = mesh.maxZ;
+    float minX = mesh.minX, minY = mesh.minY, minZ = mesh.minZ;
+
+    Mat tm = Mat::rotateX(PI / 2);
+    setCamera(Camera(tm * Dir(0, 1, 0), tm * Dir(1, 0, 0), tm * Dir(0, 0, 1),
+                     Point(mean(maxX, minX), maxY + 3, mean(maxZ, minZ)), 1.0,  width, height, PI/2.0f));
+
+    /*Quad light(Point(-0.7f, 2, -0.3f), Point(0.7f, 2, -0.3f), Point(-0.7f , 2, 0.5), Point(0.7f , 2 , 0.5));
+    //light = light.moveZ(-0.6f);
+    light.setEmit(WHITE);
+    addShape(light);*/
+
+    Sphere sky(110, Point(0, 0, 0));
+    //sky.setMaterial(Diffuse(RGB(0.1f, 0.6f, 0.85f)));
+    sky.setEmit(WHITE);
+    addShape(sky);
+
+    Plane rightWall(Dir(-1, 0, 0), Point(maxX + 0.5f, 0, 0));
     //Quad rightWall(Point(1, -1, 1), Point(1, -1, -3), Point(1, 1, 1));
     rightWall.setMaterial(DIFF_G);
     //addShape(rightWall);
 
-    Plane leftWall(Dir(1, 0, 0), Point(-1.5f, 0, 0));
+    Plane leftWall(Dir(1, 0, 0), Point(minX - 0.5f, 0, 0));
     //Quad leftWall(Point(-1, -1, 1), Point(-1, -1, -3), Point(-1, 1, 1));
     leftWall.setMaterial(DIFF_R);
     //addShape(leftWall);
 
-    Plane floor(Dir(0, 1, 0), Point(0, -1, 0));
+    Plane floor(Dir(0, 1, 0), Point(0, minY - 0.5f, 0));
     //Quad floor(Point(-1, -1, -3), Point(1, -1, -3), Point(-1, -1, 1));
     addShape(floor);
 
@@ -737,7 +816,8 @@ void Scene::buildMesh() {
 
     //addWalls();
 
-    Mesh mesh("../ply/Goku.obj.ply");
+    //Mesh mesh("../ply/Goku.obj.ply");
+    //Mesh mesh("../ply/dragon.ply");
     //mesh.setMaterial(Diffuse(RED));
     addAllShapes(mesh.getFaces());
 

@@ -195,7 +195,7 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
 
     shared_ptr<Shape> shape = shapes.at(id);
 
-    if (shape->getEmit() != BLACK) return shape->getEmit()*shape->getIntensity();
+    if (shape->getEmit() != BLACK) return shape->getEmit() * shape->getIntensity();
 
     // Getting intersection point coordinates
     Point intersectedPoint = ray.getSource() + (ray.getDirection() * dist);

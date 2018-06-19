@@ -4,6 +4,7 @@
 #include <vector>
 #include <Shape.h>
 #include <sstream>
+#include <Mat.h>
 
 using namespace std;
 
@@ -43,6 +44,15 @@ public:
         return splitted;
     }
 
+    Mesh moveX(float offset) const;
+
+    Mesh moveY(float offset) const;
+
+    Mesh moveZ(float offset) const;
+
+    float maxX = MIN_FLOAT, maxY = MIN_FLOAT, maxZ = MIN_FLOAT;
+    float minX = MAX_FLOAT, minY = MAX_FLOAT, minZ = MAX_FLOAT;
+
 private:
 
     string filename;
@@ -53,8 +63,4 @@ private:
     typedef std::tuple<string, int> Element;
 
     std::vector<Element> elements;
-
-    float maxX = MIN_FLOAT, maxY = MIN_FLOAT, maxZ = MIN_FLOAT;
-    float minX = MAX_FLOAT, minY = MAX_FLOAT, minZ = MAX_FLOAT;
-
 };

@@ -69,3 +69,7 @@ Plane Plane::moveY(float offset) const {
 Plane Plane::moveZ(float offset) const {
     return { normal, point.moveZ(offset) };
 }
+
+const Point &Plane::getPoint() const {
+    return point;
+}

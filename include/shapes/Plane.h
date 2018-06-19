@@ -64,6 +64,8 @@ public:
         return resul;
     }
 
+    const Point &getPoint() const;
+
 private:
 
     /// PLANE PARAMETERS

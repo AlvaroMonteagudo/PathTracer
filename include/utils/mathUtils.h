@@ -31,3 +31,7 @@ static float solveQuadratic(float a, float b, float c) {
         return x > THRESHOLD ? x : MAX_FLOAT;
     }
 }
+
+inline float mean(float a, float b) {
+    return (a + b) / 2.0f;
+}

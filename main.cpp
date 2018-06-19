@@ -25,7 +25,8 @@ string currentDate();
 
 using namespace std;
 
-static map<string, void (Scene::*)()> scenes;
+static map<string, tuple<int, int>> resolutions;
+
 
 int main(int argc, char * argv[]){
 
@@ -33,6 +34,13 @@ int main(int argc, char * argv[]){
     string sceneStr = "cornell", fileName = "../images/image" + currentDate() + ".ppm";
     int paths = 64, width = 720, height = 720, depth = 5;
     bool nee = false;
+
+
+    resolutions["240"] = std::make_tuple(352, 240);
+    resolutions["360"] = std::make_tuple(480, 360);
+    resolutions["480"] = std::make_tuple(858, 480);
+    resolutions["720"] = std::make_tuple(1280, 720);
+    resolutions["1080"] = std::make_tuple(1920, 1080);
 
     vector<string> arguments;
 
@@ -97,6 +105,18 @@ int main(int argc, char * argv[]){
                     height = 720;
                 }
             }
+        } else if (arguments.at(j) == "-res" || arguments.at(j) == "--resolution") {
+            ++j;
+            string resolution = arguments.at(j);
+            if (resolutions.find(resolution) != resolutions.end()) {
+                auto res = resolutions[resolution];
+                width = get<0>(res);
+                height = get<1>(res);
+            } else {
+                cout << "Unknown resolution. Try one of these: 240, 360, 480, 720 and 1080." << endl;
+            }
+
+
         } else if (arguments.at(j) == "-nee") {
             nee = true;
         } else {

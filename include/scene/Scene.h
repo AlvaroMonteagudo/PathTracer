@@ -74,9 +74,10 @@ public:
         scenes["cornell"] = &Scene::buildCornellBox;
         scenes["spheres"] = &Scene::buildSphereMaterials;
         scenes["cornell_hole"] = &Scene::buildCornellBoxHole;
-        scenes["pyramids"] = &Scene::buildPyramidMaterials;
+        scenes["pyramids"] = &Scene::buildEgipcianPyramids;
         scenes["palette"] = &Scene::buildColorPalette;
         scenes["mesh"] = &Scene::buildMesh;
+        scenes["teapot"] = &Scene::buildTeapot;
     }
 
     /**
@@ -140,11 +141,13 @@ private:
 
     void addWalls();
 
-    void buildPyramidMaterials();
+    void buildEgipcianPyramids();
 
     void buildColorPalette();
 
     void buildMesh();
+
+    void buildTeapot();
 };
 
 

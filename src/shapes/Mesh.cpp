@@ -115,4 +115,3 @@ void Mesh::setMaterial(shared_ptr<Material> material) {
         face->setMaterial(material);
     }
 }
-
