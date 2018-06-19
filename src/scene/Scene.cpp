@@ -17,6 +17,7 @@
 #include <Pyramid3.h>
 #include <Mat.h>
 #include <Mesh.h>
+#include <Texture.h>
 #include "Scene.h"
 #include "Circle.h"
 #include "Quad.h"
@@ -662,6 +663,10 @@ void Scene::buildTest() {
     setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
                      Point(0.f, -0.f, -2.8f), 1.0,  width, height, PI/3.0f));
 
+    Texture tex("../textures/wood.ppm");
+    Quad rightWall(Point(1, -1, 1), Point(1, -1, -3), Point(1, 1, 1));
+    rightWall.setMaterial(tex);
+
     Quad light(Point(-0.5f, 0.99f, -0.2f), Point(0.5f, 0.99f, -0.2f), Point(-0.5f , 0.99f, 0.4f), Point(0.5f , 0.99f , 0.4f));
     light = light.moveZ(-0.8f);
     light.setEmit(WHITE);
@@ -669,9 +674,9 @@ void Scene::buildTest() {
 
 
     //Plane rightWall(Dir(-1, 0, 0), Point(1, 0, 0));
-    Quad rightWall(Point(1, -1, 1), Point(1, -1, -3), Point(1, 1, 1));
-    rightWall.setMaterial(DIFF_G);
-    addShape(rightWall);
+    //Quad rightWall(Point(1, -1, 1), Point(1, -1, -3), Point(1, 1, 1));
+    //rightWall.setMaterial(DIFF_G);
+    //addShape(rightWall);
 
     //Plane leftWall(Dir(1, 0, 0), Point(-1, 0, 0));
     Quad leftWall(Point(-1, -1, 1), Point(-1, -1, -3), Point(-1, 1, 1));

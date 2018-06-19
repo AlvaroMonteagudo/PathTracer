@@ -78,6 +78,7 @@ public:
         scenes["palette"] = &Scene::buildColorPalette;
         scenes["mesh"] = &Scene::buildMesh;
         scenes["teapot"] = &Scene::buildTeapot;
+        scenes["test"] = &Scene::buildTest;
     }
 
     /**

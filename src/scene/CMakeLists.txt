@@ -5,7 +5,7 @@ set(SOURCE_FILES
         Ray.cpp
         RGB.cpp
         Scene.cpp
-        Material.cpp)
+        Material.cpp Texture.cpp)
 
 set(HEADER_FILES
         ${PROJECT_SOURCE_DIR}/include/scene/Camera.h
@@ -14,7 +14,7 @@ set(HEADER_FILES
         ${PROJECT_SOURCE_DIR}/include/scene/Ray.h
         ${PROJECT_SOURCE_DIR}/include/scene/RGB.h
         ${PROJECT_SOURCE_DIR}/include/scene/Scene.h
-        ${PROJECT_SOURCE_DIR}/include/scene/Material.h)
+        ${PROJECT_SOURCE_DIR}/include/scene/Material.h ../../include/scene/Texture.h)
 
 include_directories(
         ${PROJECT_SOURCE_DIR}/include/scene

@@ -10,7 +10,7 @@ class Material {
 
 public:
 
-    Material(const RGB &kd, const RGB &ks, const RGB &kr, const RGB &kt, float shininess = 0.0f);
+    Material(const RGB &kd = BLACK, const RGB &ks = BLACK, const RGB &kr = BLACK, const RGB &kt = BLACK, float shininess = 0.0f);
 
     const RGB &getKd() const;
 
