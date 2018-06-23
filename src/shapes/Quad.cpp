@@ -76,14 +76,15 @@ void Quad::bounds(){
 
 vector<Point> Quad::sampleLight2(int samples){
 
-    this->bounds();
+    srand(time(NULL));
     vector<Point> resul = vector<Point>(samples);
     for(int i=0;i<samples;i++) {
-        resul[i] = Point(minX + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (maxX - minX))),
-              minY + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (maxY - minY))),
-              minZ + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (maxZ - minZ))));
+        float s  =  ((float) rand() / (RAND_MAX));
+        float t = ((float) rand() / (RAND_MAX));
+        Point e = a*s + b*(1-s);
+        Point f = c*s + d*(1-s);
+        resul[i] = e*t + f*(1-t);
     }
-
     return resul;
 }
 
