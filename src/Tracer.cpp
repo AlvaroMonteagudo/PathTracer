@@ -228,7 +228,7 @@ RGB Tracer::directLighting(const Point &intersectedPoint, const Dir &normal,
     while (shapes.at(static_cast<unsigned long>(i))->getEmit() != BLACK) {
         //Ray shadowF;
         const shared_ptr<Shape> &light = shapes.at(static_cast<unsigned long>(i));
-        vector<Point> lightPoints = light->sampleLight2(10);
+        vector<Point> lightPoints = light->getSampledPoints();
 
         for(Point p : lightPoints){
 
