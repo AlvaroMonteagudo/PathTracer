@@ -88,6 +88,10 @@ public:
         return { x / num, y / num, z / num };
     }
 
+    Point operator * (const float f){
+        return {x * f, y * f, z * f};
+    }
+
     Point getMiddlePointWith(const Point &p) const {
         return { (x + p.x) / 2.0f, (y + p.y) / 2.0f, (z + p.z) / 2.0f };
     }
