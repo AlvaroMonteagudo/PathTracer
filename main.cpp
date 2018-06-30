@@ -33,7 +33,7 @@ int main(int argc, char * argv[]){
 
     string sceneStr = "cornell", fileName = "../images/image" + currentDate() + ".ppm";
     int paths = 64, width = 720, height = 720, depth = 5;
-    bool nee = false;
+    bool nee = true;
 
 
     resolutions["240"] = std::make_tuple(352, 240);
