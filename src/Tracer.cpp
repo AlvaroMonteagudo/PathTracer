@@ -222,42 +222,70 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
 RGB Tracer::directLighting(const Point &intersectedPoint, const Dir &normal,
                            const shared_ptr<Shape> &shape, const Ray &ray) const{
 
+
+    float dist  = MAX_FLOAT;
+    int id = -1;
     RGB color = BLACK;
-    // Lights are pushed at the front of the vector of shapes
-    int i = 0;
-    while (shapes.at(static_cast<unsigned long>(i))->getEmit() != BLACK) {
-        //Ray shadowF;
-        const shared_ptr<Shape> &light = shapes.at(static_cast<unsigned long>(i));
-        vector<Point> lightPoints = light->getSampledPoints();
+    //reflexion-refraccion
 
-        for(Point p : lightPoints){
+    if(shape->getMaterial()->getKr() != 0){
+        Dir newDir = shape->getDirRayRefracted(ray.getDirection(),intersectedPoint,normal);
+        Ray newRay(intersectedPoint,newDir);
 
-            float lightDist = (p - intersectedPoint).module();
-            Ray shadow = Ray(intersectedPoint, p);
-            bool inShadow = false;
+        if (!intersect(newRay, dist, id)) return BLACK;
 
-            for(const shared_ptr<Shape> &item : shapes) {
-                float disShape = item->intersect(shadow);
-                if (disShape < lightDist && item != light) {
-                    inShadow = true;
-                    break;
-                }
-            }
+        shared_ptr<Shape> newShape = shapes.at(id);
 
-            if(!inShadow){
-                float cos = shadow.getDirection().dot(normal);
+        if (newShape->getEmit() != BLACK) return newShape->getEmit() * newShape->getIntensity();
 
-                if (cos > 0.0f) {
+        Point newIntersectedPoint = newRay.getSource() + (newRay.getDirection() * dist);
 
-                    color += shape->getMaterial()->Phong(Ray(ray.getSource(), ray.getDirection() * -1), shadow, normal)
-                             * (light->getIntensity() / (lightDist * lightDist))
-                             * cos;
-                }
-            }
-        }
-        i++;
+        Dir newNormal = shape->getNormal(newIntersectedPoint).normalize();
+
+        // Revert normal in order to work with the visible normal of the shape
+        float cosine = newNormal.dot(ray.getDirection());
+        Dir nl = (cosine > 0) ? newNormal.changeDirection() : newNormal;
+
+        return directLighting(newIntersectedPoint,newNormal,newShape,newRay);
     }
-    return color;
+    else {
+        // Lights are pushed at the front of the vector of shapes
+        int i = 0;
+        while (shapes.at(static_cast<unsigned long>(i))->getEmit() != BLACK) {
+            //Ray shadowF;
+            const shared_ptr<Shape> &light = shapes.at(static_cast<unsigned long>(i));
+            vector<Point> lightPoints = light->getSampledPoints();
+
+            for (Point p : lightPoints) {
+
+                float lightDist = (p - intersectedPoint).module();
+                Ray shadow = Ray(intersectedPoint, p);
+                bool inShadow = false;
+
+                for (const shared_ptr<Shape> &item : shapes) {
+                    float disShape = item->intersect(shadow);
+                    if (disShape < lightDist && item != light && item->getMaterial()->getKr() != 0  && item->getMaterial()->getKt() != 0) {
+                        inShadow = true;
+                        break;
+                    }
+                }
+
+                if (!inShadow) {
+                    float cos = shadow.getDirection().dot(normal);
+
+                    if (cos > 0.0f) {
+
+                        color += shape->getMaterial()->Phong(Ray(ray.getSource(), ray.getDirection() * -1), shadow,
+                                                             normal)
+                                 * (light->getIntensity() / (lightDist * lightDist))
+                                 * cos;
+                    }
+                }
+            }
+            i++;
+        }
+        return color;
+    }
 }
 
 
