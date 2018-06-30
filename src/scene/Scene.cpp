@@ -105,7 +105,8 @@ void Scene::buildCornellBox() {
 
     Quad light(Point(-0.7f, 0.999f, -0.3f), Point(0.7f, 0.999f, -0.3f), Point(-0.7f , 0.999f, 0.5), Point(0.7f , 0.999f , 0.5));
     //light = light.moveZ(-0.6f);
-    light.setEmit(WHITE,100);
+    light.setEmit(WHITE,25);
+    light.setIntensity(0.5f);
     addShape(light);
 
     addWalls();
