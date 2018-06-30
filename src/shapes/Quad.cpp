@@ -78,11 +78,18 @@ vector<Point> Quad::sampleLight2(int samples){
 
     srand(time(NULL));
     vector<Point> resul = vector<Point>(samples);
+    Point center = a.getMiddlePointWith(d);
+
+    Point borderA = a.getMiddlePointWith(center);
+    Point borderB = b.getMiddlePointWith(center);
+    Point borderC = c.getMiddlePointWith(center);
+    Point borderD = d.getMiddlePointWith(center);
+
     for(int i=0;i<samples;i++) {
         float s  =  ((float) rand() / (RAND_MAX));
         float t = ((float) rand() / (RAND_MAX));
-        Point e = a*s + b*(1-s);
-        Point f = c*s + d*(1-s);
+        Point e = borderA*s + borderB*(1-s);
+        Point f = borderC*s + borderD*(1-s);
         resul[i] = e*t + f*(1-t);
     }
     return resul;
