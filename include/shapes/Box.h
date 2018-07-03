@@ -39,11 +39,11 @@ public:
         }
     }
 
-    void setEmit(const RGB &rgb)
+    void setEmit(const RGB &rgb,int samples)
     {
         for (const auto &face : faces)
         {
-            face->setEmit(rgb);
+            face->setEmit(rgb,samples);
         }
     }
 

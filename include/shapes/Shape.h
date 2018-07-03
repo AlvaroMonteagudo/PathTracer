@@ -101,7 +101,8 @@ public:
         Shape::refractiveIndex = refractiveIndex;
     }
 
-    void setEmit(const RGB &_emit) {
+    void setEmit(const RGB &_emit, int samples) {
+        sampledLights=sampleLight2(samples);
         emit = _emit;
     }
 
@@ -128,6 +129,10 @@ public:
     }
 
 
+    vector<Point> getSampledPoints(){
+        return sampledLights;
+    }
+
 private:
 
     /// Shape features coefficients
@@ -137,6 +142,7 @@ private:
 
     float intensity = 1.0f;
 
+    vector<Point> sampledLights;
 
     float refractiveIndex = AIR_RI;
 
