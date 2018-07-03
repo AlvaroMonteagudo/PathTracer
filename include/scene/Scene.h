@@ -74,6 +74,7 @@ public:
         scenes["cornell"] = &Scene::buildCornellBox;
         scenes["spheres"] = &Scene::buildSphereMaterials;
         scenes["cornell_hole"] = &Scene::buildCornellBoxHole;
+        scenes["boxes"] = &Scene::buildBoxes;
         scenes["pyramids"] = &Scene::buildEgipcianPyramids;
         scenes["palette"] = &Scene::buildColorPalette;
         scenes["mesh"] = &Scene::buildMesh;
@@ -126,7 +127,7 @@ private:
 
     void buildSpecularSpheres();
 
-    void buildBoxesMaterials();
+    void buildBoxes();
 
     void buildTest();
 

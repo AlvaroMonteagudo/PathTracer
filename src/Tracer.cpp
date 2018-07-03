@@ -90,7 +90,7 @@ void Tracer::renderImage() const {
 
 void Tracer::renderImageMultithread() const {
     //may return 0 when not able to detect
-    int numThreads = std::thread::hardware_concurrency();
+    int numThreads = std::thread::hardware_concurrency() - 1;
 
     if (numThreads == 0) {
         renderImage();
@@ -265,7 +265,7 @@ RGB Tracer::russianRoulette(const Ray &ray, const Shape &shape, const Material &
 
     float random = randomValue();
 
-    float pd = material.getKd().getMean();
+    float pd = material.getKd(intersectedPoint).getMean();
     float ps = material.getKs().getMean();
     float pr = material.getKr().getMean();
     float pt = material.getKt().getMean();
@@ -289,7 +289,7 @@ RGB Tracer::russianRoulette(const Ray &ray, const Shape &shape, const Material &
 
         Ray sample(intersectedPoint, transformToGlobalCoordinates * rayDirLocal);
 
-        return radiance(sample, depth) * material.getKd() / pd;
+        return radiance(sample, depth) * material.getKd(intersectedPoint) / pd;
     } else if (random < pd + ps) {
 
         Dir zAxis = normal;

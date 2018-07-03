@@ -218,9 +218,11 @@ void Scene::buildSphereMaterials() {
 
 void Scene::buildEgipcianPyramids() {
 
-    Mat mat = Mat::rotateX(PI/10);
-    setCamera(Camera(mat *Dir(0, 1, 0), mat * Dir(1, 0, 0), mat * Dir(0, 0, 1),
-                     Point(0, 0, -2.2f), 1,  width, height, PI/3.0f));
+    Mat mat = Mat::rotateX(PI/8);
+    //Mat mat2 = Mat::rotateY(-PI/6);
+    Mat m = mat;// * mat2;
+    setCamera(Camera(m * Dir(0, 1, 0), m * Dir(1, 0, 0), m * Dir(0, 0, 1),
+                     Point(1, 0.5, -3.8f), 1,  width, height, PI/3.0f));
 
 
     //Sphere sky(7000, Point(0, -0, 0));
@@ -254,13 +256,19 @@ void Scene::buildEgipcianPyramids() {
     addShape(pe);
     //addShape(BOTTOM(2));*/
 
-    Point p(-1.9f, -1.1f, 0.2);
+    Point p(-2.5f, -1.1f, 0.2);
     Quad base(p, p.moveX(1.4), p.moveZ(1.4));
     Pyramid4 pyramid4(base, 1.1);
     pyramid4.setMaterial(Diffuse(CHOCOLATE * 0.3));
     addAllShapes(pyramid4.getFaces());
 
-    Pyramid4 py(pyramid4.moveX(1.8));
+    Point p2 = p.moveX(1.8).moveZ(-0.2f);
+    Quad base2(p2, p2.moveX(1.8), p2.moveZ(1.8));
+    Pyramid4 pyramid41(base2, 1.5);
+    pyramid41.setMaterial(Diffuse(CHOCOLATE * 0.3));
+    addAllShapes(pyramid41.getFaces());
+
+    Pyramid4 py(pyramid4.moveX(3.8));
     py.setMaterial(Diffuse(CHOCOLATE * 0.4));
     addAllShapes(py.getFaces());
 }
@@ -325,58 +333,41 @@ void Scene::buildSpecularSpheres() {
 
 }
 
-void Scene::buildBoxesMaterials() {
+void Scene::buildBoxes() {
 
     setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
                      Point(0.f, -0.f, -2.8f), 1.0, width, height, PI/3.0f));
 
-    Quad light(Point(-0.5f, 0.99f, -0.2f), Point(0.5f, 0.99f, -0.2f), Point(-0.5f , 0.99f, 0.8), Point(0.5f , 0.99f , 0.8));
+    Quad light(Point(-0.8f, 0.99f, -0.8f), Point(0.8f, 0.99f, -0.8f), Point(-0.8f , 0.99f, 0.8), Point(0.8f , 0.99f , 0.8));
     light = light.moveZ(-0.6f);
     light.setEmit(WHITE);
     addShape(light);
 
 
-    //Plane rightWall(Dir(-1, 0, 0), Point(1, 0, 0));
-    Quad rightWall(Point(1, -1, 1), Point(1, -1, -3), Point(1, 1, 1));
-    rightWall.setMaterial(DIFF_G);
-    addShape(rightWall);
+    addWalls();
 
-    //Plane leftWall(Dir(1, 0, 0), Point(-1, 0, 0));
-    Quad leftWall(Point(-1, -1, 1), Point(-1, -1, -3), Point(-1, 1, 1));
-    leftWall.setMaterial(DIFF_R);
-    addShape(leftWall);
-
-    //Plane floor(Dir(0, 1, 0), Point(0, -1, 0));
-    Quad floor(Point(-1, -1, -3), Point(1, -1, -3), Point(-1, -1, 1));
-    addShape(floor);
-
-    //Plane ceiling(Dir(0, -1, 0), Point(0, 1, 0));
-    Quad ceiling(floor.moveY(2));
-    addShape(ceiling);
-
-    //Plane bottom(Dir(0, 0, -1), Point(0, 0, 1));
-    Quad bottom(Point(-1, -1, 1), Point(1, -1, 1), Point(-1, 1, 1));
-    addShape(bottom);
-
-    //Plane backWall(Dir(0, 0, 1), Point(0, 0, -3));
-    Quad backWall(bottom.moveZ(-4));
+    Plane backWall(Dir(0, 0, 1), Point(0, 0, -3));
     addShape(backWall);
 
-    Quad q(Point(0.2, -1, 0), Point(0.8, -1, 0), Point(0.2 , -1 , 0.7f));
-    //q.setMaterial(Transmittive(WHITE));
-    //q.setRefractiveIndex(GLASS);
-    //q = q.moveX(0.5f);
-    Box box(q, 0.8f);
-    box.setMaterial(Transmittive(WHITE));
-    box.setRefractiveIndex(GLASS);
+
+    Quad q(Point(-1.25f, -1, 0), Point(-0.4f, -1, 0), Point(-1.25f , -1 , 0.7f));
+
+    Box box(q, 0.75f);
+    box.setMaterial(Diffuse(BLUE));
     addAllShapes(box.getFaces());
 
-    Box box2(box.moveX(-1));
-    box2.setMaterial(Transmittive(WHITE));
-    box2.setRefractiveIndex(WATER);
+    Box box2(box.moveX(1.65f));
+    box2.setMaterial(Reflective(WHITE));
+    box2.setRefractiveIndex(GLASS);
     addAllShapes(box2.getFaces());
-    //addShape(q);
 
+    Box box3(box.moveY(1));
+    box2.setMaterial(Transmittive(WHITE));
+    addAllShapes(box3.getFaces());
+
+    Box box4(box3.moveX(1.65f));
+    box4.setMaterial(Specular(DARK_ORANGE, 25.0));
+    addAllShapes(box4.getFaces());
 
 }
 
@@ -663,33 +654,37 @@ void Scene::buildTest() {
     setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
                      Point(0.f, -0.f, -2.8f), 1.0,  width, height, PI/3.0f));
 
-    Texture tex("../textures/wood.ppm");
-    Quad rightWall(Point(1, -1, 1), Point(1, -1, -3), Point(1, 1, 1));
-    rightWall.setMaterial(tex);
+    Texture tex("../textures/stone.ppm", "Y");
 
     Quad light(Point(-0.5f, 0.99f, -0.2f), Point(0.5f, 0.99f, -0.2f), Point(-0.5f , 0.99f, 0.4f), Point(0.5f , 0.99f , 0.4f));
     light = light.moveZ(-0.8f);
     light.setEmit(WHITE);
     addShape(light);
 
+    /*Sphere sky(3, Point(0, 0, 0));
+    //sky.setMaterial(Diffuse(RGB(0.1f, 0.6f, 0.85f)));
+    sky.setEmit(WHITE);
+    addShape(sky);*/
+
 
     //Plane rightWall(Dir(-1, 0, 0), Point(1, 0, 0));
-    //Quad rightWall(Point(1, -1, 1), Point(1, -1, -3), Point(1, 1, 1));
-    //rightWall.setMaterial(DIFF_G);
-    //addShape(rightWall);
+    Quad rightWall(Point(1, -1, 1), Point(1, -1, -3), Point(1, 1, 1));
+    rightWall.setMaterial(DIFF_G);
+    addShape(rightWall);
 
     //Plane leftWall(Dir(1, 0, 0), Point(-1, 0, 0));
     Quad leftWall(Point(-1, -1, 1), Point(-1, -1, -3), Point(-1, 1, 1));
     leftWall.setMaterial(DIFF_R);
     addShape(leftWall);
 
-    //Plane floor(Dir(0, 1, 0), Point(0, -1, 0));
-    Quad floor(Point(-1, -1, -3), Point(1, -1, -3), Point(-1, -1, 1));
+    Plane floor(Dir(0, 1, 0), Point(0, -1, 0));
+    //Quad floor(Point(-1, -1, -3), Point(1, -1, -3), Point(-1, -1, 1));
+    floor.setMaterial(tex);
     addShape(floor);
 
     //Plane ceiling(Dir(0, -1, 0), Point(0, 1, 0));
-    Quad ceiling(floor.moveY(2));
-    addShape(ceiling);
+    //Quad ceiling(floor.moveY(2));
+    //addShape(ceiling);
 
     //Plane bottom(Dir(0, 0, -1), Point(0, 0, 1));
     Quad bottom(Point(-1, -1, 1), Point(1, -1, 1), Point(-1, 1, 1));
@@ -697,15 +692,19 @@ void Scene::buildTest() {
 
     //Plane backWall(Dir(0, 0, 1), Point(0, 0, -3));
     Quad backWall(bottom.moveZ(-4));
-    addShape(backWall);
 
-    Cone cone(X_AXIS, Point(0, 0, 0.5f), 0.5f);
+    /*Sphere sphere(0.25, Point(0,0,0));
+    sphere.setMaterial(tex);
+    addShape(sphere);*/
+    //addShape(backWall);
+
+    /*Cone cone(X_AXIS, Point(0, 0, 0.5f), 0.5f);
     cone.setMaterial(Diffuse(BLUE));
     addShape(cone);
 
     Cylinder cylinder(Point(0, 0, 0.5f), Dir(0, 1, 0), 0.35f);
     cylinder.setMaterial(TRANSP);
-    cylinder.setRefractiveIndex(GLASS);
+    cylinder.setRefractiveIndex(GLASS);*/
     //addShape(cylinder);
 
 }
@@ -779,35 +778,35 @@ void Scene::buildMesh() {
     /*setCamera(Camera(Dir(0, 1, 0), Dir(-1, 0, 0), Dir(0, 0, -1),
                      Point(0, 15, 60), 1.0,  width, height, PI/3.0f));*/
 
-    Mesh mesh("../ply/teapot.ply");
+    Mesh mesh("../ply/teapot.ply", "Z");
     float maxX = mesh.maxX, maxY = mesh.maxY, maxZ = mesh.maxZ;
     float minX = mesh.minX, minY = mesh.minY, minZ = mesh.minZ;
 
-    Mat tm = Mat::rotateX(PI / 2);
-    setCamera(Camera(tm * Dir(0, 1, 0), tm * Dir(1, 0, 0), tm * Dir(0, 0, 1),
-                     Point(mean(maxX, minX), maxY + 3, mean(maxZ, minZ)), 1.0,  width, height, PI/2.0f));
+    //Mat tm = Mat::rotateX(PI / 2);
+    setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
+                     Point(0, 0, -2.8f), 1.0,  width, height, PI/2.0f));
 
     /*Quad light(Point(-0.7f, 2, -0.3f), Point(0.7f, 2, -0.3f), Point(-0.7f , 2, 0.5), Point(0.7f , 2 , 0.5));
     //light = light.moveZ(-0.6f);
     light.setEmit(WHITE);
     addShape(light);*/
 
-    Sphere sky(110, Point(0, 0, 0));
+    Sphere sky(3, Point(0, 0, 0));
     //sky.setMaterial(Diffuse(RGB(0.1f, 0.6f, 0.85f)));
     sky.setEmit(WHITE);
     addShape(sky);
 
-    Plane rightWall(Dir(-1, 0, 0), Point(maxX + 0.5f, 0, 0));
+    Plane rightWall(Dir(-1, 0, 0), Point(1.5f, 0, 0));
     //Quad rightWall(Point(1, -1, 1), Point(1, -1, -3), Point(1, 1, 1));
     rightWall.setMaterial(DIFF_G);
-    //addShape(rightWall);
+    addShape(rightWall);
 
-    Plane leftWall(Dir(1, 0, 0), Point(minX - 0.5f, 0, 0));
+    Plane leftWall(Dir(1, 0, 0), Point(-1.5f, 0, 0));
     //Quad leftWall(Point(-1, -1, 1), Point(-1, -1, -3), Point(-1, 1, 1));
     leftWall.setMaterial(DIFF_R);
-    //addShape(leftWall);
+    addShape(leftWall);
 
-    Plane floor(Dir(0, 1, 0), Point(0, minY - 0.5f, 0));
+    Plane floor(Dir(0, 1, 0), Point(0, -1, 0));
     //Quad floor(Point(-1, -1, -3), Point(1, -1, -3), Point(-1, -1, 1));
     addShape(floor);
 

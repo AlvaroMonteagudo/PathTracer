@@ -49,6 +49,8 @@ public:
 
     void setHeight(float height);
 
+    const Quad &getBase() const;
+
 
 protected:
 

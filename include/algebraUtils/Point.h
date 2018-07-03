@@ -88,6 +88,17 @@ public:
         return { x / num, y / num, z / num };
     }
 
+    /**
+     * Div operator
+     * @param num: divisor
+     * @return point result from dividing this point by float num
+     */
+    void operator /= (const float num) {
+        x /= num;
+        y /= num;
+        z /= num;
+    }
+
     Point getMiddlePointWith(const Point &p) const {
         return { (x + p.x) / 2.0f, (y + p.y) / 2.0f, (z + p.z) / 2.0f };
     }

@@ -10,15 +10,17 @@ class Texture : public Material {
 
 public:
 
-    Texture(string filename);
+    Texture(string filename, string lockedDimension);
+
+    const RGB &getKd(const Point& point) const;
 
     void readPPMFIle();
 
 private:
 
-    string filename;
+    string filename, lockedDimension;
 
     int width, height, maxRGBValue;
 
-    RGB * textArray;
+    RGB * rgbArray;
 };

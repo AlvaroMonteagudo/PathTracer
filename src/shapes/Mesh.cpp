@@ -5,12 +5,15 @@
 #include <Mesh.h>
 #include <fstream>
 #include <cstring>
+#include <utility>
 #include <Triangle.h>
 #include <Quad.h>
 
 using namespace std;
 
-Mesh::Mesh(const string &filename) : filename(filename) {
+Mesh::Mesh(string filename, string alongAxis) :
+        filename(std::move(filename)),
+        alongAxis(std::move(alongAxis)) {
     loadPlyMesh();
 }
 
@@ -88,7 +91,14 @@ void Mesh::parseElement(const tuple<string, int> &tuple, fstream &file) {
                 minZ = z;
             }
 
-            Point p(x, y, z);
+            float max_value = max(maxX, max(maxY, maxZ));
+            float min_value = min(minX, min(minY, minZ));
+            float DIVISOR = max(abs(max_value), abs(min_value));
+
+            Point p = (alongAxis == "Z") ? Point(x, z, y) :
+                      (alongAxis == "X") ? Point(y, x, z) : Point(x, y, z);
+
+            p /= DIVISOR;
             vertices.push_back(p);
         }
     } else if (name == "face") {

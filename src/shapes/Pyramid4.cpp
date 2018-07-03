@@ -66,3 +66,7 @@ void Pyramid4::setHeight(float height) {
     Pyramid4::height = height;
 }
 
+const Quad &Pyramid4::getBase() const {
+    return base;
+}
+

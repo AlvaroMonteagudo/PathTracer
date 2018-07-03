@@ -12,19 +12,19 @@ public:
 
     Material(const RGB &kd = BLACK, const RGB &ks = BLACK, const RGB &kr = BLACK, const RGB &kt = BLACK, float shininess = 0.0f);
 
-    const RGB &getKd() const;
+    float getShininess() const;
+
+    Material operator + (const Material &m) const;
+
+    RGB Phong(const Ray &ray, const Ray &shadow, const Dir &normal) const;
+
+    virtual const RGB &getKd(const Point &point) const;
 
     const RGB &getKs() const;
 
     const RGB &getKr() const;
 
     const RGB &getKt() const;
-
-    float getShininess() const;
-
-    Material operator + (const Material &m) const;
-
-    RGB Phong(const Ray &ray, const Ray &shadow, const Dir &normal) const;
 
 private:
 

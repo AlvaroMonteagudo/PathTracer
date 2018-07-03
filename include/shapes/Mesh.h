@@ -12,7 +12,7 @@ class Mesh {
 
 public:
 
-    Mesh(const string &filename);
+    Mesh(string filename, string alongAxis = "Y");
 
     const vector<shared_ptr<Shape>> &getFaces() const;
 
@@ -49,7 +49,7 @@ public:
 
 private:
 
-    string filename;
+    string filename, alongAxis = "Y";
 
     std::vector<shared_ptr<Shape>> faces;
     std::vector<Point> vertices;
