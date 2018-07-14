@@ -90,7 +90,7 @@ void Tracer::renderImage() const {
 
 void Tracer::renderImageMultithread() const {
     //may return 0 when not able to detect
-    int numThreads = std::thread::hardware_concurrency() - 1;
+    int numThreads = std::thread::hardware_concurrency();
 
     if (numThreads == 0) {
         renderImage();
@@ -195,7 +195,7 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
 
     shared_ptr<Shape> shape = shapes.at(id);
 
-    if (shape->getEmit() != BLACK) return shape->getEmit() * shape->getIntensity();
+    if (shape->getEmit() != BLACK) return shape->getEmit();
 
     // Getting intersection point coordinates
     Point intersectedPoint = ray.getSource() + (ray.getDirection() * dist);
@@ -222,7 +222,6 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
 RGB Tracer::directLighting(const Point &intersectedPoint, const Dir &normal,
                            const shared_ptr<Shape> &shape, const Ray &ray) const{
 
-
     float dist  = MAX_FLOAT;
     int id = -1;
     RGB color = BLACK;
@@ -236,7 +235,7 @@ RGB Tracer::directLighting(const Point &intersectedPoint, const Dir &normal,
 
         shared_ptr<Shape> newShape = shapes.at(id);
 
-        if (newShape->getEmit() != BLACK) return newShape->getEmit() * newShape->getIntensity();
+        if (newShape->getEmit() != BLACK) return newShape->getEmit();
 
         Point newIntersectedPoint = newRay.getSource() + (newRay.getDirection() * dist);
 
@@ -293,7 +292,7 @@ RGB Tracer::russianRoulette(const Ray &ray, const Shape &shape, const Material &
 
     float random = randomValue();
 
-    float pd = material.getKd(intersectedPoint).getMean();
+    float pd = material.getKd().getMean();
     float ps = material.getKs().getMean();
     float pr = material.getKr().getMean();
     float pt = material.getKt().getMean();
@@ -317,7 +316,7 @@ RGB Tracer::russianRoulette(const Ray &ray, const Shape &shape, const Material &
 
         Ray sample(intersectedPoint, transformToGlobalCoordinates * rayDirLocal);
 
-        return radiance(sample, depth) * material.getKd(intersectedPoint) / pd;
+        return radiance(sample, depth) * material.getKd() / pd;
     } else if (random < pd + ps) {
 
         Dir zAxis = normal;

@@ -2,6 +2,7 @@
 #include "Quad.h"
 #include "samplingUtils.h"
 
+
 Quad::Quad(const Point &a, const Point &b, const Point &c, const Point &d)
     : Plane((b - a).cross(c - a).normalize(), a),
       a(a), b(b), c(c), d(d),
@@ -87,11 +88,11 @@ vector<Point> Quad::sampleLight2(int samples){
     Point borderD = d.getMiddlePointWith(center);
 
     for(int i=0;i<samples;i++) {
-        float s  =  ((float) rand() / (RAND_MAX));
-        float t = ((float) rand() / (RAND_MAX));
-        Point e = borderA*s + borderB*(1-s);
-        Point f = borderC*s + borderD*(1-s);
-        resul[i] = e*t + f*(1-t);
+        float rand1 = ((float) rand() / (RAND_MAX));
+        float rand2 = ((float) rand() / (RAND_MAX));
+        Dir dir1 = borderB - borderA;
+        Dir dir2 = borderC - borderA;
+        resul.push_back(borderA+(dir1*rand1)+(dir2*rand2));
     }
     return resul;
 }
