@@ -1,5 +1,6 @@
 #include <tuple>
 #include "Quad.h"
+#include "samplingUtils.h"
 
 Quad::Quad(const Point &a, const Point &b, const Point &c, const Point &d)
     : Plane((b - a).cross(c - a).normalize(), a),
