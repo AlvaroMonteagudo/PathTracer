@@ -1,5 +1,7 @@
 #pragma once
 
+#include <random>
+
 inline static float randomValue() {
     static random_device device;
     static mt19937 mt(device());

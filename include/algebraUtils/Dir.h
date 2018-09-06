@@ -181,6 +181,11 @@ public:
 
     }
 
+    /**
+     * Get cosine between two directions
+     * @param dir input direction
+     * @return cosine between this and [dir]
+     */
     float getCosWith(const Dir &dir) const {
         return this->dot(dir) / (this->module() * dir.module());
     }

@@ -10,6 +10,7 @@ class Material {
 
 public:
 
+
     Material(const RGB &kd = BLACK, const RGB &ks = BLACK, const RGB &kr = BLACK, const RGB &kt = BLACK, float shininess = 0.0f);
 
     float getShininess() const;

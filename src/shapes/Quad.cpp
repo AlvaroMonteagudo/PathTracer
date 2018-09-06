@@ -1,6 +1,5 @@
 #include <tuple>
 #include "Quad.h"
-#include "samplingUtils.h"
 
 
 Quad::Quad(const Point &a, const Point &b, const Point &c, const Point &d)
@@ -54,46 +53,26 @@ Quad Quad::moveZ(float offset) const {
     return { a.moveZ(offset), b.moveZ(offset), c.moveZ(offset), d.moveZ(offset) };
 }
 
-void Quad::bounds(){
-    for(int i=0;i<3;i++){
-        Point x;
-        if(i==0){
-            x=a;
-        } else if(i==1){
-            x=b;
-        } else{
-            x= c;
-        }
-        minX = (x.x<minX) ? x.x : minX;
-        minY = (x.y<minY) ? x.y : minY;
-        minZ = (x.z<minZ) ? x.z : minZ;
 
-        maxX = (x.x>maxX) ? x.x : maxX;
-        maxY = (x.y>maxY) ? x.y : maxY;
-        maxZ = (x.z>maxZ) ? x.z : maxZ;
-
-   }
-
+vector<Point> Quad::getPointLights(){
+    return sampledLights;
 }
 
-vector<Point> Quad::sampleLight2(int samples){
+void Quad::setSampleLights(int samples) {
 
-    srand(time(NULL));
-    vector<Point> resul = vector<Point>(samples);
-    Point center = a.getMiddlePointWith(d);
+    srand(static_cast<unsigned int>(time(nullptr)));
+    sampledLights = vector<Point>(static_cast<unsigned long>(samples));
 
     Point borderA = a.getMiddlePointWith(center);
     Point borderB = b.getMiddlePointWith(center);
     Point borderC = c.getMiddlePointWith(center);
-    Point borderD = d.getMiddlePointWith(center);
 
     for(int i=0;i<samples;i++) {
         float rand1 = ((float) rand() / (RAND_MAX));
         float rand2 = ((float) rand() / (RAND_MAX));
         Dir dir1 = borderB - borderA;
         Dir dir2 = borderC - borderA;
-        resul.push_back(borderA+(dir1*rand1)+(dir2*rand2));
+        sampledLights.push_back(borderA + (dir1 * rand1) + (dir2 * rand2));
     }
-    return resul;
 }
 

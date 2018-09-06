@@ -53,7 +53,7 @@ public:
 
     void setRadius(float radius);
 	
-	    vector<Point> sampleLight2(int samples){
+	    vector<Point> getPointLIghts(int samples){
         vector<Point> resul = vector<Point>(samples);
         for(int i=0;i<samples;i++){
             float dirX = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/(radius*radius)));

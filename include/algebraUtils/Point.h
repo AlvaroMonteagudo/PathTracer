@@ -99,17 +99,35 @@ public:
         z /= num;
     }
 
+    /**
+     * Product with point and float
+     * @param f input float
+     * @return this point * f
+     */
     Point operator * (const float f){
         return {x * f, y * f, z * f};
     }
 
+    /**
+     * Gets the point that is at the same distance of this and a input point along the direction that joins both
+     * @param p input point
+     * @return point that is located half way from this to [p]
+     */
     Point getMiddlePointWith(const Point &p) const {
         return { (x + p.x) / 2.0f, (y + p.y) / 2.0f, (z + p.z) / 2.0f };
     }
 
+    /**
+     * Get the point at is twice the distance with other passed as parameter
+     * @param p input point
+     * @return point at double distance from this than [p]
+     */
     Point getTwiceDistanceWith(const Point &p) const {
         return  *this + (p - *this) * 2.0f ;
     }
+
+
+    /** MOVING COORDINATES METHODS **/
 
     Point moveX(float offset) const {
         return { x + offset, y, z };
@@ -122,6 +140,9 @@ public:
     Point moveZ(float offset) const {
         return { x, y, z + offset };
     }
+
+
+    /** HIGHER AND LOWER OPERATORS **/
 
     bool operator <= (const Point &point) const {
         return (x - point.x <= 0.00001) &&

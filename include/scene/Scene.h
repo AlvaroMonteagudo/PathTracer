@@ -19,13 +19,13 @@
 
 #include <memory>
 #include <vector>
+#include <random>
 #include <map>
 #include "LightSource.h"
 #include "Triangle.h"
 #include "Sphere.h"
 #include "Camera.h"
 #include <functional>
-#include <map>
 
 using namespace std;
 
@@ -80,6 +80,9 @@ public:
         scenes["mesh"] = &Scene::buildMesh;
         scenes["teapot"] = &Scene::buildTeapot;
         scenes["test"] = &Scene::buildTest;
+        scenes["lights"] = &Scene::buildManyLights;
+        scenes["circles"] = &Scene::buildCornellCircle;
+        scenes["holes"] = &Scene::buildHoleLetters;
     }
 
     /**
@@ -112,6 +115,23 @@ public:
                                       DARK_GRAY, SILVER, LIGHT_GRAY, GAINSBORG, WHITE };
 
 
+
+        const std::vector<RGB> VIVID = {MAROON, DARK_RED, BROWN, FIREBRICK, CRIMSON, RED, TOMATO, CORAL, INDIAN_RED,
+                                     LIGHT_CORAL, DARK_SALMON, SALMON, LIGHT_SALMON, ORANGE_RED, DARK_ORANGE,
+                                     ORANGE, GOLD, DARK_GOLDEN_ROD, GOLDER_ROD, PALE_GOLDEN_ROD, DARK_KHAKI,
+                                     KHAKI, OLIVE, YELLOW, YELLOW_GREEN, DARK_OLIVE_GREEN, OLIVE_DRAB, LAWN_GREEN,
+                                     CHART_REUSE, GREEN_YELLOW, DARK_GREEN, GREEN, FOREST_GREEN, LIME, LIME_GREEN,
+                                     LIGHT_GREEN, PALE_GREEN, DARK_SEA_GREEN, MEDIUM_SPRING_GREEN, SPRING_GREEN,
+                                     SEA_GREEN, MEDIUM_AQUA_MARINE, MEDIUM_SEA_GREEN, LIGHT_SEA_GREEN,
+                                     DARK_SLATE_GRAY, TEAL, DARK_CYAN, AQUA, CYAN, LIGHT_CYAN, DARK_TURQUOISE,
+                                     TURQUOISE, MEDIUM_TURQUOISE, PALE_TURQUOISE, AQUA_MARINE, POWDER_BLUE,
+                                     CADET_BLUE, STEEL_BLUE, CORN_FLOWER_BLUE, DEEP_SKY_BLUE, DODGER_BLUE,
+                                     LIGHT_BLUE, SKY_BLUE, LIGHT_SKY_BLUE, MIDNIGHT_BLUE, NAVY, DARK_BLUE,
+                                     MEDIUM_BLUE, BLUE, ROYAL_BLUE, BLUE_VIOLET, INDIGO, DARK_SLATE_BLUE,
+                                     SLATE_BLUE, MEDIUM_SLATE_BLUE, MEDIUM_PURPLE, DARK_MAGENTE, DARK_VIOLET,
+                                     DARK_ORCHID, MEDIUM_ORCHID, PURPLE, THISTLE, PLUM, VIOLET, MAGENTA, ORCHID,
+                                     MEDIUM_VIOLET_RED, PALE_VIOLET_RED, DEEP_PINK, HOT_PINK, LIGHT_PINK, PINK};
+
 private:
 
     /// SCENE ATTRIBUTES
@@ -120,6 +140,13 @@ private:
     Camera camera;
 
     int width, height;
+
+    static float randFloat(float a, float b) {
+        random_device device;
+        mt19937 mt(device());
+        uniform_real_distribution<float> generator(a, b);
+        return generator(mt);
+    }
 
     void buildCornellBox();
 
@@ -150,6 +177,8 @@ private:
     void buildMesh();
 
     void buildTeapot();
+
+    void buildCornellCircle();
 };
 
 

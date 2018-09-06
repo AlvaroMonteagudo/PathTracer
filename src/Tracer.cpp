@@ -12,6 +12,7 @@
 
 #include <ctime>
 #include <mathUtils.h>
+#include <Quad.h>
 
 #include "Tracer.h"
 #include "samplingUtils.h"
@@ -96,7 +97,7 @@ void Tracer::renderImageMultithread() const {
         renderImage();
         return;
     }
-    // Using gpus
+
     if (numThreads > 8) {
         numThreads = 8;
         //numThreads -= 1;
@@ -112,9 +113,9 @@ void Tracer::renderImageMultithread() const {
         int start = i*linesPerThread;
         int end = start + linesPerThread;
         if (i != numThreads - 1){
-            threads[i] = thread(&Tracer::renderImageLines, *this, start, end);
+            threads[i] = thread(&Tracer::renderImageLines, this, start, end);
         } else {
-            threads[i] = thread(&Tracer::renderImageLines, *this, start, camera.getHeight());
+            threads[i] = thread(&Tracer::renderImageLines, this, start, camera.getHeight());
         }
     }
 
@@ -209,8 +210,8 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
     Dir nl = (cosine > 0) ? normal.changeDirection() : normal;
 
     if(NEE){
-        return directLighting(intersectedPoint, nl, shape, ray); // +
-               //russianRoulette(ray, *shape, *shape->getMaterial(), intersectedPoint, nl, depth);
+        return directLighting(intersectedPoint, nl, shape, ray) +
+               russianRoulette(ray, *shape, *shape->getMaterial(), intersectedPoint, nl, depth);
     }
     else{
         return russianRoulette(ray, *shape, *shape->getMaterial(), intersectedPoint, nl, depth);
@@ -222,69 +223,43 @@ RGB Tracer::radiance(const Ray &ray, int depth) const {
 RGB Tracer::directLighting(const Point &intersectedPoint, const Dir &normal,
                            const shared_ptr<Shape> &shape, const Ray &ray) const{
 
-    float dist  = MAX_FLOAT;
-    int id = -1;
     RGB color = BLACK;
-    //reflexion-refraccion
 
-    if(shape->getMaterial()->getKr() != 0){
-        Dir newDir = shape->getDirRayRefracted(ray.getDirection(),intersectedPoint,normal);
-        Ray newRay(intersectedPoint,newDir);
+    // Lights are pushed at the front of the vector of shapes
+    int i = 0;
+    while (shapes.at(static_cast<unsigned long>(i))->getEmit() != BLACK) {
 
-        if (!intersect(newRay, dist, id)) return BLACK;
+        auto &light = (const shared_ptr<Quad> &) shapes.at(static_cast<unsigned long>(i));
+        vector<Point> lightPoints = light->getPointLights();
 
-        shared_ptr<Shape> newShape = shapes.at(id);
+        for (Point p : lightPoints) {
 
-        if (newShape->getEmit() != BLACK) return newShape->getEmit();
+            float lightDist = (p - intersectedPoint).module();
+            Ray shadow = Ray(intersectedPoint, p);
+            bool inShadow = false;
 
-        Point newIntersectedPoint = newRay.getSource() + (newRay.getDirection() * dist);
-
-        Dir newNormal = shape->getNormal(newIntersectedPoint).normalize();
-
-        // Revert normal in order to work with the visible normal of the shape
-        float cosine = newNormal.dot(ray.getDirection());
-        Dir nl = (cosine > 0) ? newNormal.changeDirection() : newNormal;
-
-        return directLighting(newIntersectedPoint,newNormal,newShape,newRay);
-    }
-    else {
-        // Lights are pushed at the front of the vector of shapes
-        int i = 0;
-        while (shapes.at(static_cast<unsigned long>(i))->getEmit() != BLACK) {
-            //Ray shadowF;
-            const shared_ptr<Shape> &light = shapes.at(static_cast<unsigned long>(i));
-            vector<Point> lightPoints = light->getSampledPoints();
-
-            for (Point p : lightPoints) {
-
-                float lightDist = (p - intersectedPoint).module();
-                Ray shadow = Ray(intersectedPoint, p);
-                bool inShadow = false;
-
-                for (const shared_ptr<Shape> &item : shapes) {
-                    float disShape = item->intersect(shadow);
-                    if (disShape < lightDist && item != light && item->getMaterial()->getKr() != 0  && item->getMaterial()->getKt() != 0) {
-                        inShadow = true;
-                        break;
-                    }
-                }
-
-                if (!inShadow) {
-                    float cos = shadow.getDirection().dot(normal);
-
-                    if (cos > 0.0f) {
-
-                        color += shape->getMaterial()->Phong(Ray(ray.getSource(), ray.getDirection() * -1), shadow,
-                                                             normal)
-                                 * (light->getIntensity() / (lightDist * lightDist))
-                                 * cos;
-                    }
+            for (const shared_ptr<Shape> &item : shapes) {
+                float disShape = item->intersect(shadow);
+                if (disShape < lightDist && item != light) {
+                    inShadow = true;
+                    break;
                 }
             }
-            i++;
+
+            if (!inShadow) {
+                float cos = shadow.getDirection().dot(normal);
+
+                if (cos > 0.0f) {
+
+                    color += shape->getMaterial()->Phong(Ray(ray.getSource(), ray.getDirection() * -1), shadow, normal)
+                             * (light->getIntensity() / (lightDist * lightDist))
+                             * cos;
+                }
+            }
         }
-        return color;
+        i++;
     }
+    return color;
 }
 
 
@@ -292,7 +267,7 @@ RGB Tracer::russianRoulette(const Ray &ray, const Shape &shape, const Material &
 
     float random = randomValue();
 
-    float pd = material.getKd().getMean();
+    float pd = material.getKd(intersectedPoint).getMean();
     float ps = material.getKs().getMean();
     float pr = material.getKr().getMean();
     float pt = material.getKt().getMean();
@@ -316,7 +291,7 @@ RGB Tracer::russianRoulette(const Ray &ray, const Shape &shape, const Material &
 
         Ray sample(intersectedPoint, transformToGlobalCoordinates * rayDirLocal);
 
-        return radiance(sample, depth) * material.getKd() / pd;
+        return radiance(sample, depth) * material.getKd(intersectedPoint) / pd;
     } else if (random < pd + ps) {
 
         Dir zAxis = normal;

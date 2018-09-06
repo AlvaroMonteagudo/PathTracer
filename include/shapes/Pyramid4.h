@@ -14,29 +14,34 @@ public:
     void setMaterial(shared_ptr<Material> material);
 
     template <class M>
-    void setMaterial(M material)
-    {
-        for (const shared_ptr<Shape> &face : faces)
-        {
+    void setMaterial(M material) {
+        for (const shared_ptr<Shape> &face : faces) {
             face->setMaterial(material);
         }
     }
 
     template <class RI>
-    void setRefractiveIndex(RI refrIndex)
-    {
-        for (const auto &face : faces)
-        {
+    void setRefractiveIndex(RI refrIndex) {
+        for (const auto &face : faces) {
             face->setRefractiveIndex(refrIndex);
         }
     }
 
-    void setEmit(RGB &rgb, int samples)
-    {
-        for (const auto &face : faces)
-        {
-            face->setEmit(rgb,samples);
+    void setEmit(RGB &rgb) {
+        for (const auto &face : faces) {
+            face->setEmit(rgb);
         }
+    }
+
+    void setEmit(const RGB &rgb, int face){
+        assert(0 <= face <= 4);
+        faces.at(face)->setEmit(rgb);
+    }
+
+    template <class RI>
+    void setRefractiveIndex(RI refrIndex, int face){
+        assert(0 <= face <= 4);
+        faces.at(face)->setRefractiveIndex(refrIndex);
     }
 
     const vector<shared_ptr<Shape>> &getFaces() const;

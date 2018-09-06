@@ -105,7 +105,7 @@ void Scene::buildCornellBox() {
 
     Quad light(Point(-0.7f, 0.999f, -0.3f), Point(0.7f, 0.999f, -0.3f), Point(-0.7f , 0.999f, 0.5), Point(0.7f , 0.999f , 0.5));
     //light = light.moveZ(-0.6f);
-    light.setEmit(WHITE,25);
+    light.setEmit(WHITE, 25);
     light.setIntensity(0.5f);
     addShape(light);
 
@@ -115,12 +115,57 @@ void Scene::buildCornellBox() {
     addShape(back);
 
     Sphere leftSphere(0.35f, Point(-1, -0.6f, 0.6f));
-    leftSphere.setMaterial(Specular(ORANGE, 25.0f));
+    leftSphere.setMaterial(Diffuse(ORANGE));
     addShape(leftSphere);
 
     Sphere rightSphere(leftSphere.moveX(2));
-    rightSphere.setMaterial(Reflective(SLATE_BLUE));
+    rightSphere.setMaterial(Specular(PURPLE, 15.0f));
     addShape(rightSphere);
+}
+
+
+void Scene::buildCornellCircle() {
+    setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
+                     Point(0.f, -0.f, -2.2f), 1.0,  width, height, PI/3.0f));
+
+    Circle light(Point(0, 1, 0), Y_AXIS * -1, 0.5f);
+    //light = light.moveZ(-0.6f);
+    light.setEmit(WHITE);
+    light.setIntensity(0.5f);
+    addShape(light);
+
+    Plane back(Dir(0, 0, 1), Point(0, 0, -3));
+    addShape(back);
+
+    Circle mirror(Point(-1.5f, 0, 0), X_AXIS, 0.4f);
+    mirror.setMaterial(Reflective(WHITE));
+
+    addShape(mirror);
+
+    for (int i = 0; i < 20; ++i) {
+        Circle circle = Circle(Point(randFloat(-1.5f, 1.5), -0.9999f, randFloat(-0.5f, 1)),
+                               Y_AXIS,
+                               randFloat(0.1, 0.25));
+        if (i % 2) circle.setMaterial(Diffuse(VIVID.at(rand() % VIVID.size())));
+        else circle.setMaterial(Specular(VIVID.at(rand() % VIVID.size()), randFloat(2.0, 25.0)));
+
+        addShape(circle);
+
+        Circle circle2 = Circle(Point(0, 0, 1),
+                                Z_AXIS * -1,
+                                (i + 1) * 0.05f);
+
+        circle2.setMaterial(Diffuse(VIVID.at(rand() % VIVID.size())));
+        addShape(circle2);
+    }
+
+    Circle glass(Point(0, -0.7f, 0), Dir(0, -0.5f, 0.5), 0.6f);
+    glass.setMaterial(Transmittive(WHITE));
+    glass.setRefractiveIndex(GLASS);
+    addShape(glass);
+
+    addWalls();
+
 }
 
 void Scene::buildCornellBoxHole() {
@@ -131,11 +176,11 @@ void Scene::buildCornellBoxHole() {
     Sphere sky(75.75f, Point(0, 80, 0));
     //Plane sky(Dir(0, -1, 0), Point(0, 50, 0));
     //sky.setMaterial(Diffuse(RGB(0.1f, 0.6f, 0.85f)));
-    sky.setEmit(WHITE,100);
+    sky.setEmit(WHITE);
     addShape(sky);
 
     Sphere sun(3, Point(0, 5, 1));
-    sun.setEmit(WHITE,100);
+    sun.setEmit(WHITE);
     //sun.setIntensity(5.0f);
     //addShape(sun);
 
@@ -189,7 +234,7 @@ void Scene::buildSphereMaterials() {
 
     Quad light(Point(-0.7f, 0.999f, -0.3f), Point(0.7f, 0.999f, -0.3f), Point(-0.7f , 0.999f, 0.5), Point(0.7f , 0.999f , 0.5));
     //light = light.moveZ(-0.6f);
-    light.setEmit(WHITE,100);
+    light.setEmit(WHITE);
     addShape(light);
 
     addWalls();
@@ -238,7 +283,7 @@ void Scene::buildEgipcianPyramids() {
     addShape(earth);
 
     Sphere sun(100000, Point(-100002, 115000, -120000));
-    sun.setEmit(WHITE,100);
+    sun.setEmit(WHITE);
     sun.setIntensity(5);
     addShape(sun);
 
@@ -281,7 +326,7 @@ void Scene::buildSpecularSpheres() {
 
 
     Sphere globalLight(5, Point(0, 0, 0));
-    globalLight.setEmit(WHITE,100);
+    globalLight.setEmit(WHITE);
     addShape(globalLight);
 
     /*addShape(Plane(Dir(0, 0, -1), Point(0, 0, 1)));
@@ -341,7 +386,7 @@ void Scene::buildBoxes() {
 
     Quad light(Point(-0.8f, 0.99f, -0.8f), Point(0.8f, 0.99f, -0.8f), Point(-0.8f , 0.99f, 0.8), Point(0.8f , 0.99f , 0.8));
     light = light.moveZ(-0.6f);
-    light.setEmit(WHITE,100);
+    light.setEmit(WHITE);
     addShape(light);
 
 
@@ -379,7 +424,7 @@ void Scene::buildWindow() {
 
     Sphere light(3,Point(6.5f, 0.99f, -0.2f));
     light = light.moveZ(-0.6f);
-    light.setEmit(WHITE,100);
+    light.setEmit(WHITE);
     light.setIntensity(5);
     addShape(light);
 
@@ -437,31 +482,31 @@ void Scene::buildManyLights() {
     //light.setEmit(WHITE);
     //addShape(light);
     Box lightBox(light, -0.04f);
-    lightBox.setEmit(WHITE,100);
+    lightBox.setEmit(WHITE, 1);
     addAllShapes(lightBox.getFaces());
     //light.setEmit(WHITE);
     //addShape(light);
 
     Box lightBox2(lightBox.moveX(0.9).moveZ(0.65f));
-    lightBox2.setEmit(WHITE,100);
+    lightBox2.setEmit(WHITE, 1);
     addAllShapes(lightBox2.getFaces());
 
     Box lightBox3(lightBox.moveX(1.8));
-    lightBox3.setEmit(WHITE,100);
+    lightBox3.setEmit(WHITE, 1);
     addAllShapes(lightBox3.getFaces());
 
     Box lightBox4(lightBox.moveZ(1.2));
-    lightBox4.setEmit(WHITE,100);
+    lightBox4.setEmit(WHITE, 1);
     addAllShapes(lightBox4.getFaces());
 
     Box lightBox5(lightBox.moveX(1.8).moveZ(1.2));
-    lightBox5.setEmit(WHITE,100);
+    lightBox5.setEmit(WHITE, 1);
     addAllShapes(lightBox5.getFaces());
 
 
     //Plane rightWall(Dir(-1, 0, 0), Point(1, 0, 0));
     Quad rightWall(Point(1.5, -1, 1), Point(1.5, -1, -3), Point(1.5, 1, 1));
-    rightWall.setMaterial(DIFF_G);
+    rightWall.setMaterial(Diffuse(GREEN));
     addShape(rightWall);
 
     //Plane leftWall(Dir(1, 0, 0), Point(-1, 0, 0));
@@ -481,13 +526,16 @@ void Scene::buildManyLights() {
     Quad bottom(Point(-1.5f, -1, 1), Point(1.5, -1, 1), Point(-1.5f, 1, 1));
     addShape(bottom);
 
+    Plane backWall(Dir(0, 0, 1), Point(0, 0, -3));
+    addShape(backWall);
+
     Sphere transp(0.35f, Point(0, -0.5f, 0));
     transp.setMaterial(Transmittive(WHITE));
     transp.setRefractiveIndex(GLASS);
     addShape(transp);
 
     Sphere diffusseYellow(0.2, Point(-1, -0.8f, -0.2f));
-    diffusseYellow.setMaterial(Diffuse(YELLOW));
+    diffusseYellow.setMaterial(Diffuse(PURPLE));
     addShape(diffusseYellow);
 
     Sphere reflectiveGreen(0.25f, Point(-0.6f, -0.4f, 0.2));
@@ -500,7 +548,7 @@ void Scene::buildManyLights() {
 
     Quad base(Point(0.8, -0.8f, -0.3f), Point(1.1, -0.6f, -0.5f), Point(0.6, -0.5f, -0.1f));
     Box box(base, 0.5f);
-    box.setMaterial(Transmittive(BLUE));
+    box.setMaterial(Transmittive(SKY_BLUE));
     box.setRefractiveIndex(GLASS);
     addAllShapes(box.getFaces());
 }
@@ -512,7 +560,7 @@ void Scene::buildHoleLetters() {
 
     Circle light(Point(0, 8, 0), Y_AXIS * -1, 8);
     //Quad light(Point(-4, 10, -3), Point(4, 10, -3), Point(-4, 10, 3));
-    light.setEmit(WHITE,100);
+    light.setEmit(WHITE);
     addShape(light);
 
     Plane floor(Y_AXIS, Point(0, -1, 0));
@@ -592,7 +640,7 @@ void Scene::buildHiddenMirror() {
 
     Circle light(Point(0, 8, 0), Y_AXIS * -1, 8);
     //Quad light(Point(-4, 10, -3), Point(4, 10, -3), Point(-4, 10, 3));
-    light.setEmit(WHITE,100);
+    light.setEmit(WHITE);
     addShape(light);
 
     Plane back(Z_AXIS * -1, Point(0, 0, 2.5));
@@ -634,7 +682,7 @@ void Scene::buildColorPalette() {
                      1.0,  width, height, PI/4.0f));
 
     Plane light(CEILING(8));
-    light.setEmit(WHITE,100);
+    light.setEmit(WHITE);
     addShape(light);
 
     Plane floor(FLOOR(0));
@@ -659,7 +707,7 @@ void Scene::buildTest() {
 
     Quad light(Point(-0.5f, 0.99f, -0.2f), Point(0.5f, 0.99f, -0.2f), Point(-0.5f , 0.99f, 0.4f), Point(0.5f , 0.99f , 0.4f));
     light = light.moveZ(-0.8f);
-    light.setEmit(WHITE,100);
+    light.setEmit(WHITE, 25);
     addShape(light);
 
     /*Sphere sky(3, Point(0, 0, 0));
@@ -731,7 +779,7 @@ void Scene::buildTeapot() {
 
     Sphere sky(110, Point(0, 0, 0));
     //sky.setMaterial(Diffuse(RGB(0.1f, 0.6f, 0.85f)));
-    sky.setEmit(WHITE,100);
+    sky.setEmit(WHITE);
     addShape(sky);
 
     Plane rightWall(Dir(-1, 0, 0), Point(maxX + 3.5f, 0, 0));
@@ -758,7 +806,7 @@ void Scene::buildTeapot() {
 
     Point p = ceiling.getPoint();
     Quad light(Point(-3, -2.3f, p.z -0.01f), Point(3, -2.3f, p.z - 0.01f), Point(-3, 0, p.z - 0.01f));
-    light.setEmit(WHITE,100);
+    light.setEmit(WHITE);
     addShape(light);
 
     Plane back(bottom.moveY(maxY - minY + 10));
@@ -794,7 +842,7 @@ void Scene::buildMesh() {
 
     Sphere sky(3, Point(0, 0, 0));
     //sky.setMaterial(Diffuse(RGB(0.1f, 0.6f, 0.85f)));
-    sky.setEmit(WHITE,100);
+    sky.setEmit(WHITE);
     addShape(sky);
 
     Plane rightWall(Dir(-1, 0, 0), Point(1.5f, 0, 0));

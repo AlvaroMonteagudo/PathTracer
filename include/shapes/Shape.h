@@ -101,8 +101,7 @@ public:
         Shape::refractiveIndex = refractiveIndex;
     }
 
-    void setEmit(const RGB &_emit, int samples) {
-        sampledLights=sampleLight2(samples);
+    void setEmit(const RGB &_emit) {
         emit = _emit;
     }
 
@@ -117,21 +116,16 @@ public:
     virtual void setMaterial(const shared_ptr<Material> m){
         material = m;
     }
-	
-    virtual vector<Point> sampleLight2(int samples){
-        std::vector<Point> resul = std::vector<Point>(1);
-        return resul;
-    };
+
+    std::vector<Point> getPointLights() {
+        return std::vector<Point>();
+    }
 
     template <class M>
     void setMaterial(const M m) {
         material = make_shared<M>(m);
     }
 
-
-    vector<Point> getSampledPoints(){
-        return sampledLights;
-    }
 
 private:
 
@@ -141,8 +135,6 @@ private:
     RGB emit = BLACK;
 
     float intensity = 1.0f;
-
-    vector<Point> sampledLights;
 
     float refractiveIndex = AIR_RI;
 

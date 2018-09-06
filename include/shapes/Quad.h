@@ -26,8 +26,15 @@ public:
     Quad moveY(float offset) const;
 
     Quad moveZ(float offset) const;
+
+    void setEmit(const RGB &_emit, int samples = 0) {
+    	setSampleLights(samples);
+    	Shape::setEmit(_emit);
+    }
+
+    void setSampleLights(int samples);
 	
-	vector<Point> sampleLight2(int samples);
+	vector<Point> getPointLights();
 
     /*void setRefractiveIndex(float refrIndex)
     {
@@ -38,12 +45,11 @@ public:
 protected:
 
     Point a, b, c, d;
-	
-	float minX=999999, minY=999999, minZ=999999, maxX=-999999, maxY=-999999, maxZ=-999999;
 
     Point center;
 
     Triangle t1, t2;
 
-	void bounds();
+    std::vector<Point> sampledLights;
+
 };

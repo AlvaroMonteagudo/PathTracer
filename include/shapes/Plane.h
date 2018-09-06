@@ -59,7 +59,7 @@ public:
         holes.push_back(shape);
     }
 	
-	vector<Point> sampleLight2(int samples){
+	vector<Point> getPointLIghts(int samples){
         vector<Point> resul = vector<Point>(2);
         return resul;
     }
