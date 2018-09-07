@@ -227,11 +227,12 @@ RGB Tracer::directLighting(const Point &intersectedPoint, const Dir &normal,
 
     // Lights are pushed at the front of the vector of shapes
     int i = 0;
+
     while (shapes.at(static_cast<unsigned long>(i))->getEmit() != BLACK) {
 
         auto &light = (const shared_ptr<Quad> &) shapes.at(static_cast<unsigned long>(i));
         vector<Point> lightPoints = light->getPointLights();
-
+        int lightPointHitting = 0;
         for (Point p : lightPoints) {
 
             float lightDist = (p - intersectedPoint).module();
@@ -247,6 +248,7 @@ RGB Tracer::directLighting(const Point &intersectedPoint, const Dir &normal,
             }
 
             if (!inShadow) {
+                lightPointHitting++;
                 float cos = shadow.getDirection().dot(normal);
 
                 if (cos > 0.0f) {
@@ -257,6 +259,7 @@ RGB Tracer::directLighting(const Point &intersectedPoint, const Dir &normal,
                 }
             }
         }
+        color = (lightPointHitting > 0 ) ? color / lightPointHitting : color;
         i++;
     }
     return color;

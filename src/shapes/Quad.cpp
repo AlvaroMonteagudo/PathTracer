@@ -61,7 +61,12 @@ vector<Point> Quad::getPointLights(){
 void Quad::setSampleLights(int samples) {
 
     srand(static_cast<unsigned int>(time(nullptr)));
-    sampledLights = vector<Point>(static_cast<unsigned long>(samples));
+    sampledLights = vector<Point>();
+
+    if (samples == 1){
+        sampledLights.push_back(center);
+        return;
+    }
 
     Point borderA = a.getMiddlePointWith(center);
     Point borderB = b.getMiddlePointWith(center);

@@ -103,9 +103,9 @@ void Scene::buildCornellBox() {
     setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
                      Point(0.f, -0.f, -2.2f), 1.0,  width, height, PI/3.0f));
 
-    Quad light(Point(-0.7f, 0.999f, -0.3f), Point(0.7f, 0.999f, -0.3f), Point(-0.7f , 0.999f, 0.5), Point(0.7f , 0.999f , 0.5));
+    Quad light(Point(-0.7f, 1, -0.3f), Point(0.7f, 1, -0.3f), Point(-0.7f , 1, 0.5), Point(0.7f , 1 , 0.5));
     //light = light.moveZ(-0.6f);
-    light.setEmit(WHITE, 25);
+    light.setEmit(WHITE, 10);
     light.setIntensity(0.5f);
     addShape(light);
 
@@ -115,11 +115,11 @@ void Scene::buildCornellBox() {
     addShape(back);
 
     Sphere leftSphere(0.35f, Point(-1, -0.6f, 0.6f));
-    leftSphere.setMaterial(Diffuse(ORANGE));
+    leftSphere.setMaterial(Specular(DARK_ORANGE, 50.0f));
     addShape(leftSphere);
 
     Sphere rightSphere(leftSphere.moveX(2));
-    rightSphere.setMaterial(Specular(PURPLE, 15.0f));
+    rightSphere.setMaterial(Reflective(SLATE_BLUE));
     addShape(rightSphere);
 }
 
@@ -173,8 +173,8 @@ void Scene::buildCornellBoxHole() {
     setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
                      Point(0.f, -0.f, -2.2f), 1.0,  width, height, PI/3.0f));
 
-    Sphere sky(75.75f, Point(0, 80, 0));
-    //Plane sky(Dir(0, -1, 0), Point(0, 50, 0));
+    //Sphere sky(75.75f, Point(0, 80, 0));
+    Plane sky(Dir(0, -1, 0), Point(0, 5, 0));
     //sky.setMaterial(Diffuse(RGB(0.1f, 0.6f, 0.85f)));
     sky.setEmit(WHITE);
     addShape(sky);
@@ -477,7 +477,7 @@ void Scene::buildManyLights() {
     setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
                      Point(0.f, -0.f, -2.8f), 1.0,  width, height, PI/3.0f));
 
-    Quad light(Point(-1.3f, 0.999f, -1), Point(-0.5f, 0.999f, -1), Point(-1.3f , 0.999f, -0.6f), Point(-0.5f , 0.999f , -0.6f));
+    Quad light(Point(-1.3f, 1, -1), Point(-0.5f, 1, -1), Point(-1.3f , 1, -0.6f), Point(-0.5f , 1 , -0.6f));
     //light = light.moveZ(-0.6f);
     //light.setEmit(WHITE);
     //addShape(light);
@@ -503,6 +503,9 @@ void Scene::buildManyLights() {
     lightBox5.setEmit(WHITE, 1);
     addAllShapes(lightBox5.getFaces());
 
+    Circle mirror(Point(-1.5f, 0, 0), X_AXIS, 0.7f);
+    mirror.setMaterial(Reflective(WHITE));
+    //addShape(mirror);
 
     //Plane rightWall(Dir(-1, 0, 0), Point(1, 0, 0));
     Quad rightWall(Point(1.5, -1, 1), Point(1.5, -1, -3), Point(1.5, 1, 1));
@@ -538,9 +541,9 @@ void Scene::buildManyLights() {
     diffusseYellow.setMaterial(Diffuse(PURPLE));
     addShape(diffusseYellow);
 
-    Sphere reflectiveGreen(0.25f, Point(-0.6f, -0.4f, 0.2));
-    reflectiveGreen.setMaterial(Reflective(WHITE));
-    addShape(reflectiveGreen);
+    Sphere specularGreen(0.25f, Point(-0.6f, -0.4f, 0.2));
+    specularGreen.setMaterial(Specular(LIME, 3));
+    addShape(specularGreen);
 
     Sphere specularOrange(0.25f, Point(0.9, 0.5, 0.5));
     specularOrange.setMaterial(Specular(ORANGE, 10));
@@ -758,26 +761,28 @@ void Scene::buildTest() {
 
 }
 
-void Scene::buildTeapot() {
+void Scene::buildMesh() {
 
     /*setCamera(Camera(Dir(0, 1, 0), Dir(-1, 0, 0), Dir(0, 0, -1),
                      Point(0, 15, 60), 1.0,  width, height, PI/3.0f));*/
 
-    Mesh mesh("../ply/teapot.ply");
-    mesh.setMaterial(Reflective(WHITE));
-    float maxX = mesh.maxX, maxY = mesh.maxY, maxZ = mesh.maxZ;
-    float minX = mesh.minX, minY = mesh.minY, minZ = mesh.minZ;
+    Mesh mesh("../ply/urn2.ply", "Z");
+    mesh.setMaterial(Diffuse(GOLD));
+    /*Float maxX = mesh.maxX, maxY = mesh.maxY, maxZ = mesh.maxZ;
+    float minX = mesh.minX, minY = mesh.minY, minZ = mesh.minZ;*/
 
     Mat tm = Mat::rotateX(PI / 2);
-    setCamera(Camera(tm * Dir(0, 1, 0), tm * Dir(1, 0, 0), tm * Dir(0, 0, 1),
-                     Point(mean(maxX, minX), maxY + 3, mean(maxZ, minZ) + 2), 1.0,  width, height, PI/2.0f));
+    setCamera(Camera(Dir(0, 1, 0), Dir(1, 0, 0), Dir(0, 0, 1),
+                     Point(0, 0, -2.5f), 1.0,  width, height, PI/2.0f));
+    /*setCamera(Camera(tm * Dir(0, 1, 0), tm * Dir(1, 0, 0), tm * Dir(0, 0, 1),
+                     Point(mean(maxX, minX), maxY + 3, mean(maxZ, minZ) + 2), 1.0,  width, height, PI/2.0f));*/
 
     /*Quad light(Point(-0.7f, 2, -0.3f), Point(0.7f, 2, -0.3f), Point(-0.7f , 2, 0.5), Point(0.7f , 2 , 0.5));
     //light = light.moveZ(-0.6f);
     light.setEmit(WHITE);
     addShape(light);*/
 
-    Sphere sky(110, Point(0, 0, 0));
+    /*Sphere sky(110, Point(0, 0, 0));
     //sky.setMaterial(Diffuse(RGB(0.1f, 0.6f, 0.85f)));
     sky.setEmit(WHITE);
     addShape(sky);
@@ -811,9 +816,16 @@ void Scene::buildTeapot() {
 
     Plane back(bottom.moveY(maxY - minY + 10));
     //back.setEmit(WHITE);
-    addShape(back);
+    addShape(back);*/
 
-    //addWalls();
+    Quad light(Point(-0.7f, 1, -0.3f), Point(0.7f, 1, -0.3f), Point(-0.7f , 1, 0.5f), Point(0.7f , 1 , 0.5f));
+    light = light.moveZ(-0.4f);
+    light.setEmit(WHITE, 25);
+    addShape(light);
+
+    addWalls();
+
+
 
     //Mesh mesh("../ply/Goku.obj.ply");
     //Mesh mesh("../ply/dragon.ply");
@@ -822,7 +834,7 @@ void Scene::buildTeapot() {
 
 }
 
-void Scene::buildMesh() {
+void Scene::buildTeapot() {
 
     /*setCamera(Camera(Dir(0, 1, 0), Dir(-1, 0, 0), Dir(0, 0, -1),
                      Point(0, 15, 60), 1.0,  width, height, PI/3.0f));*/
