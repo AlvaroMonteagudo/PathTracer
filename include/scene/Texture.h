@@ -10,7 +10,7 @@ class Texture : public Material {
 
 public:
 
-    Texture(string filename, string lockedDimension);
+    Texture(string filename, string lockedDimension, float divisor);
 
     const RGB &getKd(const Point& point) const;
 
@@ -21,6 +21,8 @@ private:
     string filename, lockedDimension;
 
     int width, height, maxRGBValue;
+
+    float divisor;
 
     RGB * rgbArray;
 };

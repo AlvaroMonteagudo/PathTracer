@@ -83,6 +83,7 @@ public:
         scenes["lights"] = &Scene::buildManyLights;
         scenes["circles"] = &Scene::buildCornellCircle;
         scenes["holes"] = &Scene::buildHoleLetters;
+        scenes["cylinders"] = &Scene::buildCylinders;
     }
 
     /**
@@ -179,6 +180,8 @@ private:
     void buildTeapot();
 
     void buildCornellCircle();
+
+    void buildCylinders();
 };
 
 

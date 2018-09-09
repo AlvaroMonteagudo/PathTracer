@@ -55,13 +55,13 @@ Material Material::operator + (const Material &m) const {
     return { kd + m.getKd(Point()), ks + m.getKs(), kr + m.getKr(), kt + m.getKt(), shininess + m.getShininess() };
 }
 
-RGB Material::Phong(const Ray &ray, const Ray &shadow, const Dir &normal) const {
+RGB Material::Phong(const Ray &ray, const Ray &shadow, const Dir &normal, const Point &point) const {
     Dir reflectedLight = Shape::getDirRayReflected(shadow.getDirection() * -1, normal);
 
     float cos = ray.getDirection().dot(reflectedLight);
 
     if (cos < 0) cos = 0;
 
-    return  ((kd / PI) + (ks * ((shininess + 2.0f) / (2.0f * PI)) * pow(cos, shininess)));
+    return  ((this->getKd(point) / PI) + (ks * ((shininess + 2.0f) / (2.0f * PI)) * pow(cos, shininess)));
 
 }

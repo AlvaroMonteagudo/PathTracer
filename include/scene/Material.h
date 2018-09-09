@@ -17,7 +17,7 @@ public:
 
     Material operator + (const Material &m) const;
 
-    RGB Phong(const Ray &ray, const Ray &shadow, const Dir &normal) const;
+    RGB Phong(const Ray &ray, const Ray &shadow, const Dir &normal, const Point &point) const;
 
     virtual const RGB &getKd(const Point &point) const;
 

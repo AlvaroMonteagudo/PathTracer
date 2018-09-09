@@ -91,7 +91,7 @@ void Tracer::renderImage() const {
 
 void Tracer::renderImageMultithread() const {
     //may return 0 when not able to detect
-    int numThreads = std::thread::hardware_concurrency();
+    int numThreads = std::thread::hardware_concurrency() - 1;
 
     if (numThreads == 0) {
         renderImage();
@@ -253,7 +253,8 @@ RGB Tracer::directLighting(const Point &intersectedPoint, const Dir &normal,
 
                 if (cos > 0.0f) {
 
-                    color += shape->getMaterial()->Phong(Ray(ray.getSource(), ray.getDirection() * -1), shadow, normal)
+                    color += shape->getMaterial()->Phong(Ray(ray.getSource(), ray.getDirection() * -1),
+                                                         shadow, normal,intersectedPoint)
                              * (light->getIntensity() / (lightDist * lightDist))
                              * cos;
                 }

@@ -4,9 +4,10 @@
 #include <iostream>
 #include <sstream>
 
-Texture::Texture(string _filename, string _lockedDimension) :
+Texture::Texture(string _filename, string _lockedDimension, float divisor) :
         Material(),
         filename(std::move(_filename)),
+        divisor(divisor),
         lockedDimension(std::move(_lockedDimension)){
     readPPMFIle();
 }
@@ -73,9 +74,9 @@ void Texture::readPPMFIle() {
 }
 
 const RGB &Texture::getKd(const Point &point) const {
-    auto x = static_cast<int>((point.x < 0 ? -point.x : point.x) / 0.001);
-    auto y = static_cast<int>((point.y < 0 ? -point.y : point.y) / 0.001);
-    auto z = static_cast<int>((point.z < 0 ? -point.z : point.z) / 0.001);
+    auto x = static_cast<int>((point.x < 0 ? -point.x : point.x) / divisor);
+    auto y = static_cast<int>((point.y < 0 ? -point.y : point.y) / divisor);
+    auto z = static_cast<int>((point.z < 0 ? -point.z : point.z) / divisor);
 
     //cout << x << " " << y << " " << z << endl;
 
